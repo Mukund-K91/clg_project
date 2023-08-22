@@ -28,7 +28,7 @@ class _splash_screenState extends State<splash_screen> {
     return Scaffold(
       body: Container(
         color: Colors.orange,
-          child: Text("hello")),
+          child: Text("Splash Screen")),
     );
   }
 }
