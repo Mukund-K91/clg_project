@@ -12,10 +12,29 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff002233)),
         useMaterial3: true,
       ),
-      home:splash_screen(),
+      debugShowCheckedModeBanner: false,
+      home:home_main(),
+    );
+  }
+}
+class home_main extends StatelessWidget {
+  const home_main({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          Container(
+            child: Image(
+              image: AssetImage("assets/images/home_screen.png"),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
