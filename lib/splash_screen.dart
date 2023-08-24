@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clg_project/login.dart';
+import 'package:clg_project/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -21,7 +22,7 @@ class _splash_screenState extends State<splash_screen> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => login(),
+            builder: (context) => home_main(),
           ));
     });
   }
