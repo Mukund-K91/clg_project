@@ -38,10 +38,10 @@ class login extends StatelessWidget {
               children: [
                 TextFormField(
                   decoration: InputDecoration(
-                      labelText: "SP ID",
+                      labelText: "STUDENT ID",
                       labelStyle: TextStyle(fontSize: 15),
                       prefixIcon:
-                          Icon(Icons.person_rounded, color: Color(0xff002233)),
+                          Icon(FontAwesomeIcons.userGraduate, color: Color(0xff002233)),
                       border: OutlineInputBorder()),
                 ),
                 const SizedBox(
@@ -66,7 +66,7 @@ class login extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerRight,
                     child: TextButton(
-                        onPressed: () {}, child: Text("forget Password?"))),
+                        onPressed: () {}, child: Text("Reset Password?"))),
                 const SizedBox(
                   height: 20,
                 ),
