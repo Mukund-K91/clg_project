@@ -92,9 +92,7 @@ class login extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => _txtfield == "SP ID"
-                                  ? dashboard()
-                                  : faculty_dashboard(),
+                              builder: (context) => dashboard(_txtfield),
                             ));
                       },
                       child: Text(

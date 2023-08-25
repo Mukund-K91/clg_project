@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: faculty_dashboard(),
+      home: home_main(),
     );
   }
 }

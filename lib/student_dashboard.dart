@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class faculty_dashboard extends StatelessWidget {
-  const faculty_dashboard({super.key});
+class student_dashboard extends StatelessWidget {
+  const student_dashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,22 +27,23 @@ class faculty_dashboard extends StatelessWidget {
                   padding: const EdgeInsets.all(15),
                   child: Container(
                     width: double.infinity,
-                    height: 150,
+                    height: 200,
                     child: Card(
                       color: Colors.white,
-                      child: Row(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           CircleAvatar(
-                            radius: 40,
+                            radius: 50,
                             foregroundImage:
-                                AssetImage("assets/images/ex_img.png"),
+                            AssetImage("assets/images/ex_img.png"),
                           ),
                           Text(
-                            "Vipul M",
+                            "MUKUND K",
                             style: TextStyle(fontSize: 20),
                           ),
+                          Text("TYBCA-C")
                         ],
                       ),
                     ),
@@ -67,12 +68,12 @@ class faculty_dashboard extends StatelessWidget {
                             onPressed: () {},
                             iconSize: 50,
                             icon: Icon(
-                              FontAwesomeIcons.userGraduate,
+                              FontAwesomeIcons.calendarDay,
                               color: Color(0xff002233),
                             ),
                           ),
                           Text(
-                            "Students",
+                            "Attendence",
                             style: TextStyle(fontSize: 20),
                           ),
                         ],
@@ -87,11 +88,11 @@ class faculty_dashboard extends StatelessWidget {
                           IconButton(
                             onPressed: () {},
                             iconSize: 50,
-                            icon: Icon(FontAwesomeIcons.calendarDay,
+                            icon: Icon(FontAwesomeIcons.book,
                                 color: Color(0xff002233)),
                           ),
                           Text(
-                            "Attendence",
+                            "Syllabus",
                             style: TextStyle(fontSize: 20),
                           ),
                         ],
@@ -135,47 +136,20 @@ class faculty_dashboard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Card(
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            iconSize: 50,
-                            icon: Icon(FontAwesomeIcons.book,
-                                color: Color(0xff002233)),
-                          ),
-                          Text(
-                            "Syllabus",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Card(
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            iconSize: 50,
-                            icon: Icon(FontAwesomeIcons.newspaper,
-                                color: Color(0xff002233)),
-                          ),
-                          Text(
-                            "News & Events",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),
+              ListTile(
+                leading: Icon(
+                  FontAwesomeIcons.newspaper,
+                  color: Color(0xff002233),
+                ),
+                title: Text("Latest News & Events"),
+                trailing: Icon(
+                  FontAwesomeIcons.anglesRight,
+                  color: Color(0xff002233),
+                ),
+              )
             ],
           )
         ],
