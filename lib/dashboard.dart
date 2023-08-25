@@ -88,7 +88,10 @@ class dashboard extends StatelessWidget {
                             IconButton(
                               onPressed: () {},
                               iconSize: 50,
-                              icon: Icon(FontAwesomeIcons.calendarDay,color: Color(0xff002233),),
+                              icon: Icon(
+                                FontAwesomeIcons.calendarDay,
+                                color: Color(0xff002233),
+                              ),
                             ),
                             Text(
                               "Attendence",
@@ -106,7 +109,8 @@ class dashboard extends StatelessWidget {
                             IconButton(
                               onPressed: () {},
                               iconSize: 50,
-                              icon: Icon(FontAwesomeIcons.book,color: Color(0xff002233)),
+                              icon: Icon(FontAwesomeIcons.book,
+                                  color: Color(0xff002233)),
                             ),
                             Text(
                               "Syllabus",
@@ -124,7 +128,8 @@ class dashboard extends StatelessWidget {
                             IconButton(
                               onPressed: () {},
                               iconSize: 50,
-                              icon: Icon(FontAwesomeIcons.filePen,color: Color(0xff002233)),
+                              icon: Icon(FontAwesomeIcons.filePen,
+                                  color: Color(0xff002233)),
                             ),
                             Text(
                               "Assignment",
@@ -142,7 +147,8 @@ class dashboard extends StatelessWidget {
                             IconButton(
                               onPressed: () {},
                               iconSize: 50,
-                              icon: Icon(FontAwesomeIcons.fileContract,color: Color(0xff002233)),
+                              icon: Icon(FontAwesomeIcons.fileContract,
+                                  color: Color(0xff002233)),
                             ),
                             Text(
                               "Results",
@@ -155,7 +161,15 @@ class dashboard extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  leading: Text("dfghdfgh"),
+                  leading: Icon(
+                    FontAwesomeIcons.newspaper,
+                    color: Color(0xff002233),
+                  ),
+                  title: Text("Latest News & Events"),
+                  trailing: Icon(
+                    FontAwesomeIcons.anglesRight,
+                    color: Color(0xff002233),
+                  ),
                 )
               ],
             )

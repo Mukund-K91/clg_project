@@ -1,9 +1,13 @@
+import 'package:clg_project/dashboard.dart';
+import 'package:clg_project/faculty_dashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class login extends StatelessWidget {
-  const login({super.key});
+  var _txtfield;
+
+  login(this._txtfield);
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +42,15 @@ class login extends StatelessWidget {
               children: [
                 TextFormField(
                   decoration: InputDecoration(
-                      labelText: "STUDENT ID",
+                      labelText: _txtfield,
                       labelStyle: TextStyle(fontSize: 15),
-                      prefixIcon:
-                          Icon(FontAwesomeIcons.userGraduate, color: Color(0xff002233)),
+                      prefixIcon: _txtfield == "SP ID"
+                          ? Icon(FontAwesomeIcons.userGraduate,
+                              color: Color(0xff002233))
+                          : Icon(
+                              FontAwesomeIcons.userTie,
+                              color: Color(0xff002233),
+                            ),
                       border: OutlineInputBorder()),
                 ),
                 const SizedBox(
@@ -64,7 +73,7 @@ class login extends StatelessWidget {
                       border: OutlineInputBorder()),
                 ),
                 Align(
-                  alignment: Alignment.centerRight,
+                    alignment: Alignment.centerRight,
                     child: TextButton(
                         onPressed: () {}, child: Text("Reset Password?"))),
                 const SizedBox(
@@ -83,7 +92,9 @@ class login extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => login(),
+                              builder: (context) => _txtfield == "SP ID"
+                                  ? dashboard()
+                                  : faculty_dashboard(),
                             ));
                       },
                       child: Text(

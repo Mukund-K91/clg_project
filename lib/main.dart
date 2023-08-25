@@ -1,4 +1,5 @@
 import 'package:clg_project/dashboard.dart';
+import 'package:clg_project/faculty_dashboard.dart';
 import 'package:clg_project/login.dart';
 import 'package:clg_project/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: dashboard(),
+      home: faculty_dashboard(),
     );
   }
 }
@@ -73,7 +74,7 @@ class home_main extends StatelessWidget {
                           side: BorderSide(color: Colors.white)),
 
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => login(),));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => login("SP ID"),));
                           },
                           child: Text("LOGIN AS STUDENT",style: TextStyle(color: Colors.white,fontSize: 15),)),
                     ),
@@ -87,7 +88,9 @@ class home_main extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5))),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => login("Faculty ID"),));
+                          },
                           child: Text("LOGIN AS FACULTY",style: TextStyle(color: Color(0xff002233),fontSize: 15),)),
                     ),
                   ],
