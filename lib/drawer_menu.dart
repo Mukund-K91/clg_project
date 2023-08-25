@@ -1,3 +1,4 @@
+import 'package:clg_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -51,7 +52,9 @@ class Drawer_code extends StatelessWidget {
           title: Text("Suart"),
         ),
         TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => home_main(),));
+            },
             child: Text(
               "Log Out !",
               style: TextStyle(fontSize: 15),
