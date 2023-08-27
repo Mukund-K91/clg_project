@@ -38,6 +38,7 @@ dependencies:
   lottie: ^2.6.0
   loading_animation_widget: ^1.2.0+4
   font_awesome_flutter: ^10.5.0
+  syncfusion_flutter_datepicker: ^22.2.10
 
 dev_dependencies:
   flutter_test:
