@@ -1,10 +1,16 @@
 import 'dart:ffi';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
+void main()async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(student_add_form());
+}
 enum GenderTypeEnum { Donwloadable, Deliverable }
 
 class add_student extends StatelessWidget {
@@ -65,6 +71,12 @@ class student_add_form extends StatefulWidget {
 
 class _student_add_formState extends State<student_add_form> {
   TextEditingController _date = TextEditingController();
+  TextEditingController _id = TextEditingController();
+  TextEditingController _fname = TextEditingController();
+  TextEditingController _lname = TextEditingController();
+  TextEditingController _mobile = TextEditingController();
+  TextEditingController _email = TextEditingController();
+
 
   _student_add_formState() {
     _selectedcat = _Category[0];

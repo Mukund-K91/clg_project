@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 class UserModel {
   final String? id;
   final String? fname;
@@ -16,4 +18,15 @@ class UserModel {
     required this.mobile,
     required this.email,
   });
+
+  toJson() {
+    return {
+      "First Name": fname,
+      "Last Name": lname,
+      "DOB": dob,
+      "Admission Date": admissiondate,
+      "Mobile": mobile,
+      "Email-Id": email
+    };
+  }
 }
