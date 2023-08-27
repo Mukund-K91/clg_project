@@ -2,6 +2,7 @@ import 'package:clg_project/dashboard.dart';
 import 'package:clg_project/faculty_dashboard.dart';
 import 'package:clg_project/login.dart';
 import 'package:clg_project/splash_screen.dart';
+import 'package:clg_project/student_add.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: dashboard("Faculty ID"),
+      home: student_add_form(),
     );
   }
 }
