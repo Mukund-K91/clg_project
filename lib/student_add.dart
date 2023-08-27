@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 enum GenderTypeEnum { Donwloadable, Deliverable }
 
@@ -64,14 +65,21 @@ class student_add_form extends StatefulWidget {
 
 class _student_add_formState extends State<student_add_form> {
   TextEditingController _date = TextEditingController();
+
+  _student_add_formState() {
+    _selectedcat = _Category[0];
+  }
+
   @override
   String _selectedGender = 'Male';
+  final _Category = ["SC", "OBC", "General", "ST", "Other"];
+  String? _selectedcat = "SC";
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "ADD Students",
+          "ADD Student",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Color(0xff002233),
@@ -139,108 +147,126 @@ class _student_add_formState extends State<student_add_form> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: _date,
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(FontAwesomeIcons.calendar),
-                      labelText: "DOB",
-                      border: OutlineInputBorder()
-                  ),
-                  onTap: () async {
-                    DateTime? pickdate = await showDatePicker(context: context,
+                    controller: _date,
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(FontAwesomeIcons.calendar),
+                        labelText: "DOB",
+                        border: OutlineInputBorder()),
+                    onTap: () async {
+                      DateTime? pickdate = await showDatePicker(
+                        context: context,
                         initialDate: DateTime.now(),
-                        firstDate: DateTime(200),
-                        lastDate:DateTime.now(),);
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime.now(),
+                      );
 
-                    if(pickdate!=null){
+                      if (pickdate != null) {
+                        setState(() {
+                          _date.text =
+                              DateFormat("dd-MM-yyyy").format(pickdate);
+                        });
+                      }
+                    }),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                    controller: _date,
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(FontAwesomeIcons.calendar),
+                        labelText: "Admission Date",
+                        border: OutlineInputBorder()),
+                    onTap: () async {
+                      DateTime? pickdate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2023),
+                        lastDate: DateTime.now(),
+                      );
+
+                      if (pickdate != null) {
+                        setState(() {
+                          _date.text =
+                              DateFormat("dd-MM-yyyy").format(pickdate);
+                        });
+                      }
+                    }),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  maxLength: 10,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    labelText: "Mobile No",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    labelText: "Email-Id",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropdownButtonFormField(
+                    decoration: InputDecoration(border: OutlineInputBorder()),
+                    value: _selectedcat,
+                    items: _Category.map((e) => DropdownMenuItem(
+                          child: Text(e),
+                          value: e,
+                        )).toList(),
+                    onChanged: (val) {
                       setState(() {
-                        _date.text=DateF
+                        _selectedcat = val as String;
                       });
-                    }
-                  },
-                ),
+                    }),
               ),
-              Text("Contact Details",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,),),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: "Last Name",
-                    border: OutlineInputBorder(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    height: 60,
+                    width: 150,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          backgroundColor: Color(0xff002233),
+                        ),
+                        onPressed: () {},
+                        child: Text(
+                          "SUBMIT",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        )),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: "Last Name",
-                    border: OutlineInputBorder(),
+                  SizedBox(
+                    height: 60,
+                    width: 150,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          backgroundColor: Colors.transparent,
+                        ),
+                        onPressed: () {},
+                        child: Text(
+                          "RESET",
+                          style: TextStyle(color:Color(0xff002233) , fontSize: 20),
+                        )),
                   ),
-                ),
-              ),
+                ],
+              )
             ],
           ),
         ),
       ),
-
-      // SingleChildScrollView(
-      //     child: Padding(
-      //   padding: const EdgeInsets.all(10),
-      //   child: Form(
-      //       child: Column(
-      //     children: [
-      //       Padding(
-      //         padding: const EdgeInsets.all(8.0),
-      //         child:
-      //         TextFormField(
-      //           decoration: InputDecoration(
-      //             labelText: "SP ID",
-      //             border: OutlineInputBorder(),
-      //           ),
-      //         ),
-      //       ),
-      //       Padding(
-      //         padding: const EdgeInsets.all(8.0),
-      //         child:
-      //         TextFormField(
-      //           decoration: InputDecoration(
-      //             labelText: "First Name",
-      //             border: OutlineInputBorder(),
-      //           ),
-      //         ),
-      //       ),
-      //       Padding(
-      //         padding: const EdgeInsets.all(8.0),
-      //         child: TextFormField(
-      //           decoration: InputDecoration(
-      //             labelText: "Last Name",
-      //             border: OutlineInputBorder(),
-      //           ),
-      //         ),
-      //       ),
-      //       Container(
-      //         width: 200,
-      //         padding: EdgeInsets.all(8.0),
-      //         child: Row(
-      //           mainAxisAlignment: MainAxisAlignment.center,
-      //           children: [
-      //             RadioListTile(value: null, groupValue: null, onChanged: null)
-      //           ],
-      //         ),
-      //       ),
-      //       Padding(
-      //         padding: const EdgeInsets.all(8.0),
-      //         child: TextFormField(
-      //           decoration: InputDecoration(
-      //             labelText: "Full Name",
-      //             border: OutlineInputBorder(),
-      //           ),
-      //         ),
-      //       ),
-      //     ],
-      //   )),
-      // )),
     );
   }
 }
