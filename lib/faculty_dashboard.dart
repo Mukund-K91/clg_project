@@ -1,3 +1,4 @@
+import 'package:clg_project/student_add.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -64,7 +65,9 @@ class faculty_dashboard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => add_student(),));
+                            },
                             iconSize: 50,
                             icon: Icon(
                               FontAwesomeIcons.userGraduate,
