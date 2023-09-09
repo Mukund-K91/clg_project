@@ -1,17 +1,11 @@
 import 'dart:ffi';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
-void main()async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(student_add_form());
-}
+
 enum GenderTypeEnum { Donwloadable, Deliverable }
 
 class add_student extends StatelessWidget {
@@ -72,12 +66,11 @@ class student_add_form extends StatefulWidget {
 
 class _student_add_formState extends State<student_add_form> {
   TextEditingController _date = TextEditingController();
-  TextEditingController _id = TextEditingController();
-  TextEditingController _fname = TextEditingController();
-  TextEditingController _lname = TextEditingController();
-  TextEditingController _mobile = TextEditingController();
-  TextEditingController _email = TextEditingController();
-
+  // TextEditingController _id = TextEditingController();
+  // TextEditingController _fname = TextEditingController();
+  // TextEditingController _lname = TextEditingController();
+  // TextEditingController _mobile = TextEditingController();
+  // TextEditingController _email = TextEditingController();
 
   _student_add_formState() {
     _selectedcat = _Category[0];
@@ -105,7 +98,6 @@ class _student_add_formState extends State<student_add_form> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: _id,
                   decoration: InputDecoration(
                     labelText: "SP ID",
                     border: OutlineInputBorder(),
@@ -115,7 +107,6 @@ class _student_add_formState extends State<student_add_form> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: _fname,
                   decoration: InputDecoration(
                     labelText: "First Name",
                     border: OutlineInputBorder(),
@@ -125,7 +116,6 @@ class _student_add_formState extends State<student_add_form> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: _lname,
                   decoration: InputDecoration(
                     labelText: "Last Name",
                     border: OutlineInputBorder(),
@@ -211,7 +201,6 @@ class _student_add_formState extends State<student_add_form> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: _mobile,
                   maxLength: 10,
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
@@ -223,7 +212,6 @@ class _student_add_formState extends State<student_add_form> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: _email,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: "Email-Id",
@@ -273,21 +261,11 @@ class _student_add_formState extends State<student_add_form> {
                               borderRadius: BorderRadius.circular(5)),
                           backgroundColor: Colors.transparent,
                         ),
-                        onPressed: () {
-                          CollectionReference collref=FirebaseFirestore.instance.collection('user');
-                          collref.add({
-                            "SP ID":_id,
-                            "First Name": _fname.text,
-                            "Last Name": _lname.text,
-                            "DOB": _date.text,
-                            "Admission Date": _date.text,
-                            "Mobile": _mobile.text,
-                            "Email-Id": _email.text
-                          });
-                        },
+                        onPressed: () {},
                         child: Text(
                           "RESET",
-                          style: TextStyle(color:Color(0xff002233) , fontSize: 20),
+                          style:
+                              TextStyle(color: Color(0xff002233), fontSize: 20),
                         )),
                   ),
                 ],
