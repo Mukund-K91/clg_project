@@ -1,8 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
         android:label="eCollege"
-        android:name="${applicationName}"
-        android:icon="assets/images/logo.png">
+        android:name="${applicationName}">
         <activity
             android:name=".MainActivity"
             android:exported="true"

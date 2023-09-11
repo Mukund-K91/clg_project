@@ -3,9 +3,10 @@ import 'package:clg_project/faculty_dashboard.dart';
 import 'package:clg_project/login.dart';
 import 'package:clg_project/splash_screen.dart';
 import 'package:clg_project/student_add.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
   runApp(MyApp());
 }
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: student_add_form(),
+      home: splash_screen(),
     );
   }
 }

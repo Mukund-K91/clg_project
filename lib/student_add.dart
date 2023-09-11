@@ -57,11 +57,7 @@ class add_student extends StatelessWidget {
     );
   }
 }
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MyApp());
-}
+
 class student_add_form extends StatefulWidget {
   student_add_form({super.key});
 
@@ -185,30 +181,6 @@ class _student_add_formState extends State<student_add_form> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                    controller: _date,
-                    decoration: InputDecoration(
-                        prefixIcon: Icon(FontAwesomeIcons.calendar),
-                        labelText: "Admission Date",
-                        border: OutlineInputBorder()),
-                    onTap: () async {
-                      DateTime? pickdate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2023),
-                        lastDate: DateTime.now(),
-                      );
-
-                      if (pickdate != null) {
-                        setState(() {
-                          _date.text =
-                              DateFormat("dd-MM-yyyy").format(pickdate);
-                        });
-                      }
-                    }),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
                   maxLength: 10,
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
@@ -255,8 +227,9 @@ class _student_add_formState extends State<student_add_form> {
                           backgroundColor: Color(0xff002233),
                         ),
                         onPressed: () {
-                         CollectionReference collref=FirebaseFirestore.instance.collection('Students');
-                         collref.add({'Name':_fname.text});
+                          CollectionReference collRef =
+                              FirebaseFirestore.instance.collection('Students');
+                          collRef.add({'Name': _fname.text});
                         },
                         child: Text(
                           "SUBMIT",
