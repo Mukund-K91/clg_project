@@ -1,7 +1,12 @@
+import 'package:clg_project/main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'firebase_options.dart';
+
 enum GenderTypeEnum { Donwloadable, Deliverable }
 
 class add_student extends StatelessWidget {
@@ -52,7 +57,11 @@ class add_student extends StatelessWidget {
     );
   }
 }
-
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 class student_add_form extends StatefulWidget {
   student_add_form({super.key});
 
@@ -245,7 +254,10 @@ class _student_add_formState extends State<student_add_form> {
                               borderRadius: BorderRadius.circular(5)),
                           backgroundColor: Color(0xff002233),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                         CollectionReference collref=FirebaseFirestore.instance.collection('Students');
+                         collref.add({'Name':_fname.text});
+                        },
                         child: Text(
                           "SUBMIT",
                           style: TextStyle(color: Colors.white, fontSize: 20),

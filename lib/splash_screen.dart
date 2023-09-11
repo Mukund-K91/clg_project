@@ -30,11 +30,12 @@ class _splash_screenState extends State<splash_screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body:Container(
-        color: Color(0xff002233),
+        width: double.infinity,
+        color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(image: AssetImage("assets/images/ex_img.png")),
+            Image(image: AssetImage("assets/images/logo.png")),
             const SizedBox(height: 15,),
             LoadingAnimationWidget.discreteCircle(
               color: Colors.black,
