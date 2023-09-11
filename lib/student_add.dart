@@ -1,11 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-
-
 enum GenderTypeEnum { Donwloadable, Deliverable }
 
 class add_student extends StatelessWidget {
@@ -66,8 +62,10 @@ class student_add_form extends StatefulWidget {
 
 class _student_add_formState extends State<student_add_form> {
   TextEditingController _date = TextEditingController();
+
   // TextEditingController _id = TextEditingController();
-  // TextEditingController _fname = TextEditingController();
+  TextEditingController _fname = TextEditingController();
+
   // TextEditingController _lname = TextEditingController();
   // TextEditingController _mobile = TextEditingController();
   // TextEditingController _email = TextEditingController();
@@ -107,6 +105,7 @@ class _student_add_formState extends State<student_add_form> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
+                  controller: _fname,
                   decoration: InputDecoration(
                     labelText: "First Name",
                     border: OutlineInputBorder(),
