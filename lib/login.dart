@@ -2,12 +2,29 @@ import 'package:clg_project/dashboard.dart';
 import 'package:clg_project/faculty_dashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class login extends StatelessWidget {
+class login extends StatefulWidget {
   var _txtfield;
 
   login(this._txtfield);
+
+  @override
+  State<login> createState() => _loginState();
+}
+
+class _loginState extends State<login> {
+  bool passwordObscured = true;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  void _login() {
+    if (_formKey.currentState!.validate()) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => dashboard(widget._txtfield)));
+    }
+    ;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,70 +55,85 @@ class login extends StatelessWidget {
               height: 25,
             ),
             Form(
+                key: _formKey,
                 child: Column(
-              children: [
-                TextFormField(
-                  decoration: InputDecoration(
-                      labelText: _txtfield,
-                      labelStyle: TextStyle(fontSize: 15),
-                      prefixIcon: _txtfield == "SP ID"
-                          ? Icon(FontAwesomeIcons.userGraduate,
-                              color: Color(0xff002233))
-                          : Icon(
-                              FontAwesomeIcons.userTie,
-                              color: Color(0xff002233),
-                            ),
-                      border: OutlineInputBorder()),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                TextFormField(
-                  obscureText: true,
-                  obscuringCharacter: '*',
-                  decoration: InputDecoration(
-                      labelText: "PASSWORD",
-                      labelStyle: TextStyle(fontSize: 15),
-                      prefixIcon: Icon(
-                        Icons.lock,
-                        color: Color(0xff002233),
-                      ),
-                      suffixIcon: Icon(
-                        Icons.remove_red_eye,
-                        color: Color(0xff002233),
-                      ),
-                      border: OutlineInputBorder()),
-                ),
-                Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                        onPressed: () {}, child: Text("Reset Password?"))),
-                const SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 60,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        backgroundColor: Color(0xff002233),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => dashboard(_txtfield),
-                            ));
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(
+                          labelText: widget._txtfield,
+                          labelStyle: TextStyle(fontSize: 15),
+                          prefixIcon: widget._txtfield == "SP ID"
+                              ? Icon(FontAwesomeIcons.userGraduate,
+                                  color: Color(0xff002233))
+                              : Icon(
+                                  FontAwesomeIcons.userTie,
+                                  color: Color(0xff002233),
+                                ),
+                          border: OutlineInputBorder()),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          Fluttertoast.showToast(
+                              msg: "SP ID is required for login");
+                        }
+                        return null;
                       },
-                      child: Text(
-                        "LOGIN",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      )),
-                ),
-              ],
-            ))
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      obscureText: passwordObscured,
+                      obscuringCharacter: '*',
+                      decoration: InputDecoration(
+                          labelText: "PASSWORD",
+                          labelStyle: TextStyle(fontSize: 15),
+                          prefixIcon: Icon(
+                            Icons.lock,
+                            color: Color(0xff002233),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                passwordObscured = !passwordObscured;
+                              });
+                            },
+                            icon: passwordObscured
+                                ? Icon(Icons.visibility_off)
+                                : Icon(Icons.visibility),
+                          ),
+                          border: OutlineInputBorder()),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          Fluttertoast.showToast(
+                              msg: "Password is required for login");
+                        }
+                        return null;
+                      },
+                    ),
+                    Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                            onPressed: () {}, child: Text("Reset Password?"))),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 60,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            backgroundColor: Color(0xff002233),
+                          ),
+                          onPressed: _login,
+                          child: Text(
+                            "LOGIN",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          )),
+                    ),
+                  ],
+                ))
           ],
         ),
       ),
