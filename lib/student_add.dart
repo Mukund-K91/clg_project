@@ -77,8 +77,6 @@ class add_student extends StatelessWidget {
 class student_add_form extends StatefulWidget {
   student_add_form({super.key});
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   @override
   State<student_add_form> createState() => _student_add_formState();
 }
@@ -98,6 +96,12 @@ class _student_add_formState extends State<student_add_form> {
     _selectedcat = _Category[0];
   }
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  void _submit() {
+    if (_formKey.currentState!.validate()) {}
+  }
+
   @override
   String _selectedGender = 'Male';
   final _Category = ["none", "SC", "OBC", "General", "ST", "Other"];
@@ -115,242 +119,199 @@ class _student_add_formState extends State<student_add_form> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _id,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: "SP ID",
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("SP ID is required"),
-                      ));
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _fname,
-                  decoration: const InputDecoration(
-                    labelText: "First Name",
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("SP ID is required"),
-                      ));
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _lname,
-                  decoration: const InputDecoration(
-                    labelText: "Last Name",
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("SP ID is required"),
-                      ));
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: RadioListTile<String>(
-                      title: const Text('Female'),
-                      value: 'Female',
-                      groupValue: _selectedGender,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedGender = value!;
-                        });
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: RadioListTile<String>(
-                      title: const Text('Male'),
-                      value: 'Male',
-                      groupValue: _selectedGender,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedGender = value!;
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                    controller: _date,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _id,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
-                        prefixIcon: Icon(FontAwesomeIcons.calendar),
-                        labelText: "DOB",
-                        border: OutlineInputBorder()),
-                    onTap: () async {
-                      DateTime? pickdate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime.now(),
-                      );
-
-                      if (pickdate != null) {
-                        setState(() {
-                          _date.text =
-                              DateFormat("dd-MM-yyyy").format(pickdate);
-                        });
+                      labelText: "SP ID",
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "SP ID is required";
                       }
-                      validator:
-                      (value) {
-                        if (value!.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("SP ID is required"),
-                          ));
-                        }
-                        return null;
-                      };
-                    }),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _mobile,
-                  keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(
-                    labelText: "Mobile No",
-                    border: OutlineInputBorder(),
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("SP ID is required"),
-                      ));
-                    }
-                    return null;
-                  },
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _email,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: "Email-Id",
-                    border: OutlineInputBorder(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _fname,
+                    decoration: const InputDecoration(
+                      labelText: "First Name",
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "First Name is required";
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("SP ID is required"),
-                      ));
-                    }
-                    return null;
-                  },
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DropdownButtonFormField(
-                    decoration:
-                        const InputDecoration(border: OutlineInputBorder()),
-                    value: _selectedcat,
-                    items: _Category.map((e) => DropdownMenuItem(
-                          child: Text(e),
-                          value: e,
-                        )).toList(),
-                    onChanged: (val) {
-                      setState(() {
-                        _selectedcat = val as String;
-                      });
-                    }),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  SizedBox(
-                    height: 60,
-                    width: 150,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          backgroundColor: const Color(0xff002233),
-                        ),
-                        onPressed: () {
-                          CollectionReference collRef =
-                              FirebaseFirestore.instance.collection('Students');
-                          collRef.add({
-                            "SP ID": _id.text,
-                            "First Name": _fname.text,
-                            "Last Name": _lname.text,
-                            "DOB": _date.text,
-                            "Mobile": _mobile.text,
-                            "Email-Id": _email.text,
-                            "Category": _selectedcat.toString(),
-                            "Password": _mobile.text
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _lname,
+                    decoration: const InputDecoration(
+                      labelText: "Last Name",
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Last Name is required";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: RadioListTile<String>(
+                        title: const Text('Female'),
+                        value: 'Female',
+                        groupValue: _selectedGender,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGender = value!;
                           });
-                          AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.success,
-                              animType: AnimType.bottomSlide,
-                              showCloseIcon: true,
-                              title: "Student added successfully",
-                              desc: "Student Id : ${_id.text}",
-                              btnOkOnPress: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => add_student(),
-                                    ));
-                              }).show();
                         },
-                        child: const Text(
-                          "SUBMIT",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        )),
+                      ),
+                    ),
+                    Expanded(
+                      child: RadioListTile<String>(
+                        title: const Text('Male'),
+                        value: 'Male',
+                        groupValue: _selectedGender,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGender = value!;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                      controller: _date,
+                      decoration: const InputDecoration(
+                          prefixIcon: Icon(FontAwesomeIcons.calendar),
+                          labelText: "DOB",
+                          border: OutlineInputBorder()),
+                      onTap: () async {
+                        DateTime? pickdate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime.now(),
+                        );
+
+                        if (pickdate != null) {
+                          setState(() {
+                            _date.text =
+                                DateFormat("dd-MM-yyyy").format(pickdate);
+                          });
+                        }
+                      }),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _mobile,
+                    keyboardType: TextInputType.phone,
+                    decoration: const InputDecoration(
+                      labelText: "Mobile No",
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty || value.length>10) {
+                        return "10 Digit no. is required";
+                      }
+                      return null;
+                    },
                   ),
-                  SizedBox(
-                    height: 60,
-                    width: 150,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          backgroundColor: Colors.transparent,
-                        ),
-                        onPressed: () {},
-                        child: const Text(
-                          "RESET",
-                          style:
-                              TextStyle(color: Color(0xff002233), fontSize: 20),
-                        )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _email,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                      labelText: "Email-Id",
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Email-Id is required";
+                      }
+                      return null;
+                    },
                   ),
-                ],
-              )
-            ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: DropdownButtonFormField(
+                      decoration:
+                          const InputDecoration(border: OutlineInputBorder()),
+                      value: _selectedcat,
+                      items: _Category.map((e) => DropdownMenuItem(
+                            child: Text(e),
+                            value: e,
+                          )).toList(),
+                      onChanged: (val) {
+                        setState(() {
+                          _selectedcat = val as String;
+                        });
+                      }),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      height: 60,
+                      width: 150,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            backgroundColor: const Color(0xff002233),
+                          ),
+                          onPressed: _submit,
+                          child: const Text(
+                            "SUBMIT",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 60,
+                      width: 150,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            backgroundColor: Colors.transparent,
+                          ),
+                          onPressed: () {},
+                          child: const Text(
+                            "RESET",
+                            style:
+                                TextStyle(color: Color(0xff002233), fontSize: 20),
+                          )),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
