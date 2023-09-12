@@ -1,3 +1,4 @@
+import 'package:clg_project/crud_opration.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,8 @@ class add_student extends StatelessWidget {
                   title: const Text("Mukund"),
                   subtitle: const Text("TYBCA-C"),
                   trailing: IconButton(
-                      onPressed: () {}, icon: const Icon(FontAwesomeIcons.pen))),
+                      onPressed: () {},
+                      icon: const Icon(FontAwesomeIcons.pen))),
             ],
           )
         ],
@@ -58,7 +60,6 @@ class add_student extends StatelessWidget {
 class student_add_form extends StatefulWidget {
   student_add_form({super.key});
 
-
   @override
   State<student_add_form> createState() => _student_add_formState();
 }
@@ -66,13 +67,13 @@ class student_add_form extends StatefulWidget {
 class _student_add_formState extends State<student_add_form> {
   final TextEditingController _date = TextEditingController();
 
-  // TextEditingController _id = TextEditingController();
+  TextEditingController _id = TextEditingController();
   final TextEditingController _fname = TextEditingController();
 
   final TextEditingController _lname = TextEditingController();
 
-  // TextEditingController _mobile = TextEditingController();
-  // TextEditingController _email = TextEditingController();
+  TextEditingController _mobile = TextEditingController();
+  TextEditingController _email = TextEditingController();
 
   _student_add_formState() {
     _selectedcat = _Category[0];
@@ -100,6 +101,7 @@ class _student_add_formState extends State<student_add_form> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
+                  controller: _id,
                   decoration: const InputDecoration(
                     labelText: "SP ID",
                     border: OutlineInputBorder(),
@@ -181,7 +183,7 @@ class _student_add_formState extends State<student_add_form> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  maxLength: 10,
+                  controller: _mobile,
                   keyboardType: TextInputType.phone,
                   decoration: const InputDecoration(
                     labelText: "Mobile No",
@@ -192,6 +194,7 @@ class _student_add_formState extends State<student_add_form> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
+                  controller: _email,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     labelText: "Email-Id",
@@ -202,7 +205,8 @@ class _student_add_formState extends State<student_add_form> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: DropdownButtonFormField(
-                    decoration: const InputDecoration(border: OutlineInputBorder()),
+                    decoration:
+                        const InputDecoration(border: OutlineInputBorder()),
                     value: _selectedcat,
                     items: _Category.map((e) => DropdownMenuItem(
                           child: Text(e),
@@ -227,14 +231,18 @@ class _student_add_formState extends State<student_add_form> {
                           backgroundColor: const Color(0xff002233),
                         ),
                         onPressed: () {
-                          try {insert(_fname.text);
-                          } catch (err) {
-                            print("errerr $err");
+                          CollectionReference collRef =
+                              FirebaseFirestore.instance.collection('Students');
+                          collRef.add({
+                            "SP ID":_id.text,
+                            "First Name": _fname.text,
+                            "Last Name": _lname.text,
+                            "DOB": _date.text,
+                            "Mobile": _mobile.text,
+                            "Email-Id": _email.text,
+                            "Category":_selectedcat.toString()
+                          });
 
-                          }
-                          // CollectionReference collRef =
-                          //     FirebaseFirestore.instance.collection('Students');
-                          // collRef.add({'Name': _fname.text});
                         },
                         child: const Text(
                           "SUBMIT",
@@ -265,10 +273,10 @@ class _student_add_formState extends State<student_add_form> {
       ),
     );
   }
-  Future<void> insert( String ename)
-  async {
-    await FirebaseFirestore.instance.collection("Students").add({
-      'Name': ename
-    });
+
+  Future<void> insert(String ename) async {
+    await FirebaseFirestore.instance
+        .collection("Students")
+        .add({'Name': ename});
   }
 }
