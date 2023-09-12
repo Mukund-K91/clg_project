@@ -1,4 +1,4 @@
-import 'package:clg_project/crud_opration.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -234,15 +234,28 @@ class _student_add_formState extends State<student_add_form> {
                           CollectionReference collRef =
                               FirebaseFirestore.instance.collection('Students');
                           collRef.add({
-                            "SP ID":_id.text,
+                            "SP ID": _id.text,
                             "First Name": _fname.text,
                             "Last Name": _lname.text,
                             "DOB": _date.text,
                             "Mobile": _mobile.text,
                             "Email-Id": _email.text,
-                            "Category":_selectedcat.toString()
+                            "Category": _selectedcat.toString()
                           });
-
+                          AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.success,
+                              animType: AnimType.bottomSlide,
+                              showCloseIcon: true,
+                              title: "Student added successfully",
+                              desc: "Student Id : ${_id.text}",
+                              btnOkOnPress: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => add_student(),
+                                    ));
+                              }).show();
                         },
                         child: const Text(
                           "SUBMIT",
@@ -272,11 +285,5 @@ class _student_add_formState extends State<student_add_form> {
         ),
       ),
     );
-  }
-
-  Future<void> insert(String ename) async {
-    await FirebaseFirestore.instance
-        .collection("Students")
-        .add({'Name': ename});
   }
 }
