@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "712015779968",
+    "firebase_url": "https://mk-international-college-default-rtdb.firebaseio.com",
+    "project_id": "mk-international-college",
+    "storage_bucket": "mk-international-college.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712015779968:android:ab79f66de8537b6c34ee65",
+        "android_client_info": {
+          "package_name": "com.example.clg_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712015779968-9s1e0qu3ok9kv4hupf41rajfh69eml9g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7ZcxAVNAGjJ--zxWrPkQ84DTTDjopTxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712015779968-9s1e0qu3ok9kv4hupf41rajfh69eml9g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

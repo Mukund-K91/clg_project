@@ -39,8 +39,11 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   font_awesome_flutter: ^10.5.0
   intl: ^0.17.0
+  firebase_database: ^10.2.5
   firebase_core: ^2.15.1
   cloud_firestore: ^4.9.1
+  fluttertoast: ^8.1.1
+
 
 
 

@@ -1,11 +1,8 @@
-import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'firebase_options.dart';
 
 enum GenderTypeEnum { Donwloadable, Deliverable }
 
@@ -16,11 +13,11 @@ class add_student extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "STUDENTS",
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Color(0xff002233),
+        backgroundColor: const Color(0xff002233),
         actions: [
           IconButton(
               onPressed: () {
@@ -30,7 +27,7 @@ class add_student extends StatelessWidget {
                       builder: (context) => student_add_form(),
                     ));
               },
-              icon: Icon(
+              icon: const Icon(
                 FontAwesomeIcons.add,
                 size: 35,
                 color: Colors.white,
@@ -42,14 +39,14 @@ class add_student extends StatelessWidget {
           ListView(
             children: [
               ListTile(
-                  leading: CircleAvatar(
+                  leading: const CircleAvatar(
                     radius: 40,
                     foregroundImage: AssetImage("man.png"),
                   ),
-                  title: Text("Mukund"),
-                  subtitle: Text("TYBCA-C"),
+                  title: const Text("Mukund"),
+                  subtitle: const Text("TYBCA-C"),
                   trailing: IconButton(
-                      onPressed: () {}, icon: Icon(FontAwesomeIcons.pen))),
+                      onPressed: () {}, icon: const Icon(FontAwesomeIcons.pen))),
             ],
           )
         ],
@@ -61,17 +58,19 @@ class add_student extends StatelessWidget {
 class student_add_form extends StatefulWidget {
   student_add_form({super.key});
 
+
   @override
   State<student_add_form> createState() => _student_add_formState();
 }
 
 class _student_add_formState extends State<student_add_form> {
-  TextEditingController _date = TextEditingController();
+  final TextEditingController _date = TextEditingController();
 
   // TextEditingController _id = TextEditingController();
-  TextEditingController _fname = TextEditingController();
+  final TextEditingController _fname = TextEditingController();
 
-  // TextEditingController _lname = TextEditingController();
+  final TextEditingController _lname = TextEditingController();
+
   // TextEditingController _mobile = TextEditingController();
   // TextEditingController _email = TextEditingController();
 
@@ -87,21 +86,21 @@ class _student_add_formState extends State<student_add_form> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "ADD Student",
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Color(0xff002233),
+        backgroundColor: const Color(0xff002233),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "SP ID",
                     border: OutlineInputBorder(),
                   ),
@@ -111,7 +110,7 @@ class _student_add_formState extends State<student_add_form> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   controller: _fname,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "First Name",
                     border: OutlineInputBorder(),
                   ),
@@ -120,7 +119,8 @@ class _student_add_formState extends State<student_add_form> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  controller: _lname,
+                  decoration: const InputDecoration(
                     labelText: "Last Name",
                     border: OutlineInputBorder(),
                   ),
@@ -130,7 +130,7 @@ class _student_add_formState extends State<student_add_form> {
                 children: [
                   Expanded(
                     child: RadioListTile<String>(
-                      title: Text('Female'),
+                      title: const Text('Female'),
                       value: 'Female',
                       groupValue: _selectedGender,
                       onChanged: (value) {
@@ -142,7 +142,7 @@ class _student_add_formState extends State<student_add_form> {
                   ),
                   Expanded(
                     child: RadioListTile<String>(
-                      title: Text('Male'),
+                      title: const Text('Male'),
                       value: 'Male',
                       groupValue: _selectedGender,
                       onChanged: (value) {
@@ -158,7 +158,7 @@ class _student_add_formState extends State<student_add_form> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                     controller: _date,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         prefixIcon: Icon(FontAwesomeIcons.calendar),
                         labelText: "DOB",
                         border: OutlineInputBorder()),
@@ -183,7 +183,7 @@ class _student_add_formState extends State<student_add_form> {
                 child: TextFormField(
                   maxLength: 10,
                   keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Mobile No",
                     border: OutlineInputBorder(),
                   ),
@@ -193,7 +193,7 @@ class _student_add_formState extends State<student_add_form> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Email-Id",
                     border: OutlineInputBorder(),
                   ),
@@ -202,7 +202,7 @@ class _student_add_formState extends State<student_add_form> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: DropdownButtonFormField(
-                    decoration: InputDecoration(border: OutlineInputBorder()),
+                    decoration: const InputDecoration(border: OutlineInputBorder()),
                     value: _selectedcat,
                     items: _Category.map((e) => DropdownMenuItem(
                           child: Text(e),
@@ -224,14 +224,19 @@ class _student_add_formState extends State<student_add_form> {
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
-                          backgroundColor: Color(0xff002233),
+                          backgroundColor: const Color(0xff002233),
                         ),
                         onPressed: () {
-                          CollectionReference collRef =
-                              FirebaseFirestore.instance.collection('Students');
-                          collRef.add({'Name': _fname.text});
+                          try {insert(_fname.text);
+                          } catch (err) {
+                            print("errerr $err");
+
+                          }
+                          // CollectionReference collRef =
+                          //     FirebaseFirestore.instance.collection('Students');
+                          // collRef.add({'Name': _fname.text});
                         },
-                        child: Text(
+                        child: const Text(
                           "SUBMIT",
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         )),
@@ -246,7 +251,7 @@ class _student_add_formState extends State<student_add_form> {
                           backgroundColor: Colors.transparent,
                         ),
                         onPressed: () {},
-                        child: Text(
+                        child: const Text(
                           "RESET",
                           style:
                               TextStyle(color: Color(0xff002233), fontSize: 20),
@@ -259,5 +264,11 @@ class _student_add_formState extends State<student_add_form> {
         ),
       ),
     );
+  }
+  Future<void> insert( String ename)
+  async {
+    await FirebaseFirestore.instance.collection("Students").add({
+      'Name': ename
+    });
   }
 }

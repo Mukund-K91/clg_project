@@ -53,7 +53,7 @@ class Drawer_code extends StatelessWidget {
         ),
         TextButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => home_main(),));
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => home_main(),));
             },
             child: Text(
               "Log Out !",
