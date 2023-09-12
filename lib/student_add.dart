@@ -50,18 +50,20 @@ class add_student extends StatelessWidget {
           return ListView(
             children: snapshot.data!.docs.map((document) {
               return ListTile(
-                  leading: Text(
-                    document["SP ID"],
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xff002233),
-                        fontWeight: FontWeight.bold),
+                  leading: CircleAvatar(
+                    child: Text(
+                      document["Div"],
+                      style: TextStyle(
+                          fontSize: 25,
+                          color: Color(0xff002233),
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                   title: Text(
-                    document["First Name"],
+                    document["First Name"] + document["Last Name"],
                     style: TextStyle(fontSize: 20),
                   ),
-                  subtitle: Text("TYBCA-C"),
+                  subtitle: Text(document["SP ID"]),
                   trailing: IconButton(
                       iconSize: 20,
                       onPressed: () {},
@@ -90,22 +92,47 @@ class _student_add_formState extends State<student_add_form> {
   final TextEditingController _lname = TextEditingController();
 
   TextEditingController _mobile = TextEditingController();
-  TextEditingController _email = TextEditingController();
 
   _student_add_formState() {
-    _selectedcat = _Category[0];
+    _selectedDiv = _divison[0];
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void _submit() {
-    if (_formKey.currentState!.validate()) {}
+    if (_formKey.currentState!.validate()) {
+      CollectionReference collRef =
+          FirebaseFirestore.instance.collection('Students');
+      collRef.add({
+        "SP ID": _id.text,
+        "First Name": _fname.text,
+        "Last Name": _lname.text,
+        "DOB": _date.text,
+        "Mobile": _mobile.text,
+        "Password": _mobile.text,
+        "Div": _selectedDiv
+      });
+      AwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          animType: AnimType.bottomSlide,
+          showCloseIcon: true,
+          title: "Student added successfully",
+          desc: "SP ID : ${_id.text.toString()}\nName :${_fname.text.toString()}${_lname.text.toString()}",
+          btnOkOnPress: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => add_student(),
+                ));
+          }).show();
+    }
   }
 
   @override
   String _selectedGender = 'Male';
-  final _Category = ["none", "SC", "OBC", "General", "ST", "Other"];
-  String? _selectedcat = "SC";
+  final _divison = ["Div", "A", "B", "C", "D"];
+  String? _selectedDiv = "Div";
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -234,25 +261,8 @@ class _student_add_formState extends State<student_add_form> {
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
-                      if (value!.isEmpty || value.length>10) {
+                      if (value!.isEmpty || value.length > 10) {
                         return "10 Digit no. is required";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _email,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      labelText: "Email-Id",
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Email-Id is required";
                       }
                       return null;
                     },
@@ -263,14 +273,16 @@ class _student_add_formState extends State<student_add_form> {
                   child: DropdownButtonFormField(
                       decoration:
                           const InputDecoration(border: OutlineInputBorder()),
-                      value: _selectedcat,
-                      items: _Category.map((e) => DropdownMenuItem(
-                            child: Text(e),
-                            value: e,
-                          )).toList(),
+                      value: _selectedDiv,
+                      items: _divison
+                          .map((e) => DropdownMenuItem(
+                                child: Text(e),
+                                value: e,
+                              ))
+                          .toList(),
                       onChanged: (val) {
                         setState(() {
-                          _selectedcat = val as String;
+                          _selectedDiv = val as String;
                         });
                       }),
                 ),
@@ -304,8 +316,8 @@ class _student_add_formState extends State<student_add_form> {
                           onPressed: () {},
                           child: const Text(
                             "RESET",
-                            style:
-                                TextStyle(color: Color(0xff002233), fontSize: 20),
+                            style: TextStyle(
+                                color: Color(0xff002233), fontSize: 20),
                           )),
                     ),
                   ],
