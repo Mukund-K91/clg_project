@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,7 +9,9 @@ import 'package:intl/intl.dart';
 enum GenderTypeEnum { Donwloadable, Deliverable }
 
 class add_student extends StatelessWidget {
-  const add_student({super.key});
+  add_student({super.key});
+
+  DatabaseReference query = FirebaseDatabase.instance.ref().child('Students');
 
   @override
   Widget build(BuildContext context) {
@@ -35,23 +38,37 @@ class add_student extends StatelessWidget {
               ))
         ],
       ),
-      body: Stack(
-        children: [
-          ListView(
-            children: [
-              ListTile(
-                  leading: const CircleAvatar(
-                    radius: 40,
-                    foregroundImage: AssetImage("man.png"),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('Students').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return ListView(
+            children: snapshot.data!.docs.map((document) {
+              return ListTile(
+                  leading: Text(
+                    document["SP ID"],
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Color(0xff002233),
+                        fontWeight: FontWeight.bold),
                   ),
-                  title: const Text("Mukund"),
-                  subtitle: const Text("TYBCA-C"),
+                  title: Text(
+                    document["First Name"],
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  subtitle: Text("TYBCA-C"),
                   trailing: IconButton(
+                      iconSize: 20,
                       onPressed: () {},
-                      icon: const Icon(FontAwesomeIcons.pen))),
-            ],
-          )
-        ],
+                      icon: FaIcon(FontAwesomeIcons.pen)));
+            }).toList(),
+          );
+        },
       ),
     );
   }
@@ -59,6 +76,8 @@ class add_student extends StatelessWidget {
 
 class student_add_form extends StatefulWidget {
   student_add_form({super.key});
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   State<student_add_form> createState() => _student_add_formState();
@@ -81,7 +100,7 @@ class _student_add_formState extends State<student_add_form> {
 
   @override
   String _selectedGender = 'Male';
-  final _Category = ["SC", "OBC", "General", "ST", "Other"];
+  final _Category = ["none", "SC", "OBC", "General", "ST", "Other"];
   String? _selectedcat = "SC";
 
   Widget build(BuildContext context) {
@@ -102,10 +121,19 @@ class _student_add_formState extends State<student_add_form> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   controller: _id,
+                  keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     labelText: "SP ID",
                     border: OutlineInputBorder(),
                   ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("SP ID is required"),
+                      ));
+                    }
+                    return null;
+                  },
                 ),
               ),
               Padding(
@@ -116,6 +144,14 @@ class _student_add_formState extends State<student_add_form> {
                     labelText: "First Name",
                     border: OutlineInputBorder(),
                   ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("SP ID is required"),
+                      ));
+                    }
+                    return null;
+                  },
                 ),
               ),
               Padding(
@@ -126,6 +162,14 @@ class _student_add_formState extends State<student_add_form> {
                     labelText: "Last Name",
                     border: OutlineInputBorder(),
                   ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("SP ID is required"),
+                      ));
+                    }
+                    return null;
+                  },
                 ),
               ),
               Row(
@@ -178,6 +222,15 @@ class _student_add_formState extends State<student_add_form> {
                               DateFormat("dd-MM-yyyy").format(pickdate);
                         });
                       }
+                      validator:
+                      (value) {
+                        if (value!.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("SP ID is required"),
+                          ));
+                        }
+                        return null;
+                      };
                     }),
               ),
               Padding(
@@ -189,6 +242,14 @@ class _student_add_formState extends State<student_add_form> {
                     labelText: "Mobile No",
                     border: OutlineInputBorder(),
                   ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("SP ID is required"),
+                      ));
+                    }
+                    return null;
+                  },
                 ),
               ),
               Padding(
@@ -200,6 +261,14 @@ class _student_add_formState extends State<student_add_form> {
                     labelText: "Email-Id",
                     border: OutlineInputBorder(),
                   ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("SP ID is required"),
+                      ));
+                    }
+                    return null;
+                  },
                 ),
               ),
               Padding(
@@ -240,7 +309,8 @@ class _student_add_formState extends State<student_add_form> {
                             "DOB": _date.text,
                             "Mobile": _mobile.text,
                             "Email-Id": _email.text,
-                            "Category": _selectedcat.toString()
+                            "Category": _selectedcat.toString(),
+                            "Password": _mobile.text
                           });
                           AwesomeDialog(
                               context: context,
