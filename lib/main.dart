@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: login("SP ID", ""),
+      home: student_add_form(),
     );
   }
 }
@@ -77,7 +77,7 @@ class home_main extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => login("SP ID", ""),
+                                  builder: (context) => login("Mobile No"),
                                 ));
                           },
                           child: Text(
@@ -99,7 +99,7 @@ class home_main extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => login("Faculty ID", ""),
+                                  builder: (context) => login("Faculty ID"),
                                 ));
                           },
                           child: Text(

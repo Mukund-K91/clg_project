@@ -1,4 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:clg_project/dashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,9 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class login extends StatefulWidget {
   var _txtfield;
 
-  var _spId;
-
-  login(this._txtfield, this._spId);
+  login(this._txtfield);
 
   @override
   State<login> createState() => _loginState();
@@ -16,40 +15,27 @@ class login extends StatefulWidget {
 
 class _loginState extends State<login> {
   bool passwordObscured = true;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future<void> _login() async {
-    if (_formKey.currentState!.validate()) {}
+    if (_formKey.currentState!.validate()) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => dashboard("SP ID"),
+          ));
+    }
   }
+
+  final TextEditingController _spid = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-    return FutureBuilder<DocumentSnapshot>(
-      future: users.doc(widget._spId).get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return Text("Something went wrong");
-        }
-
-        if (snapshot.hasData && !snapshot.data!.exists) {
-          return Text("Document does not exist");
-        }
-
-        if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data =
-              snapshot.data!.data() as Map<String, dynamic>;
-          return Text("Full Name: ${data['full_name']} ${data['last_name']}");
-        }
-
-        return Text("loading");
-      },
-    );
     return Scaffold(
         body: Container(
       height: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image: DecorationImage(
               fit: BoxFit.cover,
               image: AssetImage("assets/images/login_bg.png"))),
@@ -81,10 +67,11 @@ class _loginState extends State<login> {
                   child: Column(
                     children: [
                       TextFormField(
+                        controller: _spid,
                         decoration: InputDecoration(
                             labelText: widget._txtfield,
                             labelStyle: TextStyle(fontSize: 15),
-                            prefixIcon: widget._txtfield == "SP ID"
+                            prefixIcon: widget._txtfield == "Mobile No"
                                 ? Icon(FontAwesomeIcons.userGraduate,
                                     color: Color(0xff002233))
                                 : Icon(

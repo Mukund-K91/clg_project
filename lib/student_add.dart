@@ -1,6 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -39,7 +38,7 @@ class add_student extends StatelessWidget {
         ],
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('Students').snapshots(),
+        stream: FirebaseFirestore.instance.collection('students').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -102,7 +101,7 @@ class _student_add_formState extends State<student_add_form> {
   void _submit() {
     if (_formKey.currentState!.validate()) {
       CollectionReference collRef =
-          FirebaseFirestore.instance.collection('Students');
+          FirebaseFirestore.instance.collection('students');
       collRef.add({
         "SP ID": _id.text,
         "First Name": _fname.text,
