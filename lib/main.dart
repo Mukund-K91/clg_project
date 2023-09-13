@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: login("SP ID"),
+      home: login("SP ID", ""),
     );
   }
 }
@@ -71,13 +71,19 @@ class home_main extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5)),
-                          backgroundColor: Colors.transparent,
-                          side: BorderSide(color: Colors.white)),
-
+                              backgroundColor: Colors.transparent,
+                              side: BorderSide(color: Colors.white)),
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => login("SP ID"),));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => login("SP ID", ""),
+                                ));
                           },
-                          child: Text("LOGIN AS STUDENT",style: TextStyle(color: Colors.white,fontSize: 15),)),
+                          child: Text(
+                            "LOGIN AS STUDENT",
+                            style: TextStyle(color: Colors.white, fontSize: 15),
+                          )),
                     ),
                     const SizedBox(
                       height: 15,
@@ -90,9 +96,17 @@ class home_main extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5))),
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => login("Faculty ID"),));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => login("Faculty ID", ""),
+                                ));
                           },
-                          child: Text("LOGIN AS FACULTY",style: TextStyle(color: Color(0xff002233),fontSize: 15),)),
+                          child: Text(
+                            "LOGIN AS FACULTY",
+                            style: TextStyle(
+                                color: Color(0xff002233), fontSize: 15),
+                          )),
                     ),
                   ],
                 ),
@@ -104,5 +118,3 @@ class home_main extends StatelessWidget {
     );
   }
 }
-
-

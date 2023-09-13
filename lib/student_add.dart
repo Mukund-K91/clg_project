@@ -11,7 +11,7 @@ enum GenderTypeEnum { Donwloadable, Deliverable }
 class add_student extends StatelessWidget {
   add_student({super.key});
 
-  DatabaseReference query = FirebaseDatabase.instance.ref().child('Students');
+  // DatabaseReference query = FirebaseDatabase.instance.ref().child('Students');
 
   @override
   Widget build(BuildContext context) {
