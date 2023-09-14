@@ -6,24 +6,24 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class dashboard extends StatelessWidget {
-  var _id;
+  var user;
+  var email;
 
-  dashboard(this._id)
-  {}
+  dashboard(this.user, this.email) {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           leading: Builder(
-            builder: (context) =>
-                IconButton(
-                    onPressed: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                    icon: Icon(
-                      FontAwesomeIcons.bars,
-                      color: Colors.white,
-                    )),
+            builder: (context) => IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                icon: Icon(
+                  FontAwesomeIcons.bars,
+                  color: Colors.white,
+                )),
           ),
           title: Text(
             "DASHBOARD",
@@ -34,7 +34,6 @@ class dashboard extends StatelessWidget {
         drawer: Drawer(
           child: Drawer_code(),
         ),
-        body:_id=="SP ID"?student_dashboard():faculty_dashboard()
-    );
+        body: user == "student" ? student_dashboard() : faculty_dashboard());
   }
 }

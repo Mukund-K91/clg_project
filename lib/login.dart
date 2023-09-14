@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clg_project/dashboard.dart';
+import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class login extends StatefulWidget {
-  var _txtfield;
+  var _user;
 
-  login(this._txtfield);
+  login(this._user);
 
   @override
   State<login> createState() => _loginState();
@@ -26,28 +27,40 @@ class _loginState extends State<login> {
       try {
         final String email = _email.text;
         final String password = _password.text;
-        await _auth
-            .signInWithEmailAndPassword(email: email, password: password);
-        print('User created with email and password: $email');
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+        AwesomeDialog(
+            context: context,
+            dialogType: DialogType.success,
+            animType: AnimType.bottomSlide,
+            showCloseIcon: true,
+            title: "Login Successfully",
+            btnOkOnPress: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => dashboard(widget._user, email),
+                  ));
+            }).show();
       } catch (error) {
-        print('Error creating user with email and password: $error');
+        AwesomeDialog(
+                context: context,
+                dialogType: DialogType.error,
+                animType: AnimType.bottomSlide,
+                showCloseIcon: true,
+                btnOkOnPress: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => home_main(),
+                      ));
+                },
+                title: "${widget._user} Not Found",
+                desc: widget._user == "student"
+                    ? "Please contact your respective faculty for Register yourself in eCollege App"
+                    : "Please contact admin for Register yourself in eCollege App")
+            .show();
       }
-      // final String email = _email.text;
-      // final String password = _password.text;
-      // _auth.signInWithEmailAndPassword(email: email, password: password);
-      // AwesomeDialog(
-      //         context: context,
-      //         dialogType: DialogType.success,
-      //         animType: AnimType.bottomSlide,
-      //         showCloseIcon: true,
-      //         title: "Student added successfully",
-      //         btnOkOnPress: () {})
-      //     .show();
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => dashboard("SP ID"),
-      //     ));
     }
   }
 
@@ -93,9 +106,9 @@ class _loginState extends State<login> {
                       TextFormField(
                         controller: _email,
                         decoration: InputDecoration(
-                            labelText: widget._txtfield,
+                            labelText: "Email ID",
                             labelStyle: TextStyle(fontSize: 15),
-                            prefixIcon: widget._txtfield == "Mobile No"
+                            prefixIcon: widget._user == "student"
                                 ? Icon(FontAwesomeIcons.userGraduate,
                                     color: Color(0xff002233))
                                 : Icon(
@@ -105,7 +118,7 @@ class _loginState extends State<login> {
                             border: OutlineInputBorder()),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "SP ID is required for login";
+                            return "Register Email Id is required for login";
                           }
                           return null;
                         },
@@ -142,11 +155,6 @@ class _loginState extends State<login> {
                           return null;
                         },
                       ),
-                      Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                              onPressed: () {},
-                              child: Text("Reset Password?"))),
                       const SizedBox(
                         height: 20,
                       ),

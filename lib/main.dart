@@ -1,6 +1,4 @@
-import 'package:clg_project/faculty_dashboard.dart';
 import 'package:clg_project/login.dart';
-import 'package:clg_project/student_add.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +20,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: login("SP ID"),
+      home: home_main(),
     );
   }
 }
@@ -78,7 +76,7 @@ class home_main extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => login("Mobile No"),
+                                  builder: (context) => login("student"),
                                 ));
                           },
                           child: Text(
@@ -100,7 +98,7 @@ class home_main extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => login("Faculty ID"),
+                                  builder: (context) => login("Faculty"),
                                 ));
                           },
                           child: Text(
