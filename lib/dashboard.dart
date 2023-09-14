@@ -5,14 +5,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class dashboard extends StatelessWidget {
-  var user;
+class Dashboard extends StatelessWidget {
+ final String user;
   var email;
 
-  dashboard(this.user, this.email) {}
+  Dashboard(this.user, this.email, {super.key});
 
   @override
   Widget build(BuildContext context) {
+    print(email);
     return Scaffold(
         appBar: AppBar(
           leading: Builder(
@@ -20,20 +21,20 @@ class dashboard extends StatelessWidget {
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
                 },
-                icon: Icon(
+                icon: const Icon(
                   FontAwesomeIcons.bars,
                   color: Colors.white,
                 )),
           ),
           title: Text(
-            "DASHBOARD",
-            style: TextStyle(color: Colors.white),
+            email,
+            style: const TextStyle(color: Colors.white),
           ),
-          backgroundColor: Color(0xff002233),
+          backgroundColor: const Color(0xff002233),
         ),
         drawer: Drawer(
-          child: Drawer_code(),
+          child: Drawer_code(user, email),
         ),
-        body: user == "student" ? student_dashboard() : faculty_dashboard());
+        body: user == "student" ? const StudentDashboard() : const FacultyDashboard());
   }
 }

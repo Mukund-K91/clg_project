@@ -106,17 +106,6 @@ class _student_add_formState extends State<student_add_form> {
 
   Future<void> _submit() async {
     if (_formKey.currentState!.validate()) {
-      // CollectionReference collRef =
-      //     FirebaseFirestore.instance.collection('students');
-      // collRef.add({
-      //   "SP ID": _id.text,
-      //   "First Name": _fname.text,
-      //   "Last Name": _lname.text,
-      //   "Mobile": _mobile.text,
-      //   "Email": _email.text,
-      //   "Password": _mobile.text,
-      //   "Div": _selectedDiv
-      // });
       try {
         final String email = _email.text;
         final String password = _mobile.text;

@@ -1,11 +1,12 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:clg_project/dashboard.dart';
-import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'dashboard.dart';
+import 'main.dart';
 
 class login extends StatefulWidget {
   var _user;
@@ -39,7 +40,7 @@ class _loginState extends State<login> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => dashboard(widget._user, email),
+                    builder: (context) => Dashboard(widget._user, email),
                   ));
             }).show();
       } catch (error) {

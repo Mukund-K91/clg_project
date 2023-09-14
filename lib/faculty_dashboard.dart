@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class faculty_dashboard extends StatelessWidget {
-  const faculty_dashboard({super.key});
+class FacultyDashboard extends StatelessWidget {
+  const FacultyDashboard({super.key});
 
   @override
   Widget build(BuildContext context) {

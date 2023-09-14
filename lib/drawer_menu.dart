@@ -1,76 +1,54 @@
-import 'package:clg_project/main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Drawer_code extends StatelessWidget {
-  Drawer_code({super.key});
+  String user;
+  var email;
+
+  Drawer_code(this.user, this.email);
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        const UserAccountsDrawerHeader(
-          decoration: BoxDecoration(color: Color(0xff002233)),
-          margin: EdgeInsets.all(0),
-          accountName: Text("MUKUND"),
-          accountEmail: Text("support@ecollege.com"),
-          currentAccountPicture: CircleAvatar(
-            foregroundImage: AssetImage('assets/images/ex_img.png'),
-          ),
-        ),
-        ListTile(
-          leading: Icon(FontAwesomeIcons.home, color: Color(0xff002233)),
-          title: Text(
-            "HOME",
-          ),
-        ),
-        ListTile(
-          leading: Icon(FontAwesomeIcons.user, color: Color(0xff002233)),
-          title: Text("PROFILE"),
-        ),
-        ListTile(
-          leading: Icon(FontAwesomeIcons.gear, color: Color(0xff002233)),
-          title: Text("SETTINGS"),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(15),
-          child: Text(
-            "Contact us",
-            style: TextStyle(fontSize: 15),
-          ),
-        ),
-        ListTile(
-          leading: Icon(FontAwesomeIcons.phone, color: Color(0xff002233)),
-          title: Text("78XXXXXX77"),
-        ),
-        ListTile(
-          leading: Icon(FontAwesomeIcons.globe, color: Color(0xff002233)),
-          title: Text("ecollege.net"),
-        ),
-        ListTile(
-          leading: Icon(FontAwesomeIcons.location, color: Color(0xff002233)),
-          title: Text("Suart"),
-        ),
-        TextButton(
-          onPressed: () {
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => home_main(),));
-          },
-          child: TextButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => home_main(),
-                  ));
-            },
-            child: Text("LOG OUT!"),
-          ),
-        )
-      ],
+    print(email);
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance.collection('students').where('Email' isEqualTo: email),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        return
+          ListView(
+          children: snapshot.data!.docs.map((document) {
+            return email==document['Email'] ?document[] :
+              // ListTile(
+              //   leading: CircleAvatar(
+              //     child: Text(
+              //       document["Div"],
+              //       style: TextStyle(
+              //           fontSize: 25,
+              //           color: Color(0xff002233),
+              //           fontWeight: FontWeight.bold),
+              //     ),
+              //   ),
+              //   title: Text(
+              //     document["First Name"] + document["Last Name"],
+              //     style: TextStyle(fontSize: 20),
+              //   ),
+              //   subtitle: Text(document["SP ID"]),
+              //   trailing: IconButton(
+              //       iconSize: 20,
+              //       onPressed: () {},
+              //       icon: FaIcon(FontAwesomeIcons.pen)));
+          }).toList(),
+        );
+      },
     );
-    ;
   }
 }
