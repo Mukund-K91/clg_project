@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,7 +14,7 @@ enum GenderTypeEnum { Donwloadable, Deliverable }
 class add_student extends StatelessWidget {
   add_student({super.key});
 
-  // DatabaseReference query = FirebaseDatabase.instance.ref().child('Students');
+  DatabaseReference query = FirebaseDatabase.instance.ref().child('students');
 
   @override
   Widget build(BuildContext context) {
@@ -91,33 +95,55 @@ class _student_add_formState extends State<student_add_form> {
   final TextEditingController _lname = TextEditingController();
 
   TextEditingController _mobile = TextEditingController();
+  final TextEditingController _email = TextEditingController();
 
   _student_add_formState() {
     _selectedDiv = _divison[0];
   }
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  void _submit() {
+  Future<void> _submit() async {
     if (_formKey.currentState!.validate()) {
-      CollectionReference collRef =
-          FirebaseFirestore.instance.collection('students');
-      collRef.add({
-        "SP ID": _id.text,
-        "First Name": _fname.text,
-        "Last Name": _lname.text,
-        "DOB": _date.text,
-        "Mobile": _mobile.text,
-        "Password": _mobile.text,
-        "Div": _selectedDiv
-      });
+      // CollectionReference collRef =
+      //     FirebaseFirestore.instance.collection('students');
+      // collRef.add({
+      //   "SP ID": _id.text,
+      //   "First Name": _fname.text,
+      //   "Last Name": _lname.text,
+      //   "Mobile": _mobile.text,
+      //   "Email": _email.text,
+      //   "Password": _mobile.text,
+      //   "Div": _selectedDiv
+      // });
+      try {
+        final String email = _email.text;
+        final String password = _mobile.text;
+        await _auth
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((value) =>
+                FirebaseFirestore.instance.collection('students').doc().set({
+                  "SP ID": _id.text,
+                  "First Name": _fname.text,
+                  "Last Name": _lname.text,
+                  "Mobile": _mobile.text,
+                  "Email": _email.text,
+                  "Password": _mobile.text,
+                  "Div": _selectedDiv
+                }));
+        print('User created with email and password: $email');
+      } catch (error) {
+        print('Error creating user with email and password: $error');
+      }
       AwesomeDialog(
           context: context,
           dialogType: DialogType.success,
           animType: AnimType.bottomSlide,
           showCloseIcon: true,
           title: "Student added successfully",
-          desc: "SP ID : ${_id.text.toString()}\nName :${_fname.text.toString()}${_lname.text.toString()}",
+          desc:
+              "SP ID : ${_id.text.toString()}\nName :${_fname.text.toString()}${_lname.text.toString()}\n Login Email :${_email.text}",
           btnOkOnPress: () {
             Navigator.push(
                 context,
@@ -229,26 +255,19 @@ class _student_add_formState extends State<student_add_form> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
-                      controller: _date,
-                      decoration: const InputDecoration(
-                          prefixIcon: Icon(FontAwesomeIcons.calendar),
-                          labelText: "DOB",
-                          border: OutlineInputBorder()),
-                      onTap: () async {
-                        DateTime? pickdate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime.now(),
-                        );
-
-                        if (pickdate != null) {
-                          setState(() {
-                            _date.text =
-                                DateFormat("dd-MM-yyyy").format(pickdate);
-                          });
-                        }
-                      }),
+                    controller: _email,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                      labelText: "Email Id",
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Email is required";
+                      }
+                      return null;
+                    },
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

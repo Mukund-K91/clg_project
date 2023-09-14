@@ -1,5 +1,7 @@
-
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clg_project/dashboard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -17,18 +19,40 @@ class _loginState extends State<login> {
   bool passwordObscured = true;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => dashboard("SP ID"),
-          ));
+      try {
+        final String email = _email.text;
+        final String password = _password.text;
+        await _auth
+            .signInWithEmailAndPassword(email: email, password: password);
+        print('User created with email and password: $email');
+      } catch (error) {
+        print('Error creating user with email and password: $error');
+      }
+      // final String email = _email.text;
+      // final String password = _password.text;
+      // _auth.signInWithEmailAndPassword(email: email, password: password);
+      // AwesomeDialog(
+      //         context: context,
+      //         dialogType: DialogType.success,
+      //         animType: AnimType.bottomSlide,
+      //         showCloseIcon: true,
+      //         title: "Student added successfully",
+      //         btnOkOnPress: () {})
+      //     .show();
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => dashboard("SP ID"),
+      //     ));
     }
   }
 
-  final TextEditingController _spid = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +91,7 @@ class _loginState extends State<login> {
                   child: Column(
                     children: [
                       TextFormField(
-                        controller: _spid,
+                        controller: _email,
                         decoration: InputDecoration(
                             labelText: widget._txtfield,
                             labelStyle: TextStyle(fontSize: 15),
@@ -90,6 +114,7 @@ class _loginState extends State<login> {
                         height: 15,
                       ),
                       TextFormField(
+                        controller: _password,
                         obscureText: passwordObscured,
                         obscuringCharacter: '*',
                         decoration: InputDecoration(
