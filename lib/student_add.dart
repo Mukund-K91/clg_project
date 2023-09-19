@@ -66,7 +66,24 @@ class add_student extends StatelessWidget {
                   subtitle: Text(document["SP ID"]),
                   trailing: IconButton(
                       iconSize: 20,
-                      onPressed: () {},
+                      onPressed: () {
+                        AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.question,
+                          showCloseIcon: true,
+                          title: "What Do you Want to do?",
+                          btnOkText: "UPDATE",
+                          btnOkOnPress: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => student_add_form(),
+                                ));
+                          },
+                          btnCancelText: "DELETE",
+                          btnCancelOnPress: () {},
+                        ).show();
+                      },
                       icon: FaIcon(FontAwesomeIcons.pen)));
             }).toList(),
           );
@@ -99,9 +116,11 @@ class _student_add_formState extends State<student_add_form> {
   }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final CollectionReference _query =
+      FirebaseFirestore.instance.collection('students');
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Future<void> _submit() async {
+  Future<void> _add() async {
     if (_formKey.currentState!.validate()) {
       try {
         final String email = _email.text;
@@ -138,6 +157,43 @@ class _student_add_formState extends State<student_add_form> {
                 ));
           }).show();
     }
+  }
+
+  Future<void> _update() async {
+    try {
+      QuerySnapshot querySnapshot = (await FirebaseFirestore.instance
+          .collection('students')
+          .where('SP ID', isEqualTo: _id.text)
+          .get()) as QuerySnapshot<Object?>;
+      for (QueryDocumentSnapshot document in querySnapshot.docs) {
+        await document.reference.update({
+          "SP ID": _id.text,
+          "First Name": _fname.text,
+          "Last Name": _lname.text,
+          "Mobile": _mobile.text,
+          "Email": _email.text,
+          "Password": _mobile.text,
+          "Div": _selectedDiv
+        });
+      }
+      print('User created with email and password:');
+    } catch (error) {
+      print('Error creating user with email and password: $error');
+    }
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.success,
+        animType: AnimType.bottomSlide,
+        showCloseIcon: true,
+        title: "Student Updated successfully",
+        desc: "SP ID : ${_id.text.toString()}",
+        btnOkOnPress: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => add_student(),
+              ));
+        }).show();
   }
 
   @override
@@ -302,9 +358,9 @@ class _student_add_formState extends State<student_add_form> {
                                 borderRadius: BorderRadius.circular(5)),
                             backgroundColor: const Color(0xff002233),
                           ),
-                          onPressed: _submit,
+                          onPressed: _add,
                           child: const Text(
-                            "SUBMIT",
+                            "ADD",
                             style: TextStyle(color: Colors.white, fontSize: 20),
                           )),
                     ),
@@ -317,9 +373,9 @@ class _student_add_formState extends State<student_add_form> {
                                 borderRadius: BorderRadius.circular(5)),
                             backgroundColor: Colors.transparent,
                           ),
-                          onPressed: () {},
+                          onPressed: _update,
                           child: const Text(
-                            "RESET",
+                            "UPDATE",
                             style: TextStyle(
                                 color: Color(0xff002233), fontSize: 20),
                           )),
