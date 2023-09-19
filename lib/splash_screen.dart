@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'package:clg_project/login.dart';
 import 'package:clg_project/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:lottie/lottie.dart';
 
 class splash_screen extends StatefulWidget {
   const splash_screen({super.key});
@@ -16,14 +14,15 @@ class splash_screen extends StatefulWidget {
 
 class _splash_screenState extends State<splash_screen> {
   @override
+
   void initState() {
     super.initState();
     Timer(Duration(seconds: 5), () {
-      // Navigator.pushReplacement(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => home_main(),
-      //     ));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeMain(),
+          ));
     });
   }
 

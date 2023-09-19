@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -132,7 +133,11 @@ class Profile extends StatelessWidget {
                             child: Text("FORGOT PASSWORD?")),
                         TextButton(
                             onPressed: () {
-                              _auth.signOut();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomeMain(),
+                                  ));
                             },
                             child: Text("LOG OUT!"))
                       ],
@@ -172,4 +177,5 @@ Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
     print('Error fetching data: $e');
     return null;
   }
+
 }
