@@ -1,5 +1,4 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +52,7 @@ class _loginState extends State<login> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => home_main(),
+                        builder: (context) => HomeMain(),
                       ));
                 },
                 title: "${widget._user} Not Found",

@@ -1,5 +1,9 @@
 import 'package:clg_project/dashboard.dart';
+import 'package:clg_project/profile.dart';
+import 'package:clg_project/drawer_menu.dart';
 import 'package:clg_project/login.dart';
+import 'package:clg_project/student_add.dart';
+import 'package:clg_project/student_dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -17,17 +21,18 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff002233)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff002233)),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: Dashboard("student", "abc"),
+      home:Profile('abc@gmail.com'),
+      // Dashboard('student', 'abc@gmail.com'),
     );
   }
 }
 
-class home_main extends StatelessWidget {
-  const home_main({super.key});
+class HomeMain extends StatelessWidget {
+  const HomeMain({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +40,14 @@ class home_main extends StatelessWidget {
       body: Column(
         children: [
           Container(
-            child: Image(
+            child: const Image(
               image: AssetImage("assets/images/home_screen.png"),
             ),
           ),
           Expanded(
             child: Container(
               width: double.infinity,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Color(0xff002233),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
@@ -52,11 +57,11 @@ class home_main extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "eCollege",
                       style: TextStyle(fontSize: 35, color: Colors.white),
                     ),
-                    Text(
+                    const Text(
                       "eCollege Serves You Virtual \n Education At Your home",
                       style: TextStyle(
                           fontSize: 15, letterSpacing: 5, color: Colors.grey),
@@ -72,7 +77,7 @@ class home_main extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5)),
                               backgroundColor: Colors.transparent,
-                              side: BorderSide(color: Colors.white)),
+                              side: const BorderSide(color: Colors.white)),
                           onPressed: () {
                             Navigator.push(
                                 context,
@@ -80,7 +85,7 @@ class home_main extends StatelessWidget {
                                   builder: (context) => login("student"),
                                 ));
                           },
-                          child: Text(
+                          child: const Text(
                             "LOGIN AS STUDENT",
                             style: TextStyle(color: Colors.white, fontSize: 15),
                           )),
@@ -102,7 +107,7 @@ class home_main extends StatelessWidget {
                                   builder: (context) => login("Faculty"),
                                 ));
                           },
-                          child: Text(
+                          child: const Text(
                             "LOGIN AS FACULTY",
                             style: TextStyle(
                                 color: Color(0xff002233), fontSize: 15),

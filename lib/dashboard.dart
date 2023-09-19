@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Dashboard extends StatelessWidget {
- final String user;
+  final String user;
   var email;
 
   Dashboard(this.user, this.email, {super.key});
@@ -16,25 +16,18 @@ class Dashboard extends StatelessWidget {
     print(email);
     return Scaffold(
         appBar: AppBar(
-          leading: Builder(
-            builder: (context) => IconButton(
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                icon: const Icon(
-                  FontAwesomeIcons.bars,
-                  color: Colors.white,
-                )),
+          leading: IconButton(
+            icon: Icon(FontAwesomeIcons.user,color: Colors.white,),
+            onPressed: () {},
           ),
           title: Text(
-            email,
+            "DASHBOARD",
             style: const TextStyle(color: Colors.white),
           ),
           backgroundColor: const Color(0xff002233),
         ),
-        drawer: Drawer(
-          child: Drawer_code(user, email),
-        ),
-        body: user == "student" ? const StudentDashboard() : const FacultyDashboard());
+        body: user == "student"
+            ? StudentDashboard(email)
+            : const FacultyDashboard());
   }
 }
