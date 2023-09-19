@@ -67,22 +67,11 @@ class add_student extends StatelessWidget {
                   trailing: IconButton(
                       iconSize: 20,
                       onPressed: () {
-                        AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.question,
-                          showCloseIcon: true,
-                          title: "What Do you Want to do?",
-                          btnOkText: "UPDATE",
-                          btnOkOnPress: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => student_add_form(),
-                                ));
-                          },
-                          btnCancelText: "DELETE",
-                          btnCancelOnPress: () {},
-                        ).show();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => student_add_form(),
+                            ));
                       },
                       icon: FaIcon(FontAwesomeIcons.pen)));
             }).toList(),
@@ -196,6 +185,35 @@ class _student_add_formState extends State<student_add_form> {
         }).show();
   }
 
+  Future<void> _delete() async {
+    try {
+      QuerySnapshot querySnapshot = (await FirebaseFirestore.instance
+          .collection('students')
+          .where('SP ID', isEqualTo: _id.text)
+          .get()) as QuerySnapshot<Object?>;
+      for (QueryDocumentSnapshot document in querySnapshot.docs) {
+        await document.reference.delete();
+      }
+      print('User created with email and password:');
+    } catch (error) {
+      print('Error creating user with email and password: $error');
+    }
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.success,
+        animType: AnimType.bottomSlide,
+        showCloseIcon: true,
+        title: "Deregisted successfully",
+        desc: "SP ID : ${_id.text.toString()}",
+        btnOkOnPress: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => add_student(),
+              ));
+        }).show();
+  }
+
   @override
   String _selectedGender = 'Male';
   final _divison = ["Div", "A", "B", "C", "D"];
@@ -208,6 +226,31 @@ class _student_add_formState extends State<student_add_form> {
           "ADD Student",
           style: TextStyle(color: Colors.white),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.warning,
+                  showCloseIcon: true,
+                  title: "eCollege",
+                  desc:
+                      "are you sure want to deregister ${_id.text.toString()} SPid student?",
+                  btnOkOnPress: _delete,
+                  btnCancelOnPress: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => add_student(),
+                        ));
+                  },
+                ).show();
+              },
+              icon: Icon(
+                FontAwesomeIcons.trash,
+                color: Colors.white,
+              ))
+        ],
         backgroundColor: const Color(0xff002233),
       ),
       body: SingleChildScrollView(
@@ -381,7 +424,7 @@ class _student_add_formState extends State<student_add_form> {
                           )),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),

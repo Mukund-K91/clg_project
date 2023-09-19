@@ -66,7 +66,11 @@ class FacultyDashboard extends StatelessWidget {
                         children: [
                           IconButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => add_student(),));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => add_student(),
+                                  ));
                             },
                             iconSize: 50,
                             icon: Icon(
