@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home:add_student(),
+      home:student_add_form(),
       // Dashboard('student', 'abc@gmail.com'),
     );
   }

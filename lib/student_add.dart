@@ -193,6 +193,14 @@ class _student_add_formState extends State<student_add_form> {
           .get()) as QuerySnapshot<Object?>;
       for (QueryDocumentSnapshot document in querySnapshot.docs) {
         await document.reference.delete();
+        final String email = _email.text;
+        final String pass = _mobile.text;
+        User? user = _auth.currentUser;
+        AuthCredential credential =
+            EmailAuthProvider.credential(email: email, password: pass);
+        await user!.reauthenticateWithCredential(credential).then((value) {
+          value.user?.delete();
+        });
       }
       print('User created with email and password:');
     } catch (error) {
