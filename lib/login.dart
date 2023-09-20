@@ -36,7 +36,7 @@ class _loginState extends State<login> {
             showCloseIcon: true,
             title: "Login Successfully",
             btnOkOnPress: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => Dashboard(widget._user, email),

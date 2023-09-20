@@ -143,7 +143,7 @@ class Profile extends StatelessWidget {
                             child: Text("FORGOT PASSWORD?")),
                         TextButton(
                             onPressed: () {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => HomeMain(),
