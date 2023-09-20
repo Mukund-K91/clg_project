@@ -34,11 +34,7 @@ class Profile extends StatelessWidget {
                   Text('Error: ${snapshot.error} USER NOT FOUND\nplease contact your administrator eCollegeAdmin@gmail.com'),
                   ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomeMain(),
-                            ));
+                        _auth.signOut().then((value) {Navigator.push(context, MaterialPageRoute(builder: (context) => HomeMain(),));});
                       },
                       child: Text('Return Home Page')),
                 ],
