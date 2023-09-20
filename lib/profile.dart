@@ -110,7 +110,7 @@ class Profile extends StatelessWidget {
                             color: Colors.black,
                           ),
                           title: const Text(
-                            "Mobile",
+                            "Email",
                             style: TextStyle(fontSize: 20),
                           ),
                           trailing: Text('${data['Email']}'),
