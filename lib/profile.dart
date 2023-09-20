@@ -16,6 +16,7 @@ class Profile extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xff002233),

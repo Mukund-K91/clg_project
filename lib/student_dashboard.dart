@@ -5,7 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class StudentDashboard extends StatelessWidget {
   String email;
-  StudentDashboard(this.email,{super.key});
+
+  StudentDashboard(this.email, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,15 @@ class StudentDashboard extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Error: ${snapshot.error} USER NOT FOUND'),
+                ElevatedButton(
+                    onPressed: () {}, child: Text('Return Home Page')),
+                
+              ],
+            );
           } else if (!snapshot.hasData || !snapshot.data!.exists) {
             return Text('No data found for the given email.');
           } else {

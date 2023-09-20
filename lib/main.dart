@@ -1,9 +1,4 @@
-import 'package:clg_project/dashboard.dart';
-import 'package:clg_project/profile.dart';
-import 'package:clg_project/drawer_menu.dart';
 import 'package:clg_project/login.dart';
-import 'package:clg_project/student_add.dart';
-import 'package:clg_project/student_dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +20,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home:student_add_form(),
+      home:HomeMain(),
       // Dashboard('student', 'abc@gmail.com'),
     );
   }
