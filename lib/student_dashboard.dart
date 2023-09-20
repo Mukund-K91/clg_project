@@ -1,3 +1,5 @@
+import 'package:clg_project/login.dart';
+import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +23,17 @@ class StudentDashboard extends StatelessWidget {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Error: ${snapshot.error} USER NOT FOUND'),
+                Text(
+                    'Error: ${snapshot.error} USER NOT FOUND\nplease contact your administrator eCollegeAdmin@gmail.com'),
                 ElevatedButton(
-                    onPressed: () {}, child: Text('Return Home Page')),
-                
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomeMain(),
+                          ));
+                    },
+                    child: Text('Return Home Page')),
               ],
             );
           } else if (!snapshot.hasData || !snapshot.data!.exists) {

@@ -29,7 +29,20 @@ class Profile extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
+              return Column(
+                children: [
+                  Text('Error: ${snapshot.error} USER NOT FOUND\nplease contact your administrator eCollegeAdmin@gmail.com'),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeMain(),
+                            ));
+                      },
+                      child: Text('Return Home Page')),
+                ],
+              );
             } else if (!snapshot.hasData || !snapshot.data!.exists) {
               return const Text('No data found for the given email.');
             } else {
