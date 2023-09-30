@@ -1,3 +1,4 @@
+import 'package:clg_project/demo.dart';
 import 'package:clg_project/login.dart';
 import 'package:clg_project/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home:splash_screen(),
+      home:StudentManage(),
       // Dashboard('student', 'abc@gmail.com'),
     );
   }

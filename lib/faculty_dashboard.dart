@@ -69,7 +69,7 @@ class FacultyDashboard extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => add_student(),
+                                    builder: (context) => StudentManage(),
                                   ));
                             },
                             iconSize: 50,

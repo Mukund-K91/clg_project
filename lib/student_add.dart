@@ -1,405 +1,142 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-enum GenderTypeEnum { Donwloadable, Deliverable }
-
-class add_student extends StatelessWidget {
-  add_student({super.key});
-
-  DatabaseReference query = FirebaseDatabase.instance.ref().child('students');
+class StudentManage extends StatefulWidget {
+  const StudentManage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "STUDENTS",
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: const Color(0xff002233),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => student_add_form(),
-                    ));
-              },
-              icon: const Icon(
-                FontAwesomeIcons.add,
-                size: 35,
-                color: Colors.white,
-              ))
-        ],
-      ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('students').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          return ListView(
-            children: snapshot.data!.docs.map((document) {
-              return ListTile(
-                  leading: CircleAvatar(
-                    child: Text(
-                      document["Div"],
-                      style: TextStyle(
-                          fontSize: 25,
-                          color: Color(0xff002233),
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  title: Text(
-                    document["First Name"] + document["Last Name"],
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  subtitle: Text(document["SP ID"]),
-                  trailing: IconButton(
-                      iconSize: 20,
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => student_add_form(),
-                            ));
-                      },
-                      icon: FaIcon(FontAwesomeIcons.pen)));
-            }).toList(),
-          );
-        },
-      ),
-    );
-  }
+  State<StudentManage> createState() => _MyWidgetState();
 }
 
-class student_add_form extends StatefulWidget {
-  student_add_form({super.key});
-
-  @override
-  State<student_add_form> createState() => _student_add_formState();
-}
-
-class _student_add_formState extends State<student_add_form> {
-  final TextEditingController _date = TextEditingController();
-
-  TextEditingController _id = TextEditingController();
+class _MyWidgetState extends State<StudentManage> {
+  // text field controller
+  final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _id = TextEditingController();
   final TextEditingController _fname = TextEditingController();
-
   final TextEditingController _lname = TextEditingController();
-
-  TextEditingController _mobile = TextEditingController();
+  final TextEditingController _mobile = TextEditingController();
   final TextEditingController _email = TextEditingController();
-
-  _student_add_formState() {
-    _selectedDiv = _divison[0];
-  }
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final CollectionReference _query =
-      FirebaseFirestore.instance.collection('students');
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  Future<void> _add() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        final String email = _email.text;
-        final String password = _mobile.text;
-        await _auth
-            .createUserWithEmailAndPassword(email: email, password: password)
-            .then((value) =>
-                FirebaseFirestore.instance.collection('students').doc().set({
-                  "SP ID": _id.text,
-                  "First Name": _fname.text,
-                  "Last Name": _lname.text,
-                  "Mobile": _mobile.text,
-                  "Email": _email.text,
-                  "Password": _mobile.text,
-                  "Div": _selectedDiv
-                }));
-        print('User created with email and password: $email');
-      } catch (error) {
-        print('Error creating user with email and password: $error');
-      }
-      AwesomeDialog(
-          context: context,
-          dialogType: DialogType.success,
-          animType: AnimType.bottomSlide,
-          showCloseIcon: true,
-          title: "Student added successfully",
-          desc:
-              "SP ID : ${_id.text.toString()}\nName :${_fname.text.toString()}${_lname.text.toString()}\n Login Email :${_email.text}",
-          btnOkOnPress: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => add_student(),
-                ));
-          }).show();
-    }
-  }
-
-  Future<void> _update() async {
-    try {
-      QuerySnapshot querySnapshot = (await FirebaseFirestore.instance
-          .collection('students')
-          .where('SP ID', isEqualTo: _id.text)
-          .get()) as QuerySnapshot<Object?>;
-      for (QueryDocumentSnapshot document in querySnapshot.docs) {
-        await document.reference.update({
-          "SP ID": _id.text,
-          "First Name": _fname.text,
-          "Last Name": _lname.text,
-          "Mobile": _mobile.text,
-          "Email": _email.text,
-          "Password": _mobile.text,
-          "Div": _selectedDiv
-        });
-      }
-      print('User created with email and password:');
-    } catch (error) {
-      print('Error creating user with email and password: $error');
-    }
-    AwesomeDialog(
-        context: context,
-        dialogType: DialogType.success,
-        animType: AnimType.bottomSlide,
-        showCloseIcon: true,
-        title: "Student Updated successfully",
-        desc: "SP ID : ${_id.text.toString()}",
-        btnOkOnPress: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => add_student(),
-              ));
-        }).show();
-  }
-
-  Future<void> _delete() async {
-    try {
-      QuerySnapshot querySnapshot = (await FirebaseFirestore.instance
-          .collection('students')
-          .where('SP ID', isEqualTo: _id.text)
-          .get()) as QuerySnapshot<Object?>;
-      for (QueryDocumentSnapshot document in querySnapshot.docs) {
-        await document.reference.delete();
-        final String email = _email.text;
-        final String pass = _mobile.text;
-        User? user = _auth.currentUser;
-        AuthCredential credential =
-            EmailAuthProvider.credential(email: email, password: pass);
-        await user!.reauthenticateWithCredential(credential).then((value) {
-          value.user?.delete();
-        });
-      }
-      print('User created with email and password:');
-    } catch (error) {
-      print('Error creating user with email and password: $error');
-    }
-    AwesomeDialog(
-        context: context,
-        dialogType: DialogType.success,
-        animType: AnimType.bottomSlide,
-        showCloseIcon: true,
-        title: "Deregisted successfully",
-        desc: "SP ID : ${_id.text.toString()}",
-        btnOkOnPress: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => add_student(),
-              ));
-        }).show();
-  }
-
-  @override
-  String _selectedGender = 'Male';
   final _divison = ["Div", "A", "B", "C", "D"];
   String? _selectedDiv = "Div";
+  final CollectionReference _items =
+  FirebaseFirestore.instance.collection('students');
 
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "ADD Student",
-          style: TextStyle(color: Colors.white),
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.warning,
-                  showCloseIcon: true,
-                  title: "eCollege",
-                  desc:
-                      "are you sure want to deregister ${_id.text.toString()} SPid student?",
-                  btnOkOnPress: _delete,
-                  btnCancelOnPress: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => add_student(),
-                        ));
-                  },
-                ).show();
-              },
-              icon: Icon(
-                FontAwesomeIcons.trash,
-                color: Colors.white,
-              ))
-        ],
-        backgroundColor: const Color(0xff002233),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _id,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: "SP ID",
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "SP ID is required";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _fname,
-                    decoration: const InputDecoration(
-                      labelText: "First Name",
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "First Name is required";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _lname,
-                    decoration: const InputDecoration(
-                      labelText: "Last Name",
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Last Name is required";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Row(
+  String searchText = '';
+
+  // for create operation
+  Future<void> _create([DocumentSnapshot? documentSnapshot]) async {
+    await showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext ctx) {
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: RadioListTile<String>(
-                        title: const Text('Female'),
-                        value: 'Female',
-                        groupValue: _selectedGender,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedGender = value!;
-                          });
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: _id,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: "SP ID",
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "SP ID is required";
+                          }
+                          return null;
                         },
                       ),
                     ),
-                    Expanded(
-                      child: RadioListTile<String>(
-                        title: const Text('Male'),
-                        value: 'Male',
-                        groupValue: _selectedGender,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedGender = value!;
-                          });
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: _fname,
+                        decoration: const InputDecoration(
+                          labelText: "First Name",
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "First Name is required";
+                          }
+                          return null;
                         },
                       ),
                     ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _email,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      labelText: "Email Id",
-                      border: OutlineInputBorder(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: _lname,
+                        decoration: const InputDecoration(
+                          labelText: "Last Name",
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Last Name is required";
+                          }
+                          return null;
+                        },
+                      ),
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Email is required";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _mobile,
-                    keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(
-                      labelText: "Mobile No",
-                      border: OutlineInputBorder(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: _email,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(
+                          labelText: "Email Id",
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Email is required";
+                          }
+                          return null;
+                        },
+                      ),
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty || value.length > 10) {
-                        return "10 Digit no. is required";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: DropdownButtonFormField(
-                      decoration:
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: _mobile,
+                        keyboardType: TextInputType.phone,
+                        decoration: const InputDecoration(
+                          labelText: "Mobile No",
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty || value.length > 10) {
+                            return "10 Digit no. is required";
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DropdownButtonFormField(
+                          decoration:
                           const InputDecoration(border: OutlineInputBorder()),
-                      value: _selectedDiv,
-                      items: _divison
-                          .map((e) => DropdownMenuItem(
-                                child: Text(e),
-                                value: e,
-                              ))
-                          .toList(),
-                      onChanged: (val) {
-                        setState(() {
-                          _selectedDiv = val as String;
-                        });
-                      }),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
+                          value: _selectedDiv,
+                          items: _divison
+                              .map((e) => DropdownMenuItem(
+                            child: Text(e),
+                            value: e,
+                          ))
+                              .toList(),
+                          onChanged: (val) {
+                            setState(() {
+                              _selectedDiv = val as String;
+                            });
+                          }),
+                    ),
                     SizedBox(
                       height: 60,
                       width: 150,
@@ -409,34 +146,328 @@ class _student_add_formState extends State<student_add_form> {
                                 borderRadius: BorderRadius.circular(5)),
                             backgroundColor: const Color(0xff002233),
                           ),
-                          onPressed: _add,
+                          onPressed: () async {
+                            await _items.add({
+                              "SP ID": _id.text,
+                              "First Name": _fname.text,
+                              "Last Name": _lname.text,
+                              "Mobile": _mobile.text,
+                              "Email": _email.text,
+                              "Password": _mobile.text,
+                              "Div": _selectedDiv
+                            });
+                            Navigator.of(context).pop();
+                          },
                           child: const Text(
-                            "ADD",
+                            "Register",
                             style: TextStyle(color: Colors.white, fontSize: 20),
-                          )),
-                    ),
-                    SizedBox(
-                      height: 60,
-                      width: 150,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
-                            backgroundColor: Colors.transparent,
-                          ),
-                          onPressed: _update,
-                          child: const Text(
-                            "UPDATE",
-                            style: TextStyle(
-                                color: Color(0xff002233), fontSize: 20),
                           )),
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
+          );
+        });
+  }
+
+  // for Update operation
+  Future<void> _update([DocumentSnapshot? documentSnapshot]) async {
+    if (documentSnapshot != null) {
+      _id.text=documentSnapshot['SP ID'].toString();
+      _fname.text=documentSnapshot['First Name'].toString();
+      _lname.text=documentSnapshot['Last Name'].toString();
+      _email.text=documentSnapshot['Email'].toString();
+      _mobile.text=documentSnapshot['Mobile'].toString();
+      _selectedDiv=documentSnapshot['Div'].toString();
+    }
+    await showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext ctx) {
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.only(
+                  top: 20,
+                  right: 20,
+                  left: 20,
+                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Center(
+                    child: Text(
+                      "Update your item",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Form(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: _id,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                labelText: "SP ID",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "SP ID is required";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: _fname,
+                              decoration: const InputDecoration(
+                                labelText: "First Name",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "First Name is required";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: _lname,
+                              decoration: const InputDecoration(
+                                labelText: "Last Name",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Last Name is required";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: _email,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: const InputDecoration(
+                                labelText: "Email Id",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Email is required";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: _mobile,
+                              keyboardType: TextInputType.phone,
+                              decoration: const InputDecoration(
+                                labelText: "Mobile No",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty || value.length > 10) {
+                                  return "10 Digit no. is required";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: DropdownButtonFormField(
+                                decoration: const InputDecoration(
+                                    border: OutlineInputBorder()),
+                                value: _selectedDiv,
+                                items: _divison
+                                    .map((e) => DropdownMenuItem(
+                                  child: Text(e),
+                                  value: e,
+                                ))
+                                    .toList(),
+                                onChanged: (val) {
+                                  setState(() {
+                                    _selectedDiv = val as String;
+                                  });
+                                }),
+                          ),
+                          SizedBox(
+                            height: 60,
+                            width: 150,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  backgroundColor: const Color(0xff002233),
+                                ),
+                                onPressed: () async {
+                                  await _items
+                                      .doc(documentSnapshot!.id)
+                                      .update({
+                                    "SP ID": _id.text,
+                                    "First Name": _fname.text,
+                                    "Last Name": _lname.text,
+                                    "Mobile": _mobile.text,
+                                    "Email": _email.text,
+                                    "Password": _mobile.text,
+                                    "Div": _selectedDiv
+                                  });
+
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text(
+                                  "Update",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  // for delete operation
+  Future<void> _delete(String productID) async {
+    await _items.doc(productID).delete();
+
+    // for snackBar
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("You have successfully deregister Student")));
+  }
+
+  void _onSearchChanged(String value) {
+    setState(() {
+      searchText = value;
+    });
+  }
+
+  bool isSearchClicked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xff002233),
+        title: isSearchClicked
+            ? Container(
+          height: 40,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20.0),
           ),
-        ),
+          child: TextField(
+            controller: _searchController,
+            onChanged: _onSearchChanged,
+            decoration: const InputDecoration(
+                contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 12),
+                hintStyle: TextStyle(color: Colors.black),
+                border: InputBorder.none,
+                hintText: 'Search..'),
+          ),
+        )
+            : const Text('Students',style: TextStyle(color: Colors.white),),
+        centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  isSearchClicked = !isSearchClicked;
+                });
+              },
+              icon: Icon(isSearchClicked ? Icons.close : Icons.search,color: Colors.white,))
+        ],
+      ),
+      body: StreamBuilder(
+        stream: _items.snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+          if (streamSnapshot.hasData) {
+            final List<DocumentSnapshot> items = streamSnapshot.data!.docs
+                .where((doc) => doc['First Name'].toLowerCase().contains(
+              searchText.toLowerCase(),
+            ))
+                .toList();
+            return ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final DocumentSnapshot documentSnapshot = items[index];
+                  return Card(
+                    color: const Color(0xff002233),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    margin: const EdgeInsets.all(10),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 17,
+                        backgroundColor: const Color(0xffffffff),
+                        child: Text(
+                          documentSnapshot['Div'].toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        ),
+                      ),
+                      title: Text(
+                        documentSnapshot['First Name'] +" "+documentSnapshot['Last Name'],
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                      subtitle: Text(documentSnapshot['SP ID'].toString(),style: TextStyle(color: Colors.white),),
+                      trailing: SizedBox(
+                        width: 100,
+                        child: Row(
+                          children: [
+                            IconButton(
+                                color: Colors.white,
+                                onPressed: () => _update(documentSnapshot),
+                                icon: const Icon(Icons.edit)),
+                            IconButton(
+                                color: Colors.white,
+                                onPressed: () => _delete(documentSnapshot.id),
+                                icon: const Icon(Icons.delete)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                });
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
+      // Create new project button
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _create(),
+        backgroundColor: const Color(0xff002233),
+        child: const Icon(Icons.add,color: Colors.white,),
       ),
     );
   }
