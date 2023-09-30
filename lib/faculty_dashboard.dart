@@ -15,10 +15,9 @@ class FacultyDashboard extends StatelessWidget {
     return Scaffold(
       body: FutureBuilder<DocumentSnapshot>(
         future: fetchDataByEmail(email),
-        // Replace with the desired email
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -30,14 +29,14 @@ class FacultyDashboard extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HomeMain(),
+                            builder: (context) => const HomeMain(),
                           ));
                     },
-                    child: Text('Return Home Page')),
+                    child: const Text('Return Home Page')),
               ],
             );
           } else if (!snapshot.hasData || !snapshot.data!.exists) {
-            return Text('No data found for the given email.');
+            return const Text('No data found for the given email.');
           } else {
             // Data found, you can access it using snapshot.data
             Map<String, dynamic> data =
@@ -46,7 +45,7 @@ class FacultyDashboard extends StatelessWidget {
               children: [
                 Container(
                   height: 100,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: Color(0xff002233),
                       borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(40),
@@ -68,14 +67,23 @@ class FacultyDashboard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                CircleAvatar(
+                                const CircleAvatar(
                                   radius: 40,
                                   foregroundImage:
                                   AssetImage("assets/images/ex_img.png"),
                                 ),
-                                Text(
-                                  data['ID'],
-                                  style: TextStyle(fontSize: 20),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      data['First Name']+" "+data['Last Name'],
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                    Text(
+                                      data['Department'],
+                                      style: const TextStyle(fontSize: 15),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -102,16 +110,16 @@ class FacultyDashboard extends StatelessWidget {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => StudentManage(),
+                                          builder: (context) => const StudentManage(),
                                         ));
                                   },
                                   iconSize: 50,
-                                  icon: Icon(
+                                  icon: const Icon(
                                     FontAwesomeIcons.userGraduate,
                                     color: Color(0xff002233),
                                   ),
                                 ),
-                                Text(
+                                const Text(
                                   "Students",
                                   style: TextStyle(fontSize: 20),
                                 ),
@@ -127,10 +135,10 @@ class FacultyDashboard extends StatelessWidget {
                                 IconButton(
                                   onPressed: () {},
                                   iconSize: 50,
-                                  icon: Icon(FontAwesomeIcons.calendarDay,
+                                  icon: const Icon(FontAwesomeIcons.calendarDay,
                                       color: Color(0xff002233)),
                                 ),
-                                Text(
+                                const Text(
                                   "Attendence",
                                   style: TextStyle(fontSize: 20),
                                 ),
@@ -146,10 +154,10 @@ class FacultyDashboard extends StatelessWidget {
                                 IconButton(
                                   onPressed: () {},
                                   iconSize: 50,
-                                  icon: Icon(FontAwesomeIcons.filePen,
+                                  icon: const Icon(FontAwesomeIcons.filePen,
                                       color: Color(0xff002233)),
                                 ),
-                                Text(
+                                const Text(
                                   "Assignment",
                                   style: TextStyle(fontSize: 20),
                                 ),
@@ -165,10 +173,10 @@ class FacultyDashboard extends StatelessWidget {
                                 IconButton(
                                   onPressed: () {},
                                   iconSize: 50,
-                                  icon: Icon(FontAwesomeIcons.fileContract,
+                                  icon: const Icon(FontAwesomeIcons.fileContract,
                                       color: Color(0xff002233)),
                                 ),
-                                Text(
+                                const Text(
                                   "Results",
                                   style: TextStyle(fontSize: 20),
                                 ),
@@ -184,10 +192,10 @@ class FacultyDashboard extends StatelessWidget {
                                 IconButton(
                                   onPressed: () {},
                                   iconSize: 50,
-                                  icon: Icon(FontAwesomeIcons.book,
+                                  icon: const Icon(FontAwesomeIcons.book,
                                       color: Color(0xff002233)),
                                 ),
-                                Text(
+                                const Text(
                                   "Syllabus",
                                   style: TextStyle(fontSize: 20),
                                 ),
@@ -203,10 +211,10 @@ class FacultyDashboard extends StatelessWidget {
                                 IconButton(
                                   onPressed: () {},
                                   iconSize: 50,
-                                  icon: Icon(FontAwesomeIcons.newspaper,
+                                  icon: const Icon(FontAwesomeIcons.newspaper,
                                       color: Color(0xff002233)),
                                 ),
-                                Text(
+                                const Text(
                                   "News & Events",
                                   style: TextStyle(fontSize: 20),
                                 ),
@@ -224,5 +232,30 @@ class FacultyDashboard extends StatelessWidget {
         },
       ),
     );
+  }
+}
+Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
+    String email) {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  try {
+    Future<QueryDocumentSnapshot<Map<String, dynamic>>> documentSnapshot =
+    firestore
+        .collection('faculty')
+        .where('Email', isEqualTo: email)
+        .get()
+        .then((querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot
+            .docs[0]; // Assuming there's only one matching document
+      } else {
+        throw Exception('No document found with the given email.');
+      }
+    });
+
+    return documentSnapshot;
+  } catch (e) {
+    print('Error fetching data: $e');
+    return null;
   }
 }
