@@ -1,17 +1,17 @@
-import 'package:clg_project/demo.dart';
+import 'package:clg_project/dashboard.dart';
 import 'package:clg_project/login.dart';
-import 'package:clg_project/splash_screen.dart';
+import 'package:clg_project/student_add.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home:StudentManage(),
+      home:Dashboard('faculty', 'admin@gmail.com')
       // Dashboard('student', 'abc@gmail.com'),
     );
   }
@@ -36,10 +36,8 @@ class HomeMain extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          Container(
-            child: const Image(
-              image: AssetImage("assets/images/home_screen.png"),
-            ),
+          const Image(
+            image: AssetImage("assets/images/home_screen.png"),
           ),
           Expanded(
             child: Container(
@@ -52,6 +50,7 @@ class HomeMain extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(15),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
@@ -59,7 +58,7 @@ class HomeMain extends StatelessWidget {
                       style: TextStyle(fontSize: 35, color: Colors.white),
                     ),
                     const Text(
-                      "eCollege Serves You Virtual \n Education At Your home",
+                      "eCollege Serves You Virtual Education At Your home",
                       style: TextStyle(
                           fontSize: 15, letterSpacing: 5, color: Colors.grey),
                     ),

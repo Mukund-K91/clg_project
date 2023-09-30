@@ -17,12 +17,14 @@ class Dashboard extends StatelessWidget {
     print(email);
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(FontAwesomeIcons.user,color: Colors.white,),
+          leading:user=="Student"?
+          IconButton(
+            icon: Icon(FontAwesomeIcons.user, color: Colors.white,),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(email),));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Profile(email),));
             },
-          ),
+          ):null,
           title: Text(
             "DASHBOARD",
             style: const TextStyle(color: Colors.white),
@@ -31,6 +33,6 @@ class Dashboard extends StatelessWidget {
         ),
         body: user == "student"
             ? StudentDashboard(email)
-            : const FacultyDashboard());
+            : FacultyDashboard(email));
   }
 }
