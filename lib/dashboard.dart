@@ -24,7 +24,7 @@ class Dashboard extends StatelessWidget {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => Profile(email),));
             },
-          ):null,
+          ):Icon(Icons.account_balance,color: Colors.white,),
           title: Text(
             "DASHBOARD",
             style: const TextStyle(color: Colors.white),
