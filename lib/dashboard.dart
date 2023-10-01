@@ -17,7 +17,7 @@ class Dashboard extends StatelessWidget {
     print(email);
     return Scaffold(
         appBar: AppBar(
-          leading:user=="Student"?
+          leading:user=="student"?
           IconButton(
             icon: Icon(FontAwesomeIcons.user, color: Colors.white,),
             onPressed: () {

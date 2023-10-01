@@ -1,6 +1,6 @@
-import 'package:clg_project/login.dart';
 import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,7 +9,6 @@ class StudentDashboard extends StatelessWidget {
   String email;
 
   StudentDashboard(this.email, {super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

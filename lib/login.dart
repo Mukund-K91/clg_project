@@ -52,7 +52,7 @@ class _loginState extends State<login> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HomeMain(),
+                        builder: (context) => const HomeMain(),
                       ));
                 },
                 title: "${widget._user} Not Found",
@@ -82,17 +82,17 @@ class _loginState extends State<login> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 150,
               ),
-              Text(
+              const Text(
                 "Let's Sign in",
                 style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 "Welcome Back,\nYou've been missed..",
                 style: TextStyle(fontSize: 20, color: Colors.grey),
               ),
@@ -107,15 +107,15 @@ class _loginState extends State<login> {
                         controller: _email,
                         decoration: InputDecoration(
                             labelText: "Email ID",
-                            labelStyle: TextStyle(fontSize: 15),
+                            labelStyle: const TextStyle(fontSize: 15),
                             prefixIcon: widget._user == "student"
-                                ? Icon(FontAwesomeIcons.userGraduate,
+                                ? const Icon(FontAwesomeIcons.userGraduate,
                                     color: Color(0xff002233))
-                                : Icon(
+                                : const Icon(
                                     FontAwesomeIcons.userTie,
                                     color: Color(0xff002233),
                                   ),
-                            border: OutlineInputBorder()),
+                            border: const OutlineInputBorder()),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Register Email Id is required for login";
@@ -132,8 +132,8 @@ class _loginState extends State<login> {
                         obscuringCharacter: '*',
                         decoration: InputDecoration(
                             labelText: "PASSWORD",
-                            labelStyle: TextStyle(fontSize: 15),
-                            prefixIcon: Icon(
+                            labelStyle: const TextStyle(fontSize: 15),
+                            prefixIcon: const Icon(
                               Icons.lock,
                               color: Color(0xff002233),
                             ),
@@ -144,10 +144,10 @@ class _loginState extends State<login> {
                                 });
                               },
                               icon: passwordObscured
-                                  ? Icon(Icons.visibility_off)
-                                  : Icon(Icons.visibility),
+                                  ? const Icon(Icons.visibility_off)
+                                  : const Icon(Icons.visibility),
                             ),
-                            border: OutlineInputBorder()),
+                            border: const OutlineInputBorder()),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Password is required for login";
@@ -165,10 +165,10 @@ class _loginState extends State<login> {
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5)),
-                              backgroundColor: Color(0xff002233),
+                              backgroundColor: const Color(0xff002233),
                             ),
                             onPressed: _login,
-                            child: Text(
+                            child: const Text(
                               "LOGIN",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20),

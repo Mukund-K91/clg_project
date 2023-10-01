@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class StudentManage extends StatefulWidget {
@@ -20,6 +21,7 @@ class _MyWidgetState extends State<StudentManage> {
   String? _selectedDiv = "Div";
   final CollectionReference _items =
   FirebaseFirestore.instance.collection('students');
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   String searchText = '';
 
@@ -31,143 +33,337 @@ class _MyWidgetState extends State<StudentManage> {
         builder: (BuildContext ctx) {
           return SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Form(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: _id,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          labelText: "SP ID",
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "SP ID is required";
-                          }
-                          return null;
-                        },
-                      ),
+              padding: EdgeInsets.only(
+                  top: 20,
+                  right: 20,
+                  left: 20,
+                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Center(
+                    child: Text(
+                      "Add Student",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: _fname,
-                        decoration: const InputDecoration(
-                          labelText: "First Name",
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "First Name is required";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: _lname,
-                        decoration: const InputDecoration(
-                          labelText: "Last Name",
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Last Name is required";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: _email,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          labelText: "Email Id",
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Email is required";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: _mobile,
-                        keyboardType: TextInputType.phone,
-                        decoration: const InputDecoration(
-                          labelText: "Mobile No",
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty || value.length > 10) {
-                            return "10 Digit no. is required";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: DropdownButtonFormField(
-                          decoration:
-                          const InputDecoration(border: OutlineInputBorder()),
-                          value: _selectedDiv,
-                          items: _divison
-                              .map((e) => DropdownMenuItem(
-                            child: Text(e),
-                            value: e,
-                          ))
-                              .toList(),
-                          onChanged: (val) {
-                            setState(() {
-                              _selectedDiv = val as String;
-                            });
-                          }),
-                    ),
-                    SizedBox(
-                      height: 60,
-                      width: 150,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
-                            backgroundColor: const Color(0xff002233),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Form(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: _id,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                labelText: "SP ID",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "SP ID is required";
+                                }
+                                return null;
+                              },
+                            ),
                           ),
-                          onPressed: () async {
-                            await _items.add({
-                              "SP ID": _id.text,
-                              "First Name": _fname.text,
-                              "Last Name": _lname.text,
-                              "Mobile": _mobile.text,
-                              "Email": _email.text,
-                              "Password": _mobile.text,
-                              "Div": _selectedDiv
-                            });
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text(
-                            "Register",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: _fname,
+                              decoration: const InputDecoration(
+                                labelText: "First Name",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "First Name is required";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: _lname,
+                              decoration: const InputDecoration(
+                                labelText: "Last Name",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Last Name is required";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: _email,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: const InputDecoration(
+                                labelText: "Email Id",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Email is required";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: _mobile,
+                              keyboardType: TextInputType.phone,
+                              decoration: const InputDecoration(
+                                labelText: "Mobile No",
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty || value.length > 10) {
+                                  return "10 Digit no. is required";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: DropdownButtonFormField(
+                                decoration: const InputDecoration(
+                                    border: OutlineInputBorder()),
+                                value: _selectedDiv,
+                                items: _divison
+                                    .map((e) => DropdownMenuItem(
+                                  child: Text(e),
+                                  value: e,
+                                ))
+                                    .toList(),
+                                onChanged: (val) {
+                                  setState(() {
+                                    _selectedDiv = val as String;
+                                  });
+                                }),
+                          ),
+                          SizedBox(
+                            height: 60,
+                            width: 150,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  backgroundColor: const Color(0xff002233),
+                                ),
+                                onPressed: () async {
+                                  final String email=_email.text;
+                                  final String password=_mobile.text;
+                                  try {
+                                    final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                                      email: email,
+                                      password: password,
+                                    );
+                                  } on FirebaseAuthException catch (e) {
+                                    if (e.code == 'weak-password') {
+                                      print('The password provided is too weak.');
+                                    } else if (e.code == 'email-already-in-use') {
+                                      print('The account already exists for that email.');
+                                    }
+                                  } catch (e) {
+                                    print(e);
+                                  }
+                                  await _items.add({
+                                    "SP ID": _id.text,
+                                    "First Name": _fname.text,
+                                    "Last Name": _lname.text,
+                                    "Mobile": _mobile.text,
+                                    "Email": _email.text,
+                                    "Password": _mobile.text,
+                                    "Div": _selectedDiv
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text(
+                                  "Register",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                )),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
               ),
             ),
           );
+          // return SingleChildScrollView(
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: Form(
+          //       child: Column(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           Padding(
+          //             padding: const EdgeInsets.all(8.0),
+          //             child: TextFormField(
+          //               controller: _id,
+          //               keyboardType: TextInputType.number,
+          //               decoration: const InputDecoration(
+          //                 labelText: "SP ID",
+          //                 border: OutlineInputBorder(),
+          //               ),
+          //               validator: (value) {
+          //                 if (value!.isEmpty) {
+          //                   return "SP ID is required";
+          //                 }
+          //                 return null;
+          //               },
+          //             ),
+          //           ),
+          //           Padding(
+          //             padding: const EdgeInsets.all(8.0),
+          //             child: TextFormField(
+          //               controller: _fname,
+          //               decoration: const InputDecoration(
+          //                 labelText: "First Name",
+          //                 border: OutlineInputBorder(),
+          //               ),
+          //               validator: (value) {
+          //                 if (value!.isEmpty) {
+          //                   return "First Name is required";
+          //                 }
+          //                 return null;
+          //               },
+          //             ),
+          //           ),
+          //           Padding(
+          //             padding: const EdgeInsets.all(8.0),
+          //             child: TextFormField(
+          //               controller: _lname,
+          //               decoration: const InputDecoration(
+          //                 labelText: "Last Name",
+          //                 border: OutlineInputBorder(),
+          //               ),
+          //               validator: (value) {
+          //                 if (value!.isEmpty) {
+          //                   return "Last Name is required";
+          //                 }
+          //                 return null;
+          //               },
+          //             ),
+          //           ),
+          //           Padding(
+          //             padding: const EdgeInsets.all(8.0),
+          //             child: TextFormField(
+          //               controller: _email,
+          //               keyboardType: TextInputType.emailAddress,
+          //               decoration: const InputDecoration(
+          //                 labelText: "Email Id",
+          //                 border: OutlineInputBorder(),
+          //               ),
+          //               validator: (value) {
+          //                 if (value!.isEmpty) {
+          //                   return "Email is required";
+          //                 }
+          //                 return null;
+          //               },
+          //             ),
+          //           ),
+          //           Padding(
+          //             padding: const EdgeInsets.all(8.0),
+          //             child: TextFormField(
+          //               controller: _mobile,
+          //               keyboardType: TextInputType.phone,
+          //               decoration: const InputDecoration(
+          //                 labelText: "Mobile No",
+          //                 border: OutlineInputBorder(),
+          //               ),
+          //               validator: (value) {
+          //                 if (value!.isEmpty || value.length > 10) {
+          //                   return "10 Digit no. is required";
+          //                 }
+          //                 return null;
+          //               },
+          //             ),
+          //           ),
+          //           Padding(
+          //             padding: const EdgeInsets.all(8.0),
+          //             child: DropdownButtonFormField(
+          //                 decoration:
+          //                 const InputDecoration(border: OutlineInputBorder()),
+          //                 value: _selectedDiv,
+          //                 items: _divison
+          //                     .map((e) => DropdownMenuItem(
+          //                   child: Text(e),
+          //                   value: e,
+          //                 ))
+          //                     .toList(),
+          //                 onChanged: (val) {
+          //                   setState(() {
+          //                     _selectedDiv = val as String;
+          //                   });
+          //                 }),
+          //           ),
+          //           SizedBox(
+          //             height: 60,
+          //             width: 150,
+          //             child: ElevatedButton(
+          //                 style: ElevatedButton.styleFrom(
+          //                   shape: RoundedRectangleBorder(
+          //                       borderRadius: BorderRadius.circular(5)),
+          //                   backgroundColor: const Color(0xff002233),
+          //                 ),
+          //                 onPressed: () async {
+          //                   final String email=_email.text;
+          //                   final String password=_mobile.text;
+          //                   try {
+          //                     final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          //                       email: email,
+          //                       password: password,
+          //                     );
+          //                   } on FirebaseAuthException catch (e) {
+          //                     if (e.code == 'weak-password') {
+          //                       print('The password provided is too weak.');
+          //                     } else if (e.code == 'email-already-in-use') {
+          //                       print('The account already exists for that email.');
+          //                     }
+          //                   } catch (e) {
+          //                     print(e);
+          //                   }
+          //                   await _items.add({
+          //                     "SP ID": _id.text,
+          //                     "First Name": _fname.text,
+          //                     "Last Name": _lname.text,
+          //                     "Mobile": _mobile.text,
+          //                     "Email": _email.text,
+          //                     "Password": _mobile.text,
+          //                     "Div": _selectedDiv
+          //                   });
+          //                   Navigator.of(context).pop();
+          //                 },
+          //                 child: const Text(
+          //                   "Register",
+          //                   style: TextStyle(color: Colors.white, fontSize: 20),
+          //                 )),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // );
         });
   }
 
@@ -198,7 +394,7 @@ class _MyWidgetState extends State<StudentManage> {
                 children: [
                   const Center(
                     child: Text(
-                      "Update your item",
+                      "Update Student Info",
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),

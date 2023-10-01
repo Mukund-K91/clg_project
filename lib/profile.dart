@@ -55,9 +55,9 @@ class Profile extends StatelessWidget {
                         const CircleAvatar(
                           minRadius: 80,
                           maxRadius: 80,
-                          backgroundColor: Colors.grey,
+                          backgroundColor: Colors.white,
                           foregroundImage:
-                              AssetImage('assets/images/profile_img.png'),
+                              AssetImage('assets/images/ex_img.png'),
                         ),
                         const SizedBox(
                           height: 20,

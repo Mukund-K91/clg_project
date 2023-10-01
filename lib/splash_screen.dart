@@ -1,18 +1,20 @@
 import 'dart:async';
 
 import 'package:clg_project/main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-class splash_screen extends StatefulWidget {
-  const splash_screen({super.key});
+class SplashScreen extends StatefulWidget {
+  SplashScreen({super.key});
 
   @override
-  State<splash_screen> createState() => _splash_screenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _splash_screenState extends State<splash_screen> {
+class _SplashScreenState extends State<SplashScreen> {
+
   @override
 
   void initState() {
@@ -25,7 +27,6 @@ class _splash_screenState extends State<splash_screen> {
           ));
     });
   }
-
   Widget build(BuildContext context) {
     return Scaffold(
       body:Container(
@@ -38,6 +39,8 @@ class _splash_screenState extends State<splash_screen> {
             const SizedBox(height: 15,),
             LoadingAnimationWidget.discreteCircle(
               color: Colors.black,
+              secondRingColor: Color(0xff002233),
+              thirdRingColor: Colors.grey,
               size: 50,
             ),],
         ),
