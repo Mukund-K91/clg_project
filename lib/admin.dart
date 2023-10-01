@@ -20,7 +20,7 @@ class _MyWidgetState extends State<StudentManage> {
   final _divison = ["Div", "A", "B", "C", "D"];
   String? _selectedDiv = "Div";
   final CollectionReference _items =
-  FirebaseFirestore.instance.collection('students');
+      FirebaseFirestore.instance.collection('students');
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   String searchText = '';
@@ -45,7 +45,8 @@ class _MyWidgetState extends State<StudentManage> {
                   const Center(
                     child: Text(
                       "Add Student",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Padding(
@@ -145,9 +146,9 @@ class _MyWidgetState extends State<StudentManage> {
                                 value: _selectedDiv,
                                 items: _divison
                                     .map((e) => DropdownMenuItem(
-                                  child: Text(e),
-                                  value: e,
-                                ))
+                                          child: Text(e),
+                                          value: e,
+                                        ))
                                     .toList(),
                                 onChanged: (val) {
                                   setState(() {
@@ -165,18 +166,23 @@ class _MyWidgetState extends State<StudentManage> {
                                   backgroundColor: const Color(0xff002233),
                                 ),
                                 onPressed: () async {
-                                  final String email=_email.text;
-                                  final String password=_mobile.text;
+                                  final String email = _email.text;
+                                  final String password = _mobile.text;
                                   try {
-                                    final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                                    final credential = await FirebaseAuth
+                                        .instance
+                                        .createUserWithEmailAndPassword(
                                       email: email,
                                       password: password,
                                     );
                                   } on FirebaseAuthException catch (e) {
                                     if (e.code == 'weak-password') {
-                                      print('The password provided is too weak.');
-                                    } else if (e.code == 'email-already-in-use') {
-                                      print('The account already exists for that email.');
+                                      print(
+                                          'The password provided is too weak.');
+                                    } else if (e.code ==
+                                        'email-already-in-use') {
+                                      print(
+                                          'The account already exists for that email.');
                                     }
                                   } catch (e) {
                                     print(e);
@@ -370,12 +376,12 @@ class _MyWidgetState extends State<StudentManage> {
   // for Update operation
   Future<void> _update([DocumentSnapshot? documentSnapshot]) async {
     if (documentSnapshot != null) {
-      _id.text=documentSnapshot['SP ID'].toString();
-      _fname.text=documentSnapshot['First Name'].toString();
-      _lname.text=documentSnapshot['Last Name'].toString();
-      _email.text=documentSnapshot['Email'].toString();
-      _mobile.text=documentSnapshot['Mobile'].toString();
-      _selectedDiv=documentSnapshot['Div'].toString();
+      _id.text = documentSnapshot['SP ID'].toString();
+      _fname.text = documentSnapshot['First Name'].toString();
+      _lname.text = documentSnapshot['Last Name'].toString();
+      _email.text = documentSnapshot['Email'].toString();
+      _mobile.text = documentSnapshot['Mobile'].toString();
+      _selectedDiv = documentSnapshot['Div'].toString();
     }
     await showModalBottomSheet(
         isScrollControlled: true,
@@ -395,7 +401,8 @@ class _MyWidgetState extends State<StudentManage> {
                   const Center(
                     child: Text(
                       "Update Student Info",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Padding(
@@ -495,9 +502,9 @@ class _MyWidgetState extends State<StudentManage> {
                                 value: _selectedDiv,
                                 items: _divison
                                     .map((e) => DropdownMenuItem(
-                                  child: Text(e),
-                                  value: e,
-                                ))
+                                          child: Text(e),
+                                          value: e,
+                                        ))
                                     .toList(),
                                 onChanged: (val) {
                                   setState(() {
@@ -554,8 +561,8 @@ class _MyWidgetState extends State<StudentManage> {
     await _items.doc(productID).delete();
 
     // for snackBar
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("You have successfully deregister Student")));
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("You have successfully deregister Student")));
   }
 
   void _onSearchChanged(String value) {
@@ -573,22 +580,25 @@ class _MyWidgetState extends State<StudentManage> {
         backgroundColor: Color(0xff002233),
         title: isSearchClicked
             ? Container(
-          height: 40,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: TextField(
-            controller: _searchController,
-            onChanged: _onSearchChanged,
-            decoration: const InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 12),
-                hintStyle: TextStyle(color: Colors.black),
-                border: InputBorder.none,
-                hintText: 'Search..'),
-          ),
-        )
-            : const Text('Students',style: TextStyle(color: Colors.white),),
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: _onSearchChanged,
+                  decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 12),
+                      hintStyle: TextStyle(color: Colors.black),
+                      border: InputBorder.none,
+                      hintText: 'Search..'),
+                ),
+              )
+            : const Text(
+                'Students',
+                style: TextStyle(color: Colors.white),
+              ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -597,7 +607,10 @@ class _MyWidgetState extends State<StudentManage> {
                   isSearchClicked = !isSearchClicked;
                 });
               },
-              icon: Icon(isSearchClicked ? Icons.close : Icons.search,color: Colors.white,))
+              icon: Icon(
+                isSearchClicked ? Icons.close : Icons.search,
+                color: Colors.white,
+              ))
         ],
       ),
       body: StreamBuilder(
@@ -606,8 +619,8 @@ class _MyWidgetState extends State<StudentManage> {
           if (streamSnapshot.hasData) {
             final List<DocumentSnapshot> items = streamSnapshot.data!.docs
                 .where((doc) => doc['First Name'].toLowerCase().contains(
-              searchText.toLowerCase(),
-            ))
+                      searchText.toLowerCase(),
+                    ))
                 .toList();
             return ListView.builder(
                 itemCount: items.length,
@@ -630,11 +643,16 @@ class _MyWidgetState extends State<StudentManage> {
                         ),
                       ),
                       title: Text(
-                        documentSnapshot['First Name'] +" "+documentSnapshot['Last Name'],
+                        documentSnapshot['First Name'] +
+                            " " +
+                            documentSnapshot['Last Name'],
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.white),
                       ),
-                      subtitle: Text(documentSnapshot['SP ID'].toString(),style: TextStyle(color: Colors.white),),
+                      subtitle: Text(
+                        documentSnapshot['SP ID'].toString(),
+                        style: TextStyle(color: Colors.white),
+                      ),
                       trailing: SizedBox(
                         width: 100,
                         child: Row(
@@ -663,7 +681,10 @@ class _MyWidgetState extends State<StudentManage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _create(),
         backgroundColor: const Color(0xff002233),
-        child: const Icon(Icons.add,color: Colors.white,),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }

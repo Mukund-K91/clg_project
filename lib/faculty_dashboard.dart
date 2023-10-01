@@ -1,9 +1,8 @@
-import 'package:clg_project/student_add.dart';
+import 'package:clg_project/admin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'drawer_menu.dart';
 import 'main.dart';
 
 class FacultyDashboard extends StatelessWidget {
