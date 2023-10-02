@@ -134,7 +134,7 @@ class _LoginState extends State<Login> {
                             labelText: "PASSWORD",
                             labelStyle: const TextStyle(fontSize: 15),
                             prefixIcon: const Icon(
-                              Icons.lock,
+                              Icons.fingerprint,
                               color: Color(0xff002233),
                             ),
                             suffixIcon: IconButton(

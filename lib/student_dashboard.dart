@@ -17,7 +17,7 @@ class StudentDashboard extends StatelessWidget {
         // Replace with the desired email
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -125,7 +125,7 @@ class StudentDashboard extends StatelessWidget {
                                       color: Color(0xff002233)),
                                 ),
                                 Text(
-                                  "Syllabus",
+                                  "Material",
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ],

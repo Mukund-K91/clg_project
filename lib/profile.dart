@@ -1,20 +1,28 @@
+import 'dart:typed_data';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clg_project/main.dart';
+import 'package:clg_project/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   String _email;
 
   Profile(this._email, {super.key});
 
   @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  @override
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Widget build(BuildContext context) {
+    Color themeColor = Color(0xff002233);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -23,11 +31,11 @@ class Profile extends StatelessWidget {
           title: const Text('PROFILE'),
         ),
         body: FutureBuilder<DocumentSnapshot>(
-          future: fetchDataByEmail(_email),
+          future: fetchDataByEmail(widget._email),
           // Replace with the desired email
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Column(
                 children: [
@@ -39,11 +47,11 @@ class Profile extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HomeMain(),
+                                builder: (context) => const HomeMain(),
                               ));
                         });
                       },
-                      child: Text('Return Home Page')),
+                      child: const Text('Return Home Page')),
                 ],
               );
             } else if (!snapshot.hasData || !snapshot.data!.exists) {
@@ -60,62 +68,59 @@ class Profile extends StatelessWidget {
                     child: Column(
                       children: [
                         const CircleAvatar(
-                          minRadius: 80,
-                          maxRadius: 80,
-                          backgroundColor: Colors.white,
-                          foregroundImage:
-                              AssetImage('assets/images/ex_img.png'),
-                        ),
+                            radius: 64,
+                            backgroundImage:
+                                AssetImage('assets/images/profile_img2.png')),
                         const SizedBox(
                           height: 20,
                         ),
                         ListTile(
-                            leading: const Icon(
-                              FontAwesomeIcons.solidUser,
-                              color: Colors.black,
-                            ),
-                            title: Text(
-                              '${data['First Name']} ${data['Last Name']}',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                           ),
+                          leading: Icon(
+                            FontAwesomeIcons.solidUser,
+                            color: themeColor,
+                          ),
+                          title: Text(
+                            '${data['First Name']} ${data['Last Name']}',
+                            style: const TextStyle(fontSize: 15),
+                          ),
+                        ),
                         const Divider(
                           thickness: 2,
                         ),
                         ListTile(
-                          leading: const Icon(
+                          leading: Icon(
                             FontAwesomeIcons.graduationCap,
-                            color: Colors.black,
+                            color: themeColor,
                           ),
-                          title:Text(
+                          title: Text(
                             'TYBCA-${data['Div']}',
-                            style: TextStyle(fontSize: 15),
+                            style: const TextStyle(fontSize: 15),
                           ),
                         ),
                         const Divider(
                           thickness: 2,
                         ),
                         ListTile(
-                          leading: const Icon(
+                          leading: Icon(
                             FontAwesomeIcons.phone,
-                            color: Colors.black,
+                            color: themeColor,
                           ),
-                          title:  Text(
+                          title: Text(
                             '${data['Mobile']}',
-                            style: TextStyle(fontSize: 15),
+                            style: const TextStyle(fontSize: 15),
                           ),
                         ),
                         const Divider(
                           thickness: 2,
                         ),
                         ListTile(
-                          leading: const Icon(
+                          leading: Icon(
                             FontAwesomeIcons.solidEnvelope,
-                            color: Colors.black,
+                            color: themeColor,
                           ),
                           title: Text(
                             '${data['Email']}',
-                            style: TextStyle(fontSize: 15),
+                            style: const TextStyle(fontSize: 15),
                           ),
                         ),
                         const Divider(
@@ -124,14 +129,14 @@ class Profile extends StatelessWidget {
                         TextButton(
                             onPressed: () {
                               try {
-                                final String email = _email;
+                                final String email = widget._email;
                                 _auth.sendPasswordResetEmail(email: email);
                                 AwesomeDialog(
                                   context: context,
                                   dialogType: DialogType.success,
                                   title: "Reset Password Mail Sent",
                                   desc:
-                                      "New Password Email sent to ${_email}! Please Check Inbox",
+                                      "New Password Email sent to ${widget._email}! Please Check Inbox",
                                   showCloseIcon: true,
                                 ).show();
                               } catch (error) {
@@ -143,13 +148,13 @@ class Profile extends StatelessWidget {
                                 ).show();
                               }
                             },
-                            child: Text("FORGOT PASSWORD?")),
+                            child: const Text("FORGOT PASSWORD?")),
                         SizedBox(
                           width: 250,
                           height: 50,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xff002233),
+                                  backgroundColor: const Color(0xff002233),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5))),
                               onPressed: () {
@@ -157,15 +162,15 @@ class Profile extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => HomeMain(),
+                                      builder: (context) => const HomeMain(),
                                     ));
                               },
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(FontAwesomeIcons.powerOff),
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: EdgeInsets.all(8.0),
                                     child: Text('LOG OUT!'),
                                   )
                                 ],

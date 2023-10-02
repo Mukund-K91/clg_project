@@ -195,7 +195,7 @@ class FacultyDashboard extends StatelessWidget {
                                       color: Color(0xff002233)),
                                 ),
                                 const Text(
-                                  "Syllabus",
+                                  "Material",
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ],
