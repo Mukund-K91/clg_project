@@ -18,29 +18,19 @@ class _FilesUploadState extends State<FilesUpload> {
 
     return Scaffold(
       body: Center(
-          child: Column(
-            children: [
-              ElevatedButton(
-                  onPressed: () async {
-                    final result = await FilePicker.platform
-                        .pickFiles(allowMultiple: false, type: FileType.any);
-                    if (result == null) {
-                      print("Error: No file selected");
-                    } else {
-                      final path = result.files.single.path;
-                      final fileName = result.files.single.name;
-                      service.uplaodFile(fileName, path!);
-                    }
-                  },
-                  child: Text("Upload ")),
-              ElevatedButton(
-                  onPressed: () async {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ListScreen()));
-                  },
-                  child: Text("Move to List ")),
-            ],
-          )),
+          child: FloatingActionButton(
+              onPressed: () async {
+                final result = await FilePicker.platform
+                    .pickFiles(allowMultiple: false, type: FileType.any);
+                if (result == null) {
+                  print("Error: No file selected");
+                } else {
+                  final path = result.files.single.path;
+                  final fileName = result.files.single.name;
+                  service.uplaodFile(fileName, path!);
+                }
+              },
+              child:Icon(Icons.add))),
     );
   }
 }
