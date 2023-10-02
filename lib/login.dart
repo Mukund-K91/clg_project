@@ -7,16 +7,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dashboard.dart';
 import 'main.dart';
 
-class login extends StatefulWidget {
+class Login extends StatefulWidget {
   var _user;
 
-  login(this._user);
+  Login(this._user);
 
   @override
-  State<login> createState() => _loginState();
+  State<Login> createState() => _LoginState();
 }
 
-class _loginState extends State<login> {
+class _LoginState extends State<Login> {
   bool passwordObscured = true;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();

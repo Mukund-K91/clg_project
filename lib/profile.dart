@@ -31,10 +31,17 @@ class Profile extends StatelessWidget {
             } else if (snapshot.hasError) {
               return Column(
                 children: [
-                  Text('Error: ${snapshot.error} USER NOT FOUND\nplease contact your administrator eCollegeAdmin@gmail.com'),
+                  Text(
+                      'Error: ${snapshot.error} USER NOT FOUND\nplease contact your administrator eCollegeAdmin@gmail.com'),
                   ElevatedButton(
                       onPressed: () {
-                        _auth.signOut().then((value) {Navigator.push(context, MaterialPageRoute(builder: (context) => HomeMain(),));});
+                        _auth.signOut().then((value) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomeMain(),
+                              ));
+                        });
                       },
                       child: Text('Return Home Page')),
                 ],
@@ -67,12 +74,11 @@ class Profile extends StatelessWidget {
                               FontAwesomeIcons.solidUser,
                               color: Colors.black,
                             ),
-                            title: const Text(
-                              "Name",
-                              style: TextStyle(fontSize: 20),
+                            title: Text(
+                              '${data['First Name']} ${data['Last Name']}',
+                              style: TextStyle(fontSize: 15),
                             ),
-                            trailing: Text(
-                                '${data['First Name']} ${data['Last Name']}')),
+                           ),
                         const Divider(
                           thickness: 2,
                         ),
@@ -81,11 +87,10 @@ class Profile extends StatelessWidget {
                             FontAwesomeIcons.graduationCap,
                             color: Colors.black,
                           ),
-                          title: const Text(
-                            "Div",
-                            style: TextStyle(fontSize: 20),
+                          title:Text(
+                            'TYBCA-${data['Div']}',
+                            style: TextStyle(fontSize: 15),
                           ),
-                          trailing: Text('TYBCA-${data['Div']}'),
                         ),
                         const Divider(
                           thickness: 2,
@@ -95,11 +100,10 @@ class Profile extends StatelessWidget {
                             FontAwesomeIcons.phone,
                             color: Colors.black,
                           ),
-                          title: const Text(
-                            "Mobile",
-                            style: TextStyle(fontSize: 20),
+                          title:  Text(
+                            '${data['Mobile']}',
+                            style: TextStyle(fontSize: 15),
                           ),
-                          trailing: Text('${data['Mobile']}'),
                         ),
                         const Divider(
                           thickness: 2,
@@ -109,11 +113,10 @@ class Profile extends StatelessWidget {
                             FontAwesomeIcons.solidEnvelope,
                             color: Colors.black,
                           ),
-                          title: const Text(
-                            "Email",
-                            style: TextStyle(fontSize: 20),
+                          title: Text(
+                            '${data['Email']}',
+                            style: TextStyle(fontSize: 15),
                           ),
-                          trailing: Text('${data['Email']}'),
                         ),
                         const Divider(
                           thickness: 2,
@@ -141,15 +144,33 @@ class Profile extends StatelessWidget {
                               }
                             },
                             child: Text("FORGOT PASSWORD?")),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pop(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HomeMain(),
-                                  ));
-                            },
-                            child: Text("LOG OUT!"))
+                        SizedBox(
+                          width: 250,
+                          height: 50,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color(0xff002233),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5))),
+                              onPressed: () {
+                                _auth.signOut();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => HomeMain(),
+                                    ));
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(FontAwesomeIcons.powerOff),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('LOG OUT!'),
+                                  )
+                                ],
+                              )),
+                        ),
                       ],
                     ),
                   ),
@@ -181,11 +202,9 @@ Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
         throw Exception('No document found with the given email.');
       }
     });
-
     return documentSnapshot;
   } catch (e) {
     print('Error fetching data: $e');
     return null;
   }
-
 }

@@ -1,7 +1,5 @@
-import 'package:clg_project/dashboard.dart';
 import 'package:clg_project/login.dart';
-import 'package:clg_project/splash_screen.dart';
-import 'package:clg_project/admin.dart';
+import 'package:clg_project/profile.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -17,15 +15,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff002233)),
-        useMaterial3: true,
-      ),
-      debugShowCheckedModeBanner: false,
-      home:SplashScreen()
-      // Dashboard('student', 'abc@gmail.com'),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff002233)),
+          useMaterial3: true,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: Login('student')
+        // Profile('koladiyamukund76@gmail.com')
+        // Dashboard('student', 'abc@gmail.com'),
+        );
   }
 }
 
@@ -79,7 +78,7 @@ class HomeMain extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => login("student"),
+                                  builder: (context) => Login("student"),
                                 ));
                           },
                           child: const Text(
@@ -95,13 +94,14 @@ class HomeMain extends StatelessWidget {
                       height: 50,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5))),
                           onPressed: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => login("Faculty"),
+                                  builder: (context) => Login("Faculty"),
                                 ));
                           },
                           child: const Text(
