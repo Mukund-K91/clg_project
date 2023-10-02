@@ -28,7 +28,7 @@ class _FilesUploadState extends State<FilesUpload> {
           alignment: Alignment.bottomRight,
           child: Padding(
             padding: const EdgeInsets.all(20),
-            child: FloatingActionButton(
+            child: ElevatedButton(
                 onPressed: () async {
                   final result = await FilePicker.platform
                       .pickFiles(allowMultiple: false, type: FileType.any);
