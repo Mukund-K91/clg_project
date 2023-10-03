@@ -1,4 +1,5 @@
 import 'package:clg_project/Material.dart';
+import 'package:clg_project/faculty_dashboard.dart';
 import 'package:clg_project/home_screen.dart';
 import 'package:clg_project/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        home: FilesUpload()
+        home:FacultyDashboard('admin@gmail.com', 'Faculty')
         // Profile('koladiyamukund76@gmail.com')
         // Dashboard('student', 'abc@gmail.com'),
         );

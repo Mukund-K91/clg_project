@@ -1,3 +1,4 @@
+import 'package:clg_project/Material.dart';
 import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,8 +8,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class StudentDashboard extends StatelessWidget {
   String email;
+  String _user;
 
-  StudentDashboard(this.email, {super.key});
+  StudentDashboard(this.email,this._user, {super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +19,7 @@ class StudentDashboard extends StatelessWidget {
         // Replace with the desired email
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -29,14 +31,14 @@ class StudentDashboard extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HomeMain(),
+                            builder: (context) => const HomeMain(),
                           ));
                     },
-                    child: Text('Return Home Page')),
+                    child: const Text('Return Home Page')),
               ],
             );
           } else if (!snapshot.hasData || !snapshot.data!.exists) {
-            return Text('No data found for the given email.');
+            return const Text('No data found for the given email.');
           } else {
             // Data found, you can access it using snapshot.data
             Map<String, dynamic> data =
@@ -45,7 +47,7 @@ class StudentDashboard extends StatelessWidget {
               children: [
                 Container(
                   height: 100,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: Color(0xff002233),
                       borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(40),
@@ -67,14 +69,14 @@ class StudentDashboard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                CircleAvatar(
+                                const CircleAvatar(
                                   radius: 50,
                                   foregroundImage:
                                       AssetImage("assets/images/ex_img.png"),
                                 ),
                                 Text(
                                   "${data['First Name']}",
-                                  style: TextStyle(fontSize: 20),
+                                  style: const TextStyle(fontSize: 20),
                                 ),
                                 Text("${data['SP ID']}")
                               ],
@@ -100,12 +102,12 @@ class StudentDashboard extends StatelessWidget {
                                 IconButton(
                                   onPressed: () {},
                                   iconSize: 50,
-                                  icon: Icon(
+                                  icon: const Icon(
                                     FontAwesomeIcons.calendarDay,
                                     color: Color(0xff002233),
                                   ),
                                 ),
-                                Text(
+                                const Text(
                                   "Attendence",
                                   style: TextStyle(fontSize: 20),
                                 ),
@@ -119,12 +121,14 @@ class StudentDashboard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => FilesUpload(_user),));
+                                  },
                                   iconSize: 50,
-                                  icon: Icon(FontAwesomeIcons.book,
+                                  icon: const Icon(FontAwesomeIcons.book,
                                       color: Color(0xff002233)),
                                 ),
-                                Text(
+                                const Text(
                                   "Material",
                                   style: TextStyle(fontSize: 20),
                                 ),
@@ -140,10 +144,10 @@ class StudentDashboard extends StatelessWidget {
                                 IconButton(
                                   onPressed: () {},
                                   iconSize: 50,
-                                  icon: Icon(FontAwesomeIcons.filePen,
+                                  icon: const Icon(FontAwesomeIcons.filePen,
                                       color: Color(0xff002233)),
                                 ),
-                                Text(
+                                const Text(
                                   "Assignment",
                                   style: TextStyle(fontSize: 20),
                                 ),
@@ -159,10 +163,10 @@ class StudentDashboard extends StatelessWidget {
                                 IconButton(
                                   onPressed: () {},
                                   iconSize: 50,
-                                  icon: Icon(FontAwesomeIcons.fileContract,
+                                  icon: const Icon(FontAwesomeIcons.fileContract,
                                       color: Color(0xff002233)),
                                 ),
-                                Text(
+                                const Text(
                                   "Results",
                                   style: TextStyle(fontSize: 20),
                                 ),
@@ -173,14 +177,17 @@ class StudentDashboard extends StatelessWidget {
                       ),
                     ),
                     ListTile(
-                      leading: Icon(
+                      leading: const Icon(
                         FontAwesomeIcons.newspaper,
                         color: Color(0xff002233),
                       ),
-                      title: Text("Latest News & Events"),
-                      trailing: Icon(
-                        FontAwesomeIcons.anglesRight,
-                        color: Color(0xff002233),
+                      title: const Text("Latest Notice & Events"),
+                      trailing: IconButton(
+                       icon: const Icon(
+                          FontAwesomeIcons.anglesRight,
+                          color: Color(0xff002233),
+                        ), onPressed: () {
+                      },
                       ),
                     )
                   ],

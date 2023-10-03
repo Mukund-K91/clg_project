@@ -31,7 +31,7 @@ class Dashboard extends StatelessWidget {
           backgroundColor: const Color(0xff002233),
         ),
         body: user == "student"
-            ? StudentDashboard(email)
-            : FacultyDashboard(email));
+            ? StudentDashboard(email,user)
+            : FacultyDashboard(email,user));
   }
 }
