@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:clg_project/Material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -287,7 +289,6 @@ Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
 
 class Notice extends StatefulWidget {
   const Notice({super.key});
-
   @override
   State<Notice> createState() => _MyWidgetState();
 }
@@ -299,9 +300,33 @@ class _MyWidgetState extends State<Notice> {
   final CollectionReference _con =
       FirebaseFirestore.instance.collection('Notice');
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  String _Date = DateFormat('dd - MM - yyyy').format(DateTime.now());
-  String _Time = DateFormat('kk:mm').format(DateTime.now());
+  var _timeString;
+  void initState() {
+    _timeString = _Time(DateTime.now());
+    _timeString=_Date(DateTime.now());
+
+    Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTimeString());
+    super.initState();
+  }
+  _getTimeString() {
+    final DateTime now = DateTime.now();
+    final String formattedTime = _Time(now);
+    final String formattedDate = _Date(now);
+
+    setState(() {
+      _timeString = formattedTime;
+    });
+  }
+  @override
+  // String _Date = DateFormat('dd - MM - yyyy').format(DateTime.now());
+  // String _Time = DateFormat('kk:mm').format(DateTime.now());
   String searchText = '';
+  String _Time(DateTime dateTime) {
+    return DateFormat('hh:mm').format(dateTime);
+  }
+  String _Date(DateTime dateTime) {
+    return DateFormat('dd-MM-yyyy').format(dateTime);
+  }
 
   // for create operation
   Future<void> _create([DocumentSnapshot? documentSnapshot]) async {
@@ -322,7 +347,7 @@ class _MyWidgetState extends State<Notice> {
                 children: [
                   Center(
                     child: Text(
-                      'Notice',
+                     "Notice",
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
@@ -368,9 +393,10 @@ class _MyWidgetState extends State<Notice> {
                                   await _con.add({
                                     "Title": _title.text,
                                     "Description": _description.text,
-                                    "Date": _Date,
-                                    "Time": _Time
+                                    "Date": _Date(DateTime.now()),
+                                    "Time": _Time(DateTime.now())
                                   });
+                                  Navigator.of(context).pop();
                                 },
                                 child: const Text(
                                   "Publish",
@@ -440,6 +466,8 @@ class _MyWidgetState extends State<Notice> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              keyboardType: TextInputType.multiline,
+                              maxLines: 5,
                               controller: _description,
                               decoration: const InputDecoration(
                                 labelText: "Description",
@@ -459,8 +487,8 @@ class _MyWidgetState extends State<Notice> {
                                 onPressed: () async {
                                   await _con.doc(documentSnapshot!.id).update({
                                     "Description": _description.text,
-                                    "Date": _Date,
-                                    "Time": _Time
+                                    "Date": _Date(DateTime.now()),
+                                    "Time": _Time(DateTime.now())
                                   });
                                   Navigator.of(context).pop();
                                 },
@@ -490,7 +518,7 @@ class _MyWidgetState extends State<Notice> {
 
     // for snackBar
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("You have successfully deregister Student")));
+        content: Text("Deleted")));
   }
 
   void _onSearchChanged(String value) {
@@ -560,31 +588,36 @@ class _MyWidgetState extends State<Notice> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     margin: const EdgeInsets.all(10),
-                    child: ListTile(
-                      title: Text(
-                        documentSnapshot['Title'],
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
-                      subtitle: Text(
-                        documentSnapshot['Description'].toString(),
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      trailing: SizedBox(
-                        width: 100,
-                        child: Row(
-                          children: [
-                            IconButton(
-                                color: Colors.white,
-                                onPressed: () => _update(documentSnapshot),
-                                icon: const Icon(Icons.edit)),
-                            IconButton(
-                                color: Colors.white,
-                                onPressed: () => _delete(documentSnapshot.id),
-                                icon: const Icon(Icons.delete)),
-                          ],
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: Text(
+                            documentSnapshot['Title'],
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, color: Colors.white),
+                          ),
+                          subtitle: Text(documentSnapshot['Date']+" "+documentSnapshot['Time'],style: TextStyle(color: Colors.grey),),
+                          trailing: SizedBox(
+                            width: 100,
+                            child: Row(
+                              children: [
+                                IconButton(
+                                    color: Colors.white,
+                                    onPressed: () => _update(documentSnapshot),
+                                    icon: const Icon(Icons.edit)),
+                                IconButton(
+                                    color: Colors.white,
+                                    onPressed: () => _delete(documentSnapshot.id),
+                                    icon: const Icon(Icons.delete)),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(documentSnapshot['Description'],style: TextStyle(color: Colors.white),),
+                        )
+                      ],
                     ),
                   );
                 });
