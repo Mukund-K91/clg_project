@@ -2,6 +2,8 @@ import 'package:clg_project/Material.dart';
 import 'package:clg_project/faculty_dashboard.dart';
 import 'package:clg_project/home_screen.dart';
 import 'package:clg_project/login.dart';
+import 'package:clg_project/splash_screen.dart';
+import 'package:clg_project/student_dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -23,9 +25,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        home:FacultyDashboard('admin@gmail.com', 'Faculty')
-        // Profile('koladiyamukund76@gmail.com')
-        // Dashboard('student', 'abc@gmail.com'),
+        home:SplashScreen()
         );
   }
 }

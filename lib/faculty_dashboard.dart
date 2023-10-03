@@ -569,7 +569,8 @@ class _MyWidgetState extends State<Notice> {
               ))
         ],
       ),
-      body: StreamBuilder(
+      body:
+      StreamBuilder(
         stream: _con.snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
           if (streamSnapshot.hasData) {

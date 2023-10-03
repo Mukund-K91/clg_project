@@ -1,4 +1,6 @@
 import 'package:clg_project/Material.dart';
+import 'package:clg_project/Notice.dart';
+import 'package:clg_project/faculty_dashboard.dart';
 import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +12,8 @@ class StudentDashboard extends StatelessWidget {
   String email;
   String _user;
 
-  StudentDashboard(this.email,this._user, {super.key});
+  StudentDashboard(this.email, this._user, {super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,7 +125,12 @@ class StudentDashboard extends StatelessWidget {
                               children: [
                                 IconButton(
                                   onPressed: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => FilesUpload(_user),));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              FilesUpload(_user),
+                                        ));
                                   },
                                   iconSize: 50,
                                   icon: const Icon(FontAwesomeIcons.book,
@@ -163,7 +171,8 @@ class StudentDashboard extends StatelessWidget {
                                 IconButton(
                                   onPressed: () {},
                                   iconSize: 50,
-                                  icon: const Icon(FontAwesomeIcons.fileContract,
+                                  icon: const Icon(
+                                      FontAwesomeIcons.fileContract,
                                       color: Color(0xff002233)),
                                 ),
                                 const Text(
@@ -183,11 +192,17 @@ class StudentDashboard extends StatelessWidget {
                       ),
                       title: const Text("Latest Notice & Events"),
                       trailing: IconButton(
-                       icon: const Icon(
+                        icon: const Icon(
                           FontAwesomeIcons.anglesRight,
                           color: Color(0xff002233),
-                        ), onPressed: () {
-                      },
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => StudentNotice(),
+                              ));
+                        },
                       ),
                     )
                   ],
