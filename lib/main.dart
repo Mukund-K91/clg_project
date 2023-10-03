@@ -80,7 +80,7 @@ class HomeMain extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Login("student"),
+                                  builder: (context) => Login("Student"),
                                 ));
                           },
                           child: const Text(

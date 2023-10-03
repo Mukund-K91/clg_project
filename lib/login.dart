@@ -56,7 +56,7 @@ class _LoginState extends State<Login> {
                       ));
                 },
                 title: "${widget._user} Not Found",
-                desc: widget._user == "student"
+                desc: widget._user == "Student"
                     ? "Please contact your respective faculty for Register yourself in eCollege App"
                     : "Please contact admin for Register yourself in eCollege App")
             .show();
@@ -108,7 +108,7 @@ class _LoginState extends State<Login> {
                         decoration: InputDecoration(
                             labelText: "Email ID",
                             labelStyle: const TextStyle(fontSize: 15),
-                            prefixIcon: widget._user == "student"
+                            prefixIcon: widget._user == "Student"
                                 ? const Icon(FontAwesomeIcons.userGraduate,
                                     color: Color(0xff002233))
                                 : const Icon(
