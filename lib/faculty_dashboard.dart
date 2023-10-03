@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clg_project/Material.dart';
+import 'package:clg_project/admin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -122,7 +123,7 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => const Notice(),
+                                          builder: (context) => StudentManage(),
                                         ));
                                   },
                                   iconSize: 50,

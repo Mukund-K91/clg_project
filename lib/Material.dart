@@ -1,9 +1,6 @@
-import 'dart:async';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:clg_project/storage_service.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 
 class FilesUpload extends StatefulWidget {
   String _user;
@@ -32,8 +29,14 @@ class _FilesUploadState extends State<FilesUpload> {
           style: const TextStyle(color: Colors.white),
         ),
         actions: [
-          widget._user == "student"
-              ? Icon(Icons.search)
+          widget._user == "Student"
+              ? Padding(
+                padding: const EdgeInsets.all(10),
+                child: Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
+              )
               : IconButton(
                   onPressed: () async {
                     final result = await FilePicker.platform
@@ -52,8 +55,7 @@ class _FilesUploadState extends State<FilesUpload> {
         ],
         backgroundColor: const Color(0xff002233),
       ),
-      body:
-      Stack(children: [
+      body: Stack(children: [
         FutureBuilder(
           future: storageService.listFiles(),
           builder: (context, snapshot) {
