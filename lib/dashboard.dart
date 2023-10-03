@@ -49,8 +49,8 @@ class Dashboard extends StatelessWidget {
                             builder: (context) => HomeMain(),
                           ));
                     },
-                    icon: Icon(Icons.power_settings_new))
-                : Icon(Icons.notifications),
+                    icon: Icon(Icons.power_settings_new,color: Colors.white,))
+                : Icon(Icons.notifications,color: Colors.white,),
           ],
           title: Text(
             "DASHBOARD",
