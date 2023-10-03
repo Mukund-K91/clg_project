@@ -1,5 +1,6 @@
 import 'package:clg_project/Material.dart';
 import 'package:clg_project/Notice.dart';
+import 'package:clg_project/attendance.dart';
 import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -101,7 +102,13 @@ class StudentDashboard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Attendance(),
+                                        ));
+                                  },
                                   iconSize: 50,
                                   icon: const Icon(
                                     FontAwesomeIcons.calendarDay,

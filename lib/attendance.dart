@@ -20,10 +20,6 @@ class _AttendanceState extends State<Attendance> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.calendar_month,
-          color: Colors.white,
-        ),
         title: Text(
           "Attendance",
           style: TextStyle(color: Colors.white),

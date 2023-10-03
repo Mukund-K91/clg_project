@@ -21,10 +21,6 @@ class _FilesUploadState extends State<FilesUpload> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.file_copy_rounded,
-          color: Colors.white,
-        ),
         title: Text(
           "Material",
           style: const TextStyle(color: Colors.white),
