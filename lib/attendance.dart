@@ -13,8 +13,8 @@ class Attendance extends StatefulWidget {
 Random random = new Random();
 
 class _AttendanceState extends State<Attendance> {
-  int present = random.nextInt(150);
-  int absent =random.nextInt(50);
+  int present = random.nextInt(100);
+  int absent =random.nextInt(20);
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class _AttendanceState extends State<Attendance> {
                 child: Center(child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text('Total Present',style: TextStyle(fontSize: 20),),
+                    Text('Total Absent',style: TextStyle(fontSize: 20),),
                     CircleAvatar(
                       backgroundColor: Colors.white,
                       radius: 30,

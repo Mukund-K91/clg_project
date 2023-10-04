@@ -1,5 +1,6 @@
 import 'package:clg_project/Material.dart';
 import 'package:clg_project/Notice.dart';
+import 'package:clg_project/PageNotAvailable.dart';
 import 'package:clg_project/attendance.dart';
 import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -155,7 +156,9 @@ class StudentDashboard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    await pagenotfound(context,'No assignment to submit woo hoo :)');
+                                  },
                                   iconSize: 50,
                                   icon: const Icon(FontAwesomeIcons.filePen,
                                       color: Color(0xff002233)),
@@ -174,7 +177,9 @@ class StudentDashboard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed:() async {
+                                    await pagenotfound(context,'Results not published yet...!');
+                                  },
                                   iconSize: 50,
                                   icon: const Icon(
                                       FontAwesomeIcons.fileContract,

@@ -1,7 +1,4 @@
-import 'package:clg_project/Material.dart';
-import 'package:clg_project/attendance.dart';
-import 'package:clg_project/faculty_dashboard.dart';
-import 'package:clg_project/home_screen.dart';
+import 'package:clg_project/dashboard.dart';
 import 'package:clg_project/login.dart';
 import 'package:clg_project/splash_screen.dart';
 import 'package:clg_project/student_dashboard.dart';
@@ -26,8 +23,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        home:FilesUpload('Faculty')
-        //StudentDashboard('koladiyamukund76@gmail.com','Student')
+        home: SplashScreen()
         );
   }
 }
