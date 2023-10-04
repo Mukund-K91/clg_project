@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        home:SplashScreen()
+        home:FilesUpload('Faculty')
+        //StudentDashboard('koladiyamukund76@gmail.com','Student')
         );
   }
 }
