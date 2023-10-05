@@ -43,14 +43,18 @@ class Dashboard extends StatelessWidget {
                 ? IconButton(
                     onPressed: () {
                       _auth.signOut();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomeMain(),
-                          ));
+                      runApp(new MaterialApp(
+                        home: HomeMain(),
+                      ));
                     },
-                    icon: Icon(Icons.power_settings_new,color: Colors.white,))
-                : Icon(Icons.notifications,color: Colors.white,),
+                    icon: Icon(
+                      Icons.power_settings_new,
+                      color: Colors.white,
+                    ))
+                : Icon(
+                    Icons.notifications,
+                    color: Colors.white,
+                  ),
           ],
           title: Text(
             "DASHBOARD",

@@ -157,11 +157,11 @@ class _ProfileState extends State<Profile> {
                                       borderRadius: BorderRadius.circular(5))),
                               onPressed: () {
                                 _auth.signOut();
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const HomeMain(),
-                                    ));
+                                runApp(
+                                  new MaterialApp(
+                                    home: HomeMain(),
+                                  )
+                                );
                               },
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
