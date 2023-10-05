@@ -34,7 +34,8 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                    'Error: ${snapshot.error} USER NOT FOUND\nplease contact your administrator eCollegeAdmin@gmail.com'),
+                    'Error: ${snapshot
+                        .error} USER NOT FOUND\nplease contact your administrator eCollegeAdmin@gmail.com'),
                 ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -51,7 +52,7 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
           } else {
             // Data found, you can access it using snapshot.data
             Map<String, dynamic> data =
-                snapshot.data!.data() as Map<String, dynamic>;
+            snapshot.data!.data() as Map<String, dynamic>;
             return Stack(
               children: [
                 Container(
@@ -81,7 +82,7 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
                                 const CircleAvatar(
                                   radius: 40,
                                   foregroundImage:
-                                      AssetImage("assets/images/ex_img.png"),
+                                  AssetImage("assets/images/ex_img.png"),
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -147,7 +148,8 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
                               children: [
                                 IconButton(
                                   onPressed: () async {
-                                    await pagenotfound(context,'This Feature Not available Yet...!\nunder progress');
+                                    await pagenotfound(context,
+                                        'This Feature Not available Yet...!\nunder progress');
                                   },
                                   iconSize: 50,
                                   icon: const Icon(FontAwesomeIcons.calendarDay,
@@ -272,11 +274,11 @@ Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
 
   try {
     Future<QueryDocumentSnapshot<Map<String, dynamic>>> documentSnapshot =
-        firestore
-            .collection('faculty')
-            .where('Email', isEqualTo: email)
-            .get()
-            .then((querySnapshot) {
+    firestore
+        .collection('faculty')
+        .where('Email', isEqualTo: email)
+        .get()
+        .then((querySnapshot) {
       if (querySnapshot.docs.isNotEmpty) {
         return querySnapshot
             .docs[0]; // Assuming there's only one matching document
@@ -294,6 +296,7 @@ Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
 
 class Notice extends StatefulWidget {
   const Notice({super.key});
+
   @override
   State<Notice> createState() => _MyWidgetState();
 }
@@ -303,16 +306,18 @@ class _MyWidgetState extends State<Notice> {
   final TextEditingController _title = TextEditingController();
   final TextEditingController _description = TextEditingController();
   final CollectionReference _con =
-      FirebaseFirestore.instance.collection('Notice');
+  FirebaseFirestore.instance.collection('Notice');
   final FirebaseAuth _auth = FirebaseAuth.instance;
   var _timeString;
+
   void initState() {
     _timeString = _Time(DateTime.now());
-    _timeString=_Date(DateTime.now());
+    _timeString = _Date(DateTime.now());
 
     Timer.periodic(const Duration(seconds: 1), (Timer t) => _getTimeString());
     super.initState();
   }
+
   _getTimeString() {
     final DateTime now = DateTime.now();
     final String formattedTime = _Time(now);
@@ -322,13 +327,16 @@ class _MyWidgetState extends State<Notice> {
       _timeString = formattedTime;
     });
   }
+
   @override
   // String _Date = DateFormat('dd - MM - yyyy').format(DateTime.now());
   // String _Time = DateFormat('kk:mm').format(DateTime.now());
   String searchText = '';
+
   String _Time(DateTime dateTime) {
     return DateFormat('hh:mm').format(dateTime);
   }
+
   String _Date(DateTime dateTime) {
     return DateFormat('dd-MM-yyyy').format(dateTime);
   }
@@ -345,16 +353,19 @@ class _MyWidgetState extends State<Notice> {
                   top: 20,
                   right: 20,
                   left: 20,
-                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+                  bottom: MediaQuery
+                      .of(ctx)
+                      .viewInsets
+                      .bottom + 20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
                     child: Text(
-                     "Notice",
+                      "Notice",
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Padding(
@@ -401,6 +412,8 @@ class _MyWidgetState extends State<Notice> {
                                     "Date": _Date(DateTime.now()),
                                     "Time": _Time(DateTime.now())
                                   });
+                                  _title.text = "";
+                                  _description.text = "";
                                   Navigator.of(context).pop();
                                 },
                                 child: const Text(
@@ -439,7 +452,10 @@ class _MyWidgetState extends State<Notice> {
                   top: 20,
                   right: 20,
                   left: 20,
-                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+                  bottom: MediaQuery
+                      .of(ctx)
+                      .viewInsets
+                      .bottom + 20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -448,7 +464,7 @@ class _MyWidgetState extends State<Notice> {
                     child: Text(
                       "Update Notice",
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Padding(
@@ -495,6 +511,8 @@ class _MyWidgetState extends State<Notice> {
                                     "Date": _Date(DateTime.now()),
                                     "Time": _Time(DateTime.now())
                                   });
+                                  _title.text = "";
+                                  _description.text = "";
                                   Navigator.of(context).pop();
                                 },
                                 child: const Text(
@@ -541,25 +559,25 @@ class _MyWidgetState extends State<Notice> {
         backgroundColor: Color(0xff002233),
         title: isSearchClicked
             ? Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: TextField(
-                  controller: _searchController,
-                  onChanged: _onSearchChanged,
-                  decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 12),
-                      hintStyle: TextStyle(color: Colors.black),
-                      border: InputBorder.none,
-                      hintText: 'Search..'),
-                ),
-              )
+          height: 40,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: TextField(
+            controller: _searchController,
+            onChanged: _onSearchChanged,
+            decoration: const InputDecoration(
+                contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 12),
+                hintStyle: TextStyle(color: Colors.black),
+                border: InputBorder.none,
+                hintText: 'Search..'),
+          ),
+        )
             : const Text(
-                'Notice & Events',
-                style: TextStyle(color: Colors.white),
-              ),
+          'Notice & Events',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -580,9 +598,10 @@ class _MyWidgetState extends State<Notice> {
         builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
           if (streamSnapshot.hasData) {
             final List<DocumentSnapshot> items = streamSnapshot.data!.docs
-                .where((doc) => doc['Title'].toLowerCase().contains(
-                      searchText.toLowerCase(),
-                    ))
+                .where((doc) =>
+                doc['Title'].toLowerCase().contains(
+                  searchText.toLowerCase(),
+                ))
                 .toList();
             return ListView.builder(
                 itemCount: items.length,
@@ -596,35 +615,37 @@ class _MyWidgetState extends State<Notice> {
                     margin: const EdgeInsets.all(10),
                     child: Column(
                       children: [
-                        ListTile(
-                          title: Text(
-                            documentSnapshot['Title'],
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, color: Colors.white),
-                          ),
-                          subtitle: Text(documentSnapshot['Date']+" "+documentSnapshot['Time'],style: TextStyle(color: Colors.grey),),
-                          trailing: SizedBox(
-                            width: 100,
-                            child: Row(
-                              children: [
-                                IconButton(
-                                    color: Colors.white,
-                                    onPressed: () => _update(documentSnapshot),
-                                    icon: const Icon(Icons.edit)),
-                                IconButton(
-                                    color: Colors.white,
-                                    onPressed: () => _delete(documentSnapshot.id),
-                                    icon: const Icon(Icons.delete)),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Text(documentSnapshot['Description'],style: TextStyle(color: Colors.white),),
-                        )
-                      ],
+                    ListTile(
+                    title: Text(
+                    documentSnapshot['Title'],
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
                     ),
+                    subtitle: Text(
+                      documentSnapshot['Date'] + " " + documentSnapshot['Time'],
+                      style: TextStyle(color: Colors.grey),),
+                    trailing: SizedBox(
+                      width: 100,
+                      child: Row(
+                        children: [
+                          IconButton(
+                              color: Colors.white,
+                              onPressed: () => _update(documentSnapshot),
+                              icon: const Icon(Icons.edit)),
+                          IconButton(
+                              color: Colors.white,
+                              onPressed: () => _delete(documentSnapshot.id),
+                              icon: const Icon(Icons.delete)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Align(alignment:Alignment.topLeft ,child: Text(documentSnapshot['Description'],style: TextStyle(color: Colors.white),)),
+                  )
+                  ],
+                  ),
                   );
                 });
           }

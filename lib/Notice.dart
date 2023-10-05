@@ -102,9 +102,12 @@ class _StudentNoticeState extends State<StudentNotice> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10),
-                          child: Text(
-                            documentSnapshot['Description'],
-                            style: TextStyle(color: Colors.white),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              documentSnapshot['Description'],
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         )
                       ],

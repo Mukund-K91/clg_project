@@ -65,12 +65,28 @@ class _ProfileState extends State<Profile> {
                     padding: const EdgeInsets.all(10),
                     child: Column(
                       children: [
-                        const CircleAvatar(
-                            radius: 64,
-                            backgroundImage:
-                                AssetImage('assets/images/profile_img2.png')),
+                        Stack(children: [
+                          const CircleAvatar(
+                              radius: 64,
+                              backgroundImage:
+                                  AssetImage('assets/images/profile_img2.png')),
+                          Positioned(top: 100,left: 100, child: Icon(Icons.camera_alt))
+                        ]),
                         const SizedBox(
                           height: 20,
+                        ),
+                        ListTile(
+                          leading: Icon(
+                            FontAwesomeIcons.idCardClip,
+                            color: themeColor,
+                          ),
+                          title: Text(
+                            data['SP ID'],
+                            style: const TextStyle(fontSize: 15),
+                          ),
+                        ),
+                        const Divider(
+                          thickness: 2,
                         ),
                         ListTile(
                           leading: Icon(
@@ -157,16 +173,15 @@ class _ProfileState extends State<Profile> {
                                       borderRadius: BorderRadius.circular(5))),
                               onPressed: () {
                                 _auth.signOut();
-                                runApp(
-                                  MaterialApp(
-                                    home: HomeMain(),
-                                    debugShowCheckedModeBanner: false,
-                                    theme: ThemeData(
-                                      colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff002233)),
-                                      useMaterial3: true,
-                                    ),
-                                  )
-                                );
+                                runApp(MaterialApp(
+                                  home: const HomeMain(),
+                                  debugShowCheckedModeBanner: false,
+                                  theme: ThemeData(
+                                    colorScheme: ColorScheme.fromSeed(
+                                        seedColor: const Color(0xff002233)),
+                                    useMaterial3: true,
+                                  ),
+                                ));
                               },
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

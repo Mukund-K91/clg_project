@@ -1,8 +1,10 @@
-import 'package:clg_project/admin.dart';
 import 'package:clg_project/login.dart';
+import 'package:clg_project/profile.dart';
 import 'package:clg_project/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
+import 'dashboard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        home:Material()
+        home:SplashScreen()
         );
   }
 }

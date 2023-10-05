@@ -17,12 +17,23 @@ class FilesUpload extends StatefulWidget {
 }
 
 class _FilesUploadState extends State<FilesUpload> {
+  final TextEditingController _searchController = TextEditingController();
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   StorageService service = StorageService();
 
   StorageService storageService = StorageService();
   double? _progress;
+
+  void _onSearchChanged(String value) {
+    setState(() {
+      searchText = value;
+    });
+  }
+
+  bool isSearchClicked = false;
   @override
+  String searchText = '';
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -32,11 +43,18 @@ class _FilesUploadState extends State<FilesUpload> {
         ),
         actions: [
           widget._user == "Student"
-              ? const Padding(
+              ? Padding(
                   padding: EdgeInsets.all(10),
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.white,
+                  child: IconButton(
+                    icon: Icon(
+                      isSearchClicked ? Icons.close : Icons.search,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isSearchClicked = !isSearchClicked;
+                      });
+                    },
                   ),
                 )
               : IconButton(
@@ -50,9 +68,12 @@ class _FilesUploadState extends State<FilesUpload> {
                       final fileName = result.files.single.name;
                       service.uplaodFile(fileName, path!);
                       Timer(Duration(seconds: 5), () {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) =>super.widget ,));
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => super.widget,
+                            ));
                       });
-
                     }
                   },
                   icon: const Icon(size: 30, Icons.add),
@@ -64,7 +85,6 @@ class _FilesUploadState extends State<FilesUpload> {
       body: RefreshIndicator(
         onRefresh: () {
           return Future<void>.delayed(const Duration(seconds: 3));
-
         },
         child: Stack(children: [
           FutureBuilder(
@@ -73,7 +93,8 @@ class _FilesUploadState extends State<FilesUpload> {
               if (snapshot.connectionState == ConnectionState.waiting &&
                   !snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasData) {
+              }
+              else if (snapshot.hasData) {
                 return ListView.builder(
                     itemCount: snapshot.data!.items.length,
                     itemBuilder: (context, index) {
@@ -102,7 +123,8 @@ class _FilesUploadState extends State<FilesUpload> {
                                               _progress = null;
                                             });
                                           },
-                                          notificationType: NotificationType.all,
+                                          notificationType:
+                                              NotificationType.all,
                                         );
                                         Fluttertoast.showToast(
                                             msg: 'Downloading....',
@@ -116,8 +138,10 @@ class _FilesUploadState extends State<FilesUpload> {
                                     },
                                     icon: const Icon(Icons.download),
                                   )
-                                :const Icon(Icons.picture_as_pdf,color: Color(0xff002233),)
-                        ),
+                                : const Icon(
+                                    Icons.picture_as_pdf,
+                                    color: Color(0xff002233),
+                                  )),
                       );
                     });
               }
