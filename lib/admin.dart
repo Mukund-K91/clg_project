@@ -196,6 +196,12 @@ class _MyWidgetState extends State<StudentManage> {
                                     "Password": _mobile.text,
                                     "Div": _selectedDiv
                                   });
+                                  _id.text ='';
+                                  _fname.text = '';
+                                  _lname.text = '';
+                                  _email.text = '';
+                                  _mobile.text = '';
+                                  _selectedDiv = "Div";
                                   Navigator.of(context).pop();
                                 },
                                 child: const Text(
@@ -378,7 +384,15 @@ class _MyWidgetState extends State<StudentManage> {
                                     "Password": _mobile.text,
                                     "Div": _selectedDiv
                                   });
+                                  _id.text ='';
+                                  _fname.text = '';
+                                  _lname.text = '';
+                                  _email.text = '';
+                                  _mobile.text = '';
+                                  _selectedDiv = "Div";
+
                                   Navigator.of(context).pop();
+
                                 },
                                 child: const Text(
                                   "Update",

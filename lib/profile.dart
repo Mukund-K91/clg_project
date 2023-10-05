@@ -42,7 +42,7 @@ class _ProfileState extends State<Profile> {
                   ElevatedButton(
                       onPressed: () {
                         _auth.signOut().then((value) {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const HomeMain(),
@@ -158,8 +158,13 @@ class _ProfileState extends State<Profile> {
                               onPressed: () {
                                 _auth.signOut();
                                 runApp(
-                                  new MaterialApp(
+                                  MaterialApp(
                                     home: HomeMain(),
+                                    debugShowCheckedModeBanner: false,
+                                    theme: ThemeData(
+                                      colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff002233)),
+                                      useMaterial3: true,
+                                    ),
                                   )
                                 );
                               },

@@ -1,7 +1,6 @@
-import 'package:clg_project/dashboard.dart';
+import 'package:clg_project/admin.dart';
 import 'package:clg_project/login.dart';
 import 'package:clg_project/splash_screen.dart';
-import 'package:clg_project/student_dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        home: SplashScreen()
+        home:Material()
         );
   }
 }

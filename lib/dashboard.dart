@@ -42,9 +42,15 @@ class Dashboard extends StatelessWidget {
             user == 'Faculty'
                 ? IconButton(
                     onPressed: () {
-                      _auth.signOut();
-                      runApp(new MaterialApp(
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeMain(),));
+                      runApp(MaterialApp(
                         home: HomeMain(),
+                        color: const Color(0xff002233),
+                        debugShowCheckedModeBanner: false,
+                        theme: ThemeData(
+                          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff002233)),
+                          useMaterial3: true,
+                        ),
                       ));
                     },
                     icon: Icon(
