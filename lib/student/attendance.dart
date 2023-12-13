@@ -20,11 +20,11 @@ class _AttendanceState extends State<Attendance> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Attendance",
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Color(0xff002233),
+        backgroundColor: const Color(0xff002233),
       ),
       body: Column(
         children: [
@@ -42,11 +42,11 @@ class _AttendanceState extends State<Attendance> {
                 child: Center(child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text('Total Present',style: TextStyle(fontSize: 20),),
+                    const Text('Total Present',style: TextStyle(fontSize: 20),),
                     CircleAvatar(
                       backgroundColor: Colors.white,
                       radius: 30,
-                      child: Text(present.toString(),style: TextStyle(fontSize: 20),),
+                      child: Text(present.toString(),style: const TextStyle(fontSize: 20),),
                     )
                   ],
                 )),
@@ -67,11 +67,11 @@ class _AttendanceState extends State<Attendance> {
                 child: Center(child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text('Total Absent',style: TextStyle(fontSize: 20),),
+                    const Text('Total Absent',style: TextStyle(fontSize: 20),),
                     CircleAvatar(
                       backgroundColor: Colors.white,
                       radius: 30,
-                      child: Text(absent.toString(),style: TextStyle(fontSize: 20),),
+                      child: Text(absent.toString(),style: const TextStyle(fontSize: 20),),
                     )
                   ],
                 )),

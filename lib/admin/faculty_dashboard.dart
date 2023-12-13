@@ -1,14 +1,14 @@
 import 'dart:async';
-import 'package:clg_project/Material.dart';
-import 'package:clg_project/admin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import '../main.dart';
+import 'Material.dart';
 import 'PageNotAvailable.dart';
-import 'main.dart';
+import 'admin.dart';
 
 class FacultyDashboard extends StatefulWidget {
   String email;

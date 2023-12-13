@@ -3,9 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import '../main.dart';
 import 'dashboard.dart';
-import 'main.dart';
 
 class Login extends StatefulWidget {
   var _user;

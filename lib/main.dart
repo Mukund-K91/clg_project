@@ -1,15 +1,15 @@
-import 'package:clg_project/login.dart';
-import 'package:clg_project/profile.dart';
 import 'package:clg_project/splash_screen.dart';
+import 'package:clg_project/student/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-import 'dashboard.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+ //  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: SystemUiOverlay.values);
 }
 
 class MyApp extends StatelessWidget {

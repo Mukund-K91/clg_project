@@ -14,9 +14,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
-
   void initState() {
     super.initState();
     Timer(Duration(seconds: 5), () {
@@ -27,24 +25,27 @@ class _SplashScreenState extends State<SplashScreen> {
           ));
     });
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
-      body:Container(
-        width: double.infinity,
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image(image: AssetImage("assets/images/logo.png")),
-            const SizedBox(height: 15,),
-            LoadingAnimationWidget.discreteCircle(
-              color: Colors.black,
-              secondRingColor: Color(0xff002233),
-              thirdRingColor: Colors.grey,
-              size: 50,
-            ),],
-        ),
-      )
-    );
+        body: Container(
+      width: double.infinity,
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image(image: AssetImage("assets/images/logo.png")),
+          const SizedBox(
+            height: 15,
+          ),
+          LoadingAnimationWidget.discreteCircle(
+            color: Colors.black,
+            secondRingColor: Color(0xff002233),
+            thirdRingColor: Colors.grey,
+            size: 50,
+          ),
+        ],
+      ),
+    ));
   }
 }

@@ -1,7 +1,7 @@
-import 'package:clg_project/faculty_dashboard.dart';
+import 'package:clg_project/admin/faculty_dashboard.dart';
 import 'package:clg_project/main.dart';
-import 'package:clg_project/profile.dart';
-import 'package:clg_project/student_dashboard.dart';
+import 'package:clg_project/student/profile.dart';
+import 'package:clg_project/student/student_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,13 +42,18 @@ class Dashboard extends StatelessWidget {
             user == 'Faculty'
                 ? IconButton(
                     onPressed: () {
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeMain(),));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomeMain(),
+                          ));
                       runApp(MaterialApp(
                         home: HomeMain(),
                         color: const Color(0xff002233),
                         debugShowCheckedModeBanner: false,
                         theme: ThemeData(
-                          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff002233)),
+                          colorScheme: ColorScheme.fromSeed(
+                              seedColor: const Color(0xff002233)),
                           useMaterial3: true,
                         ),
                       ));

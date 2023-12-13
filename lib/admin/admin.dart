@@ -146,8 +146,8 @@ class _MyWidgetState extends State<StudentManage> {
                                 value: _selectedDiv,
                                 items: _divison
                                     .map((e) => DropdownMenuItem(
-                                          child: Text(e),
                                           value: e,
+                                          child: Text(e),
                                         ))
                                     .toList(),
                                 onChanged: (val) {
@@ -353,8 +353,8 @@ class _MyWidgetState extends State<StudentManage> {
                                 value: _selectedDiv,
                                 items: _divison
                                     .map((e) => DropdownMenuItem(
-                                          child: Text(e),
                                           value: e,
+                                          child: Text(e),
                                         ))
                                     .toList(),
                                 onChanged: (val) {
@@ -435,7 +435,7 @@ class _MyWidgetState extends State<StudentManage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff002233),
+        backgroundColor: const Color(0xff002233),
         title: isSearchClicked
             ? Container(
                 height: 40,
@@ -509,7 +509,7 @@ class _MyWidgetState extends State<StudentManage> {
                       ),
                       subtitle: Text(
                         documentSnapshot['SP ID'].toString(),
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                       trailing: SizedBox(
                         width: 100,

@@ -70,7 +70,10 @@ class _ProfileState extends State<Profile> {
                               radius: 64,
                               backgroundImage:
                                   AssetImage('assets/images/profile_img2.png')),
-                          Positioned(top: 100,left: 100, child: Icon(Icons.camera_alt))
+                          Positioned(
+                              top: 100,
+                              left: 100,
+                              child: Icon(Icons.camera_alt))
                         ]),
                         const SizedBox(
                           height: 20,
@@ -172,9 +175,14 @@ class _ProfileState extends State<Profile> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5))),
                               onPressed: () {
-                                _auth.signOut();
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => HomeMain(),
+                                    ));
                                 runApp(MaterialApp(
-                                  home: const HomeMain(),
+                                  home: HomeMain(),
+                                  color: const Color(0xff002233),
                                   debugShowCheckedModeBanner: false,
                                   theme: ThemeData(
                                     colorScheme: ColorScheme.fromSeed(
@@ -182,6 +190,15 @@ class _ProfileState extends State<Profile> {
                                     useMaterial3: true,
                                   ),
                                 ));
+                                // runApp(MaterialApp(
+                                //   home: HomeMain(),
+                                //   debugShowCheckedModeBanner: false,
+                                //   theme: ThemeData(
+                                //     colorScheme: ColorScheme.fromSeed(
+                                //         seedColor: const Color(0xff002233)),
+                                //     useMaterial3: true,
+                                //   ),
+                                // ));
                               },
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
