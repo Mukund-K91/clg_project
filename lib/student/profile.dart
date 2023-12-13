@@ -165,7 +165,7 @@ class _ProfileState extends State<Profile> {
                                 ).show();
                               }
                             },
-                            child: const Text("FORGOT PASSWORD?")),
+                            child: const Text("FORGOT PASSWORD??")),
                         SizedBox(
                           width: 250,
                           height: 50,
