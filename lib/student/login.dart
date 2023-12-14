@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class _LoginState extends State<Login> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
@@ -182,3 +184,27 @@ class _LoginState extends State<Login> {
     ));
   }
 }
+// Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
+//     String email) {
+//   FirebaseFirestore firestore = FirebaseFirestore.instance;
+//
+//   try {
+//     Future<QueryDocumentSnapshot<Map<String, dynamic>>> documentSnapshot =
+//     firestore
+//         .collection('students')
+//         .where('SP ID', isEqualTo:)
+//         .get()
+//         .then((querySnapshot) {
+//       if (querySnapshot.docs.isNotEmpty) {
+//         return querySnapshot
+//             .docs[0]; // Assuming there's only one matching document
+//       } else {
+//         throw Exception('No document found with the given email.');
+//       }
+//     });
+//     return documentSnapshot;
+//   } catch (e) {
+//     print('Error fetching data: $e');
+//     return null;
+//   }
+// }
