@@ -35,7 +35,7 @@ class _LoginState extends State<Login> {
             dialogType: DialogType.success,
             animType: AnimType.bottomSlide,
             showCloseIcon: false,
-            title: "Login Successfully :)",
+            title: "Login Successfully",
             btnOkOnPress: () {
               Navigator.pushReplacement(
                   context,
