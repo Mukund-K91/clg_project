@@ -1,13 +1,12 @@
 import 'dart:async';
-
-import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:clg_project/demo.dart';
+import 'package:clg_project/splash_screen.dart';
 import 'package:clg_project/student/login.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 //HET
 //MUKUND
@@ -16,7 +15,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
-
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
   //  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: SystemUiOverlay.values);
 }
@@ -29,11 +27,50 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   // late StreamSubscription subscription;
   // var isConnected = false;
   // bool isAlert = false;
-
-  @override
+  // late ConnectivityResult result;
+  // late StreamSubscription subscription;
+  // var isConnected = false;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   startStream();
+  // }
+  // checkInternet() async {
+  //   result =await Connectivity().checkConnectivity();
+  //   if (result != ConnectivityResult.none) {
+  //     isConnected = true;
+  //   } else {
+  //     isConnected = false;
+  //     Text('no');
+  //     showDialogBox();
+  //   }
+  //   setState(() {});
+  // }
+  // showDialogBox() {
+  //   showDialog(
+  //       barrierDismissible: false,
+  //       context: context,
+  //       builder: (context) => CupertinoAlertDialog(
+  //         title: Text('NO'),
+  //         content: Text('Check'),
+  //         actions: [
+  //           CupertinoButton.filled(child: Text('Retry'), onPressed: () {
+  //             Navigator.pop(context);
+  //             checkInternet();
+  //           })
+  //         ],
+  //       ));
+  // }
+  // startStream(){
+  //   subscription=Connectivity().onConnectivityChanged.listen((event) {
+  //     checkInternet();
+  //   });
+  // }
   // void initState() {
   //   getConnectivity();
   //   super.initState();
@@ -70,6 +107,9 @@ class _MyAppState extends State<MyApp> {
   //   subscription.cancel();
   //   super.dispose();
   // }
+  @override
+
+
 
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -79,7 +119,7 @@ class _MyAppState extends State<MyApp> {
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        home: HomeMain());
+        home: SplashScreen());
   }
 }
 
