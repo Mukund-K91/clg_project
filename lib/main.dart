@@ -37,9 +37,9 @@ class _MyAppState extends State<MyApp> {
         ),
         debugShowCheckedModeBanner: false,
         home:
-        //SplashScreen()
+        SplashScreen()
          // FacultyDashboard('admin2@gmail.com', 'Faculty')
-        StudentDashboard('mukundkoladiya05@gmail.com', 'Student')
+       // StudentDashboard('mukundkoladiya05@gmail.com', 'Student')
     );
   }
 }
