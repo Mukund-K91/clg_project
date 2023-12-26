@@ -48,11 +48,9 @@ class _MyWidgetState extends State<NoticeBoard> {
   String _Time(DateTime dateTime) {
     return DateFormat('hh:mm').format(dateTime);
   }
-
   String _Date(DateTime dateTime) {
     return DateFormat('dd-MM-yyyy').format(dateTime);
   }
-
   // for create operation
   Future<void> _create([DocumentSnapshot? documentSnapshot]) async {
     await showModalBottomSheet(
