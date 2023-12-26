@@ -367,7 +367,7 @@ class _MyWidgetState extends State<NoticeBoard> {
                                   "Read More >>",
                                   style: TextStyle(
                                       fontSize: 15,
-                                      color: Colors.grey,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 onTap: () {
