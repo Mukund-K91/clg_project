@@ -3,16 +3,12 @@ import 'package:clg_project/main.dart';
 import 'package:clg_project/student/profile.dart';
 import 'package:clg_project/student/student_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 class Dashboard extends StatelessWidget {
   final String user;
   var email;
-
   Dashboard(this.user, this.email, {super.key});
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
@@ -22,7 +18,7 @@ class Dashboard extends StatelessWidget {
         appBar: AppBar(
           leading: user == "Student"
               ? IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     FontAwesomeIcons.user,
                     color: Colors.white,
                   ),
@@ -34,7 +30,7 @@ class Dashboard extends StatelessWidget {
                         ));
                   },
                 )
-              : Icon(
+              : const Icon(
                   Icons.account_balance,
                   color: Colors.white,
                 ),
@@ -45,10 +41,10 @@ class Dashboard extends StatelessWidget {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HomeMain(),
+                            builder: (context) => const HomeMain(),
                           ));
                       runApp(MaterialApp(
-                        home: HomeMain(),
+                        home: const HomeMain(),
                         color: const Color(0xff002233),
                         debugShowCheckedModeBanner: false,
                         theme: ThemeData(
@@ -58,18 +54,18 @@ class Dashboard extends StatelessWidget {
                         ),
                       ));
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.power_settings_new,
                       color: Colors.white,
                     ))
-                : Icon(
+                : const Icon(
                     Icons.notifications,
                     color: Colors.white,
                   ),
           ],
-          title: Text(
+          title: const Text(
             "DASHBOARD",
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white),
           ),
           backgroundColor: const Color(0xff002233),
         ),

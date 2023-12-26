@@ -3,7 +3,6 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
-
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
@@ -48,7 +47,6 @@ class DefaultFirebaseOptions {
         );
     }
   }
-
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyAyRszp9YjvF5iPmK_V5fAt-wsjNhV2S0k',
     appId: '1:958032766959:web:476f83e7f04cc1114db81a',
@@ -58,7 +56,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'ecollege-dd3a3.appspot.com',
     measurementId: 'G-YCJVZ866HW',
   );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDUiu22FqaiPwRfZ0J5obtz0md2Er93D0g',
     appId: '1:958032766959:android:8933c75b2044fbc34db81a',

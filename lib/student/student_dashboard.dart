@@ -1,11 +1,9 @@
 import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../admin/Material.dart';
-import '../admin/Notice.dart';
+import 'student_notice.dart';
 import '../admin/PageNotAvailable.dart';
 import 'attendance.dart';
 
@@ -13,7 +11,6 @@ import 'attendance.dart';
 class StudentDashboard extends StatelessWidget {
   String email;
   String _user;
-
   StudentDashboard(this.email, this._user, {super.key});
 
   @override

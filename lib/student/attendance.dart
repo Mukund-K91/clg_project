@@ -1,17 +1,13 @@
 import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Attendance extends StatefulWidget {
   const Attendance({super.key});
-
   @override
   State<Attendance> createState() => _AttendanceState();
 }
-
 Random random = new Random();
-
 class _AttendanceState extends State<Attendance> {
   int present = random.nextInt(100);
   int absent =random.nextInt(20);

@@ -99,14 +99,51 @@ class _StudentNoticeState extends State<StudentNotice> {
                                 documentSnapshot['Time'],
                             style: TextStyle(color: Colors.grey),
                           ),
+                          trailing: Text(
+                            "- " + documentSnapshot['Name'],
+                            style: TextStyle(color: Colors.grey),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10),
                           child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              documentSnapshot['Description'],
-                              style: TextStyle(color: Colors.white),
+                            alignment: Alignment.topRight,
+                            child: InkWell(
+                              splashColor: Colors.white,
+                              child: Text(
+                                "Read >>",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onTap: () {
+                                showModalBottomSheet(
+                                  shape: RoundedRectangleBorder(),
+                                  backgroundColor: Colors.white,
+                                  constraints: BoxConstraints(
+                                    minWidth: double.infinity,
+                                    minHeight: MediaQuery.of(context).size.height/1.5,
+                                    maxHeight: MediaQuery.of(context).size.height/1.5,
+                                  ),
+                                    context: context,
+                                    isScrollControlled: true,
+                                    builder: (BuildContext ctx) {
+                                      return SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(10),
+                                              child: Text(
+                                                documentSnapshot['Description'],
+                                                style: TextStyle(fontSize: 15),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    });
+                              },
                             ),
                           ),
                         )

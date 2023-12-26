@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 class StudentManage extends StatefulWidget {
   const StudentManage({super.key});
-
   @override
   State<StudentManage> createState() => _MyWidgetState();
 }
@@ -22,7 +21,6 @@ class _MyWidgetState extends State<StudentManage> {
   final CollectionReference _items =
       FirebaseFirestore.instance.collection('students');
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
   String searchText = '';
 
   // for create operation
@@ -223,7 +221,6 @@ class _MyWidgetState extends State<StudentManage> {
           );
         });
   }
-
   // for Update operation
   Future<void> _update([DocumentSnapshot? documentSnapshot]) async {
     if (documentSnapshot != null) {
@@ -413,7 +410,6 @@ class _MyWidgetState extends State<StudentManage> {
           );
         });
   }
-
   // for delete operation
   Future<void> _delete(String productID) async {
     await _items.doc(productID).delete();
@@ -422,15 +418,12 @@ class _MyWidgetState extends State<StudentManage> {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("You have successfully deregister Student")));
   }
-
   void _onSearchChanged(String value) {
     setState(() {
       searchText = value;
     });
   }
-
   bool isSearchClicked = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -2,15 +2,12 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Profile extends StatefulWidget {
   String _email;
-
   Profile(this._email, {super.key});
-
   @override
   State<Profile> createState() => _ProfileState();
 }
@@ -190,15 +187,6 @@ class _ProfileState extends State<Profile> {
                                     useMaterial3: true,
                                   ),
                                 ));
-                                // runApp(MaterialApp(
-                                //   home: HomeMain(),
-                                //   debugShowCheckedModeBanner: false,
-                                //   theme: ThemeData(
-                                //     colorScheme: ColorScheme.fromSeed(
-                                //         seedColor: const Color(0xff002233)),
-                                //     useMaterial3: true,
-                                //   ),
-                                // ));
                               },
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
