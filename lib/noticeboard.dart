@@ -9,7 +9,7 @@ class NoticeBoard extends StatefulWidget {
   String name;
   String user;
 
-  NoticeBoard(this.name, this.user);
+  NoticeBoard(this.name, this.user, {super.key});
 
   @override
   State<NoticeBoard> createState() => _MyWidgetState();
@@ -70,7 +70,7 @@ class _MyWidgetState extends State<NoticeBoard> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
+                  const Center(
                     child: Text(
                       "Notice",
                       style:
@@ -264,7 +264,7 @@ class _MyWidgetState extends State<NoticeBoard> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xff002233),
+          backgroundColor: const Color(0xff002233),
           title: isSearchClicked
               ? Container(
                   height: 40,
@@ -282,7 +282,7 @@ class _MyWidgetState extends State<NoticeBoard> {
                         hintText: 'Search..'),
                   ),
                 )
-              : Text(
+              : const Text(
                   "Notice & Events",
                   style: TextStyle(color: Colors.white),
                 ),
@@ -332,7 +332,7 @@ class _MyWidgetState extends State<NoticeBoard> {
                               documentSnapshot['Date'] +
                                   " " +
                                   documentSnapshot['Time'],
-                              style: TextStyle(color: Colors.grey),
+                              style: const TextStyle(color: Colors.grey),
                             ),
                             trailing: widget.user == 'Faculty'
                                 ? SizedBox(
@@ -354,7 +354,7 @@ class _MyWidgetState extends State<NoticeBoard> {
                                   )
                                 : Text(
                                     "- " + documentSnapshot['Name'],
-                                    style: TextStyle(color: Colors.grey),
+                                    style: const TextStyle(color: Colors.grey),
                                   ),
                           ),
                           Padding(
@@ -363,7 +363,7 @@ class _MyWidgetState extends State<NoticeBoard> {
                               alignment: Alignment.topRight,
                               child: InkWell(
                                 splashColor: Colors.white,
-                                child: Text(
+                                child: const Text(
                                   "Read More >>",
                                   style: TextStyle(
                                       fontSize: 15,
@@ -372,8 +372,8 @@ class _MyWidgetState extends State<NoticeBoard> {
                                 ),
                                 onTap: () {
                                   showModalBottomSheet(
-                                      shape: RoundedRectangleBorder(),
-                                      backgroundColor: Color(0xff002233),
+                                      shape: const RoundedRectangleBorder(),
+                                      backgroundColor: const Color(0xff002233),
                                       constraints: BoxConstraints(
                                         minWidth: double.infinity,
                                         minHeight:
@@ -395,7 +395,7 @@ class _MyWidgetState extends State<NoticeBoard> {
                                                 child: Text(
                                                   documentSnapshot[
                                                       'Description'],
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       fontSize: 15,
                                                       color: Colors.white),
                                                 ),
@@ -423,7 +423,7 @@ class _MyWidgetState extends State<NoticeBoard> {
             ? FloatingActionButton(
                 onPressed: () => _create(),
                 backgroundColor: const Color(0xff002233),
-                child: Icon(
+                child: const Icon(
                   Icons.add,
                   color: Colors.white,
                 ))
