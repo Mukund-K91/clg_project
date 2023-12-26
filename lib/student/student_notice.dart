@@ -111,7 +111,7 @@ class _StudentNoticeState extends State<StudentNotice> {
                             child: InkWell(
                               splashColor: Colors.white,
                               child: Text(
-                                "Read >>",
+                                "Read More>>",
                                 style: TextStyle(
                                     fontSize: 15,
                                     color: Colors.white,

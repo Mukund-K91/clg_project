@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:clg_project/admin/faculty_notice.dart';
+import 'package:clg_project/admin/noticeboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -240,7 +240,7 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              FacultyNotice(name),
+                                              NoticeBoard(name,widget._user),
                                         ));
                                   },
                                   iconSize: 50,

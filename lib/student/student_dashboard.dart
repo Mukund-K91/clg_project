@@ -1,3 +1,4 @@
+import 'package:clg_project/admin/noticeboard.dart';
 import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -209,7 +210,7 @@ class StudentDashboard extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => StudentNotice(),
+                                builder: (context) => NoticeBoard(email,_user),
                               ));
                         },
                       ),
