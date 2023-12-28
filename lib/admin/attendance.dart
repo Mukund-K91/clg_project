@@ -19,16 +19,20 @@ class _AttendanceState extends State<Attendance> {
 
   Future<void> fetchData() async {
     // Fetch data from Firestore
-    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance.collection('students').get();
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await FirebaseFirestore.instance.collection('students').get();
 
     // Convert QuerySnapshot to List
-    List<Map<String, dynamic>> allStudents = querySnapshot.docs.map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+    List<Map<String, dynamic>> allStudents = querySnapshot.docs
+        .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
       return doc.data();
     }).toList();
 
     // Filter and sort the data based on the selected division and roll number
     setState(() {
-      studentList = allStudents.where((student) => student['Div'] == selectedDivision).toList();
+      studentList = allStudents
+          .where((student) => student['Div'] == selectedDivision)
+          .toList();
       studentList.sort((a, b) => a['Roll No'].compareTo(b['Roll No']));
     });
   }
@@ -43,16 +47,14 @@ class _AttendanceState extends State<Attendance> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child:
-            DropdownButtonFormField(
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder()),
+            child: DropdownButtonFormField(
+                decoration: const InputDecoration(border: OutlineInputBorder()),
                 value: selectedDivision,
                 items: _divison
                     .map((e) => DropdownMenuItem(
-                  value: e,
-                  child: Text(e),
-                ))
+                          value: e,
+                          child: Text(e),
+                        ))
                     .toList(),
                 onChanged: (val) {
                   setState(() {
@@ -62,50 +64,44 @@ class _AttendanceState extends State<Attendance> {
                 }),
           ),
           Expanded(
-            child: ListView.builder(
-                itemCount: studentList.length,
-                itemBuilder: (context, index) {
-                  var student = studentList[index];
-                  return Card(
-                    color: const Color(0xff002233),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    margin: const EdgeInsets.all(10),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        radius: 17,
-                        backgroundColor: const Color(0xffffffff),
-                        child: Text(
-                          student['Div'].toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.black),
+              child: ListView.builder(
+                  itemCount: studentList.length,
+                  itemBuilder: (context, index) {
+                    var student = studentList[index];
+                    return Card(
+                      color: const Color(0xff002233),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      margin: const EdgeInsets.all(10),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          radius: 17,
+                          backgroundColor: const Color(0xffffffff),
+                          child: Text(
+                            student['Div'].toString(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                        ),
+                        title: InkWell(
+                          child: Text(
+                            student['Roll No'],
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ),
+                        subtitle: Text(
+                          student['First Name'] + " " + student['Last Name'],
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
-                      title: InkWell(
-                        child: Text(
-                          student['First Name'] +
-                              " " +
-                              student['Last Name'],
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                        ),
-                      ),
-                      subtitle: Text(
-                        student['SP ID'].toString(),
-                        style: const TextStyle(color: Colors.white),
-                      ),
-
-                    ),
-                  );
-                })
-          ),
+                    );
+                  })),
         ],
       ),
     );
   }
 }
-
-
-
-
