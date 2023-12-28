@@ -1,9 +1,11 @@
+import 'package:clg_project/reusable_widget/reusable_textfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class StudentManage extends StatefulWidget {
   const StudentManage({super.key});
+
   @override
   State<StudentManage> createState() => _MyWidgetState();
 }
@@ -53,88 +55,92 @@ class _MyWidgetState extends State<StudentManage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _id,
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                labelText: "SP ID",
-                                border: OutlineInputBorder(),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "SP ID is required";
-                                }
-                                return null;
-                              },
-                            ),
+                          // Padding(
+                          //   padding: const EdgeInsets.all(8.0),
+                          //   child: TextFormField(
+                          //     controller: _id,
+                          //     keyboardType: TextInputType.number,
+                          //     decoration: const InputDecoration(
+                          //       labelText: "SP ID",
+                          //       border: OutlineInputBorder(),
+                          //     ),
+                          //     validator: (value) {
+                          //       if (value!.isEmpty) {
+                          //         return "SP ID is required";
+                          //       }
+                          //       return null;
+                          //     },
+                          //   ),
+                          // ),
+                          ReusableTextField(
+                            controller: _id,
+                            keyboardType: TextInputType.number,
+                            enable: true,
+                            label: 'SP ID',
+                            validator: (str) {
+                              if (str!.isEmpty) {
+                                return "SP ID is required";
+                              }
+                              return null;
+                            },
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _fname,
-                              decoration: const InputDecoration(
-                                labelText: "First Name",
-                                border: OutlineInputBorder(),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "First Name is required";
-                                }
-                                return null;
-                              },
-                            ),
+                          const SizedBox(
+                            height: 4,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _lname,
-                              decoration: const InputDecoration(
-                                labelText: "Last Name",
-                                border: OutlineInputBorder(),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Last Name is required";
-                                }
-                                return null;
-                              },
-                            ),
+                          ReusableTextField(
+                            controller: _fname,
+                            label: 'First Name',
+                            enable: true,
+                            validator: (str) {
+                              if (str!.isEmpty) {
+                                return "First Name is required";
+                              }
+                              return null;
+                            },
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _email,
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: const InputDecoration(
-                                labelText: "Email Id",
-                                border: OutlineInputBorder(),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Email is required";
-                                }
-                                return null;
-                              },
-                            ),
+                          const SizedBox(
+                            height: 4,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _mobile,
-                              keyboardType: TextInputType.phone,
-                              decoration: const InputDecoration(
-                                labelText: "Mobile No",
-                                border: OutlineInputBorder(),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty || value.length > 10) {
-                                  return "10 Digit no. is required";
-                                }
-                                return null;
-                              },
-                            ),
+                          ReusableTextField(
+                            controller: _lname,
+                            label: 'Last Name',
+                            enable: true,
+                            validator: (str) {
+                              if (str!.isEmpty) {
+                                return "Last Name is required";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          ReusableTextField(
+                            controller: _email,
+                            keyboardType: TextInputType.emailAddress,
+                            label: 'Email Id',
+                            enable: true,
+                            validator: (str) {
+                              if (str!.isEmpty) {
+                                return "Email is required";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          ReusableTextField(
+                            controller: _mobile,
+                            label: 'Mobile No',
+                            keyboardType: TextInputType.phone,
+                            enable: true,
+                            validator: (str) {
+                              if (str!.isEmpty || str.length > 10) {
+                                return "10 Digit no. is required";
+                              }
+                              return null;
+                            },
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -194,7 +200,7 @@ class _MyWidgetState extends State<StudentManage> {
                                     "Password": _mobile.text,
                                     "Div": _selectedDiv
                                   });
-                                  _id.text ='';
+                                  _id.text = '';
                                   _fname.text = '';
                                   _lname.text = '';
                                   _email.text = '';
@@ -221,6 +227,7 @@ class _MyWidgetState extends State<StudentManage> {
           );
         });
   }
+
   // for Update operation
   Future<void> _update([DocumentSnapshot? documentSnapshot]) async {
     if (documentSnapshot != null) {
@@ -259,89 +266,68 @@ class _MyWidgetState extends State<StudentManage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _id,
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                labelText: "SP ID",
-                                border: OutlineInputBorder(),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "SP ID is required";
-                                }
-                                return null;
-                              },
-                            ),
+                          ReusableTextField(
+                            controller: _id,
+                            label: 'SP ID',
+                            keyboardType: TextInputType.phone,
+                            enable: true,
+                            validator: (str) {
+                              if (str!.isEmpty) {
+                                return "SP ID is required";
+                              }
+                              return null;
+                            },
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _fname,
-                              decoration: const InputDecoration(
-                                labelText: "First Name",
-                                border: OutlineInputBorder(),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "First Name is required";
-                                }
-                                return null;
-                              },
-                            ),
+                          const SizedBox(height: 4),
+                          ReusableTextField(
+                            controller: _fname,
+                            label: 'First Name',
+                            enable: true,
+                            validator: (str) {
+                              if (str!.isEmpty) {
+                                return "First Name is required";
+                              }
+                              return null;
+                            },
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _lname,
-                              decoration: const InputDecoration(
-                                labelText: "Last Name",
-                                border: OutlineInputBorder(),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Last Name is required";
-                                }
-                                return null;
-                              },
-                            ),
+                          const SizedBox(height: 4),
+                          ReusableTextField(
+                            controller: _lname,
+                            label: 'Last Name',
+                            enable: true,
+                            validator: (str) {
+                              if (str!.isEmpty) {
+                                return "Last Name is required";
+                              }
+                              return null;
+                            },
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _email,
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: const InputDecoration(
-                                labelText: "Email Id",
-                                border: OutlineInputBorder(),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Email is required";
-                                }
-                                return null;
-                              },
-                            ),
+                          const SizedBox(height: 4),
+                          ReusableTextField(
+                            controller: _email,
+                            label: 'Email Id',
+                            enable: true,
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (str) {
+                              if (str!.isEmpty) {
+                                return "Email is required";
+                              }
+                              return null;
+                            },
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _mobile,
-                              keyboardType: TextInputType.phone,
-                              decoration: const InputDecoration(
-                                labelText: "Mobile No",
-                                border: OutlineInputBorder(),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty || value.length > 10) {
-                                  return "10 Digit no. is required";
-                                }
-                                return null;
-                              },
-                            ),
+                          const SizedBox(height: 4),
+                          ReusableTextField(
+                            controller: _mobile,
+                            label: 'Mobile No',
+                            enable: true,
+                            validator: (str) {
+                              if (str!.isEmpty || str.length > 10) {
+                                return "10. Digit no. is required";
+                              }
+                              return null;
+                            },
                           ),
+                          const SizedBox(height: 8),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: DropdownButtonFormField(
@@ -381,7 +367,7 @@ class _MyWidgetState extends State<StudentManage> {
                                     "Password": _mobile.text,
                                     "Div": _selectedDiv
                                   });
-                                  _id.text ='';
+                                  _id.text = '';
                                   _fname.text = '';
                                   _lname.text = '';
                                   _email.text = '';
@@ -389,7 +375,6 @@ class _MyWidgetState extends State<StudentManage> {
                                   _selectedDiv = "Div";
 
                                   Navigator.of(context).pop();
-
                                 },
                                 child: const Text(
                                   "Update",
@@ -410,6 +395,7 @@ class _MyWidgetState extends State<StudentManage> {
           );
         });
   }
+
   // for delete operation
   Future<void> _delete(String productID) async {
     await _items.doc(productID).delete();
@@ -418,12 +404,15 @@ class _MyWidgetState extends State<StudentManage> {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("You have successfully deregister Student")));
   }
+
   void _onSearchChanged(String value) {
     setState(() {
       searchText = value;
     });
   }
+
   bool isSearchClicked = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
