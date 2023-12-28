@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clg_project/reusable_widget/reusable_textfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -418,11 +419,21 @@ class _MyWidgetState extends State<StudentManage> {
 
   // for delete operation
   Future<void> _delete(String productID) async {
+   await AwesomeDialog(
+      context: context,
+      dialogType: DialogType.question,
+      btnOkOnPress: () async {
+        await _items.doc(productID).delete();
+        // for snackBar
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("You have successfully deregister Student")));
+      },
+     showCloseIcon: true,
+      title: "Are You Sure?",
+    ).show();
     // await _items.doc(productID).delete();
 
-    // for snackBar
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("You have successfully deregister Student")));
+
   }
 
   void _onSearchChanged(String value) {
