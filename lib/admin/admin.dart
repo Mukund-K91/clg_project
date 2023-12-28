@@ -4,15 +4,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class StudentManage extends StatefulWidget {
-  const StudentManage({super.key});
+  StudentManage({super.key});
 
   @override
   State<StudentManage> createState() => _MyWidgetState();
 }
+
 class _MyWidgetState extends State<StudentManage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   // text field controller
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _id = TextEditingController();
+  final TextEditingController _rollno = TextEditingController();
   final TextEditingController _fname = TextEditingController();
   final TextEditingController _lname = TextEditingController();
   final TextEditingController _mobile = TextEditingController();
@@ -51,6 +55,7 @@ class _MyWidgetState extends State<StudentManage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Form(
+                      key: _formKey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -86,6 +91,19 @@ class _MyWidgetState extends State<StudentManage> {
                           const SizedBox(
                             height: 4,
                           ),
+                          ReusableTextField(
+                            controller: _rollno,
+                            label: 'Roll No',
+                            keyboardType: TextInputType.phone,
+                            enable: true,
+                            validator: (str) {
+                              if (str!.isEmpty) {
+                                return "Roll No is required";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 4),
                           ReusableTextField(
                             controller: _fname,
                             label: 'First Name',
@@ -171,41 +189,30 @@ class _MyWidgetState extends State<StudentManage> {
                                 onPressed: () async {
                                   final String email = _email.text;
                                   final String password = _mobile.text;
-                                  try {
+                                  if (_formKey.currentState!.validate()) {
                                     final credential = await FirebaseAuth
                                         .instance
                                         .createUserWithEmailAndPassword(
-                                      email: email,
-                                      password: password,
-                                    );
-                                  } on FirebaseAuthException catch (e) {
-                                    if (e.code == 'weak-password') {
-                                      print(
-                                          'The password provided is too weak.');
-                                    } else if (e.code ==
-                                        'email-already-in-use') {
-                                      print(
-                                          'The account already exists for that email.');
-                                    }
-                                  } catch (e) {
-                                    print(e);
+                                            email: email, password: password);
+                                    await _items.add({
+                                      "SP ID": _id.text,
+                                      "Roll No":_rollno.text,
+                                      "First Name": _fname.text,
+                                      "Last Name": _lname.text,
+                                      "Mobile": _mobile.text,
+                                      "Email": _email.text,
+                                      "Password": _mobile.text,
+                                      "Div": _selectedDiv
+                                    });
+                                    _id.text = '';
+                                    _rollno.text='';
+                                    _fname.text = '';
+                                    _lname.text = '';
+                                    _email.text = '';
+                                    _mobile.text = '';
+                                    _selectedDiv = "Div";
+                                    Navigator.of(context).pop();
                                   }
-                                  await _items.add({
-                                    "SP ID": _id.text,
-                                    "First Name": _fname.text,
-                                    "Last Name": _lname.text,
-                                    "Mobile": _mobile.text,
-                                    "Email": _email.text,
-                                    "Password": _mobile.text,
-                                    "Div": _selectedDiv
-                                  });
-                                  _id.text = '';
-                                  _fname.text = '';
-                                  _lname.text = '';
-                                  _email.text = '';
-                                  _mobile.text = '';
-                                  _selectedDiv = "Div";
-                                  Navigator.of(context).pop();
                                 },
                                 child: const Text(
                                   "Register",
@@ -231,6 +238,7 @@ class _MyWidgetState extends State<StudentManage> {
   Future<void> _update([DocumentSnapshot? documentSnapshot]) async {
     if (documentSnapshot != null) {
       _id.text = documentSnapshot['SP ID'].toString();
+      _rollno.text = documentSnapshot['Roll No'].toString();
       _fname.text = documentSnapshot['First Name'].toString();
       _lname.text = documentSnapshot['Last Name'].toString();
       _email.text = documentSnapshot['Email'].toString();
@@ -273,6 +281,19 @@ class _MyWidgetState extends State<StudentManage> {
                             validator: (str) {
                               if (str!.isEmpty) {
                                 return "SP ID is required";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 4),
+                          ReusableTextField(
+                            controller: _rollno,
+                            label: 'Roll No',
+                            keyboardType: TextInputType.phone,
+                            enable: true,
+                            validator: (str) {
+                              if (str!.isEmpty) {
+                                return "Roll No is required";
                               }
                               return null;
                             },
@@ -329,8 +350,7 @@ class _MyWidgetState extends State<StudentManage> {
                           const SizedBox(height: 8),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child:
-                            DropdownButtonFormField(
+                            child: DropdownButtonFormField(
                                 decoration: const InputDecoration(
                                     border: OutlineInputBorder()),
                                 value: _selectedDiv,
@@ -398,7 +418,7 @@ class _MyWidgetState extends State<StudentManage> {
 
   // for delete operation
   Future<void> _delete(String productID) async {
-    await _items.doc(productID).delete();
+    // await _items.doc(productID).delete();
 
     // for snackBar
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
