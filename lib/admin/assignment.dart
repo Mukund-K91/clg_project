@@ -6,6 +6,20 @@ class Assignment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('assignments')
+      ),
+      body: Column(
+        children: [
+          container(
+            decoration: BoxDecoration(
+              color: kOthercolor,
+              borderRadius:
+            )
+          )// container
+        ],
+      ),
+    );
   }
 }
