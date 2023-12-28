@@ -15,9 +15,13 @@ class Assignment extends StatelessWidget {
           container(
             decoration: BoxDecoration(
               color: kOthercolor,
-              borderRadius:
-            )
-          )// container
+              borderRadius:BorderRadius.only(
+                topLeft: Radius.circular(kDefaultpadding),
+                topRight: Radius.circular(kDefaultpadding),
+
+              ),
+            ),
+          ),// container
         ],
       ),
     );
