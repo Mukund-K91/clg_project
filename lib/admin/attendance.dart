@@ -1,90 +1,86 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Attendance extends StatefulWidget {
-  const Attendance({super.key});
-
   @override
-  State<Attendance> createState() => _AttendanceState();
+  _AttendanceState createState() => _AttendanceState();
 }
 
 class _AttendanceState extends State<Attendance> {
-  final CollectionReference _items =
-      FirebaseFirestore.instance.collection('students');
-  String searchText = '';
-  final TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> studentList = [];
+  String selectedDivision = 'Div';
+  final _divison = ["Div", "A", "B", "C", "D"];
 
-  void _onSearchChanged(String value) {
-    setState(() {
-      searchText = value;
-    });
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
   }
 
-  bool isSearchClicked = false;
+  Future<void> fetchData() async {
+    // Fetch data from Firestore
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance.collection('students').get();
+
+    // Convert QuerySnapshot to List
+    List<Map<String, dynamic>> allStudents = querySnapshot.docs.map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+      return doc.data();
+    }).toList();
+
+    // Filter and sort the data based on the selected division and roll number
+    setState(() {
+      studentList = allStudents.where((student) => student['Div'] == selectedDivision).toList();
+      studentList.sort((a, b) => a['Roll No'].compareTo(b['Roll No']));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xff002233),
-        title: const Text(
-                'Students',
-                style: TextStyle(color: Colors.white),
-              ),
-        centerTitle: true,
+        title: Text('Student List by Division and Roll No'),
       ),
-      body: StreamBuilder(
-        stream: _items.snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-          if (streamSnapshot.hasData) {
-            final List<DocumentSnapshot> items = streamSnapshot.data!.docs
-                .where((doc) => doc['First Name'].toString().contains(
-                      searchText.toUpperCase(),
-                    ))
-                .toList();
-            return ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final DocumentSnapshot documentSnapshot = items[index];
-                  return Card(
-                    color: const Color(0xff002233),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    margin: const EdgeInsets.all(10),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        radius: 17,
-                        backgroundColor: const Color(0xffffffff),
-                        child: Text(
-                          documentSnapshot['Div'].toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.black),
-                        ),
-                      ),
-                      title: InkWell(
-                        child: Text(
-                          documentSnapshot['Roll No'].toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                        ),
-                      ),
-                      subtitle: Text(
-                        documentSnapshot['First Name'] +
-                            " " +
-                            documentSnapshot['Last Name'],
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  );
-                });
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child:
+            DropdownButtonFormField(
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder()),
+                value: selectedDivision,
+                items: _divison
+                    .map((e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(e),
+                ))
+                    .toList(),
+                onChanged: (val) {
+                  setState(() {
+                    selectedDivision = val as String;
+                    fetchData();
+                  });
+                }),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: studentList.length,
+              itemBuilder: (context, index) {
+                var student = studentList[index];
+                var name = student['First Name'];
+                var rollNo = student['Roll No'];
+
+                return ListTile(
+                  title: Text('$name - Roll No: $rollNo'),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
+
+
+

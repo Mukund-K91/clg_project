@@ -329,7 +329,8 @@ class _MyWidgetState extends State<StudentManage> {
                           const SizedBox(height: 8),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: DropdownButtonFormField(
+                            child:
+                            DropdownButtonFormField(
                                 decoration: const InputDecoration(
                                     border: OutlineInputBorder()),
                                 value: _selectedDiv,

@@ -38,6 +38,7 @@ class _MyAppState extends State<MyApp> {
         ),
         debugShowCheckedModeBanner: false,
         home:
+        //DemoPage()
         Attendance()
         //SplashScreen()
          // FacultyDashboard('admin2@gmail.com', 'Faculty')
