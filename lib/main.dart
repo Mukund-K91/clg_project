@@ -1,5 +1,12 @@
+import 'dart:async';
+import 'package:clg_project/admin/attendance.dart';
+import 'package:clg_project/admin/faculty_dashboard.dart';
+import 'package:clg_project/demo.dart';
 import 'package:clg_project/splash_screen.dart';
+import 'package:clg_project/student/dashboard.dart';
 import 'package:clg_project/student/login.dart';
+import 'package:clg_project/student/student_dashboard.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,33 +25,28 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   MyApp({super.key});
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
-
 class _MyAppState extends State<MyApp> {
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xff002233),
-          ),
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff002233)),
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        home: const SplashScreen()
-        // FacultyDashboard('admin2@gmail.com', 'Faculty')
-        // StudentDashboard('mukundkoladiya05@gmail.com', 'Student')
-        );
+        home:
+        Attendance()
+        //SplashScreen()
+         // FacultyDashboard('admin2@gmail.com', 'Faculty')
+       // StudentDashboard('mukundkoladiya05@gmail.com', 'Student')
+    );
   }
 }
-
 class HomeMain extends StatelessWidget {
   const HomeMain({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +74,7 @@ class HomeMain extends StatelessWidget {
                       style: TextStyle(fontSize: 35, color: Colors.white),
                     ),
                     const Text(
-                      "eCollege Serves You Virtual Education At Your home.",
+                      "eCollege Serves You Virtual Education At Your home",
                       style: TextStyle(
                           fontSize: 15, letterSpacing: 5, color: Colors.grey),
                     ),
@@ -92,7 +94,7 @@ class HomeMain extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const Login("Student"),
+                                  builder: (context) => Login("Student"),
                                 ));
                           },
                           child: const Text(
@@ -115,7 +117,7 @@ class HomeMain extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const Login("Faculty"),
+                                  builder: (context) => Login("Faculty"),
                                 ));
                           },
                           child: const Text(

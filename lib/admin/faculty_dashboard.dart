@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:clg_project/admin/attendance.dart';
 import 'package:clg_project/noticeboard.dart';
+import 'package:clg_project/student/attendance.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -144,62 +146,66 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
-                                  onPressed: () async {
-                                    await pagenotfound(context,
-                                        'This Feature Not available Yet...!\nunder progress');
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Attendance(),
+                                        ));
                                   },
                                   iconSize: 50,
                                   icon: const Icon(FontAwesomeIcons.calendarDay,
                                       color: Color(0xff002233)),
                                 ),
                                 const Text(
-                                  "Attendence",
+                                  "Attendance",
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ],
                             ),
                           ),
-                          // Card(
-                          //   color: Colors.white,
-                          //   child: Column(
-                          //     crossAxisAlignment: CrossAxisAlignment.center,
-                          //     mainAxisAlignment: MainAxisAlignment.center,
-                          //     children: [
-                          //       IconButton(
-                          //         onPressed: () async {
-                          //           await pagenotfound(context,'This Feature Not available Yet...!\nunder progress');
-                          //         },
-                          //         iconSize: 50,
-                          //         icon: const Icon(FontAwesomeIcons.filePen,
-                          //             color: Color(0xff002233)),
-                          //       ),
-                          //       const Text(
-                          //         "Assignment",
-                          //         style: TextStyle(fontSize: 20),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-                          // Card(
-                          //   color: Colors.white,
-                          //   child: Column(
-                          //     crossAxisAlignment: CrossAxisAlignment.center,
-                          //     mainAxisAlignment: MainAxisAlignment.center,
-                          //     children: [
-                          //       IconButton(
-                          //         onPressed: () {},
-                          //         iconSize: 50,
-                          //         icon: const Icon(
-                          //             FontAwesomeIcons.fileContract,
-                          //             color: Color(0xff002233)),
-                          //       ),
-                          //       const Text(
-                          //         "Results",
-                          //         style: TextStyle(fontSize: 20),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
+                          Card(
+                            color: Colors.white,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () async {
+                                    await pagenotfound(context,
+                                        'This Feature Not available Yet...!\nunder progress');
+                                  },
+                                  iconSize: 50,
+                                  icon: const Icon(FontAwesomeIcons.filePen,
+                                      color: Color(0xff002233)),
+                                ),
+                                const Text(
+                                  "Assignment",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Card(
+                            color: Colors.white,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () {},
+                                  iconSize: 50,
+                                  icon: const Icon(
+                                      FontAwesomeIcons.fileContract,
+                                      color: Color(0xff002233)),
+                                ),
+                                const Text(
+                                  "Results",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ),
                           Card(
                             color: Colors.white,
                             child: Column(
@@ -240,7 +246,7 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              NoticeBoard(name,widget._user),
+                                              NoticeBoard(name, widget._user),
                                         ));
                                   },
                                   iconSize: 50,

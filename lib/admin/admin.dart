@@ -9,7 +9,6 @@ class StudentManage extends StatefulWidget {
   @override
   State<StudentManage> createState() => _MyWidgetState();
 }
-
 class _MyWidgetState extends State<StudentManage> {
   // text field controller
   final TextEditingController _searchController = TextEditingController();
@@ -482,12 +481,14 @@ class _MyWidgetState extends State<StudentManage> {
                               fontWeight: FontWeight.bold, color: Colors.black),
                         ),
                       ),
-                      title: Text(
-                        documentSnapshot['First Name'] +
-                            " " +
-                            documentSnapshot['Last Name'],
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white),
+                      title: InkWell(
+                        child: Text(
+                          documentSnapshot['First Name'] +
+                              " " +
+                              documentSnapshot['Last Name'],
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
                       ),
                       subtitle: Text(
                         documentSnapshot['SP ID'].toString(),
