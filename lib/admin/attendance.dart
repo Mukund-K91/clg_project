@@ -63,17 +63,42 @@ class _AttendanceState extends State<Attendance> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: studentList.length,
-              itemBuilder: (context, index) {
-                var student = studentList[index];
-                var name = student['First Name'];
-                var rollNo = student['Roll No'];
+                itemCount: studentList.length,
+                itemBuilder: (context, index) {
+                  var student = studentList[index];
+                  return Card(
+                    color: const Color(0xff002233),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    margin: const EdgeInsets.all(10),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 17,
+                        backgroundColor: const Color(0xffffffff),
+                        child: Text(
+                          student['Div'].toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        ),
+                      ),
+                      title: InkWell(
+                        child: Text(
+                          student['First Name'] +
+                              " " +
+                              student['Last Name'],
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                      ),
+                      subtitle: Text(
+                        student['SP ID'].toString(),
+                        style: const TextStyle(color: Colors.white),
+                      ),
 
-                return ListTile(
-                  title: Text('$name - Roll No: $rollNo'),
-                );
-              },
-            ),
+                    ),
+                  );
+                })
           ),
         ],
       ),
