@@ -147,11 +147,11 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
                               children: [
                                 IconButton(
                                   onPressed: () {
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //       builder: (context) => Attendance(),
-                                    //     ));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Attendance(),
+                                        ));
                                   },
                                   iconSize: 50,
                                   icon: const Icon(FontAwesomeIcons.calendarDay,

@@ -27,7 +27,13 @@ class _AttendanceState extends State<Attendance> {
       );
     });
   }
-
+  void _resetButtonColor() {
+    setState(() {
+      studentList.forEach((student) {
+        student['clickCount'] = 0;
+      });
+    });
+  }
   Color _getButtonColor(int index) {
     switch (clickCounts[index]) {
       case 1:
@@ -86,7 +92,7 @@ class _AttendanceState extends State<Attendance> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Student List by Division and Roll No'),
+        title: Text('Attendance'),
       ),
       body: Column(
         children: [
@@ -104,6 +110,7 @@ class _AttendanceState extends State<Attendance> {
                 onChanged: (val) {
                   setState(() {
                     selectedDivision = val as String;
+                    _resetButtonColor();
                     fetchData();
                   });
                 }),
