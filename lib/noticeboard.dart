@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'package:clg_project/reusable_widget/reusable_textfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -20,7 +20,7 @@ class _MyWidgetState extends State<NoticeBoard> {
   final TextEditingController _title = TextEditingController();
   final TextEditingController _description = TextEditingController();
   final CollectionReference _con =
-      FirebaseFirestore.instance.collection('Notice');
+  FirebaseFirestore.instance.collection('Notice');
   final FirebaseAuth _auth = FirebaseAuth.instance;
   var _timeString;
 
@@ -48,9 +48,11 @@ class _MyWidgetState extends State<NoticeBoard> {
   String _Time(DateTime dateTime) {
     return DateFormat('hh:mm').format(dateTime);
   }
+
   String _Date(DateTime dateTime) {
     return DateFormat('dd-MM-yyyy').format(dateTime);
   }
+
   // for create operation
   Future<void> _create([DocumentSnapshot? documentSnapshot]) async {
     await showModalBottomSheet(
@@ -63,7 +65,10 @@ class _MyWidgetState extends State<NoticeBoard> {
                   top: 20,
                   right: 20,
                   left: 20,
-                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+                  bottom: MediaQuery
+                      .of(ctx)
+                      .viewInsets
+                      .bottom + 20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,7 +77,7 @@ class _MyWidgetState extends State<NoticeBoard> {
                     child: Text(
                       "Notice",
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Padding(
@@ -81,54 +86,48 @@ class _MyWidgetState extends State<NoticeBoard> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _title,
-                              decoration: const InputDecoration(
-                                labelText: "Title",
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
+                          ReusableTextField(
+                            controller: _title,
+                            label: 'Title',
+                            enable: true,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              keyboardType: TextInputType.multiline,
-                              maxLines: 5,
-                              controller: _description,
-                              decoration: const InputDecoration(
-                                labelText: "Description",
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
+                          const SizedBox(height: 4),
+                          ReusableTextField(
+                            controller: _description,
+                            label: 'Description',
+                            isMulti: true,
+                            enable: true,
+                            keyboardType: TextInputType.multiline,
                           ),
+                          const SizedBox(height: 8,),
                           SizedBox(
                             height: 60,
                             width: 150,
                             child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)),
-                                  backgroundColor: const Color(0xff002233),
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
-                                onPressed: () async {
-                                  await _con.add({
-                                    "Title": _title.text,
-                                    "Description": _description.text,
-                                    "Date": _Date(DateTime.now()),
-                                    "Time": _Time(DateTime.now()),
-                                    "Name": widget.name
-                                  });
-                                  _title.text = "";
-                                  _description.text = "";
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text(
-                                  "Publish",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                )),
+                                backgroundColor: const Color(0xff002233),
+                              ),
+                              onPressed: () async {
+                                await _con.add({
+                                  "Title": _title.text,
+                                  "Description": _description.text,
+                                  "Date": _Date(DateTime.now()),
+                                  "Time": _Time(DateTime.now()),
+                                  "Name": widget.name
+                                });
+                                _title.text = "";
+                                _description.text = "";
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text(
+                                "Publish",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -160,7 +159,10 @@ class _MyWidgetState extends State<NoticeBoard> {
                   top: 20,
                   right: 20,
                   left: 20,
-                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+                  bottom: MediaQuery
+                      .of(ctx)
+                      .viewInsets
+                      .bottom + 20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,7 +171,7 @@ class _MyWidgetState extends State<NoticeBoard> {
                     child: Text(
                       "Update Notice",
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Padding(
@@ -178,54 +180,47 @@ class _MyWidgetState extends State<NoticeBoard> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              enabled: false,
-                              controller: _title,
-                              decoration: const InputDecoration(
-                                labelText: "Title",
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
+                          ReusableTextField(
+                            controller: _title,
+                            enable: false,
+                            label: 'Title',),
+                          const SizedBox(height: 4,),
+                          ReusableTextField(
+                            controller: _description,
+                            label: 'Description',
+                            keyboardType: TextInputType.multiline,
+                            enable: true,
+                            isMulti: true
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              keyboardType: TextInputType.multiline,
-                              maxLines: 5,
-                              controller: _description,
-                              decoration: const InputDecoration(
-                                labelText: "Description",
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                          ),
+                          const SizedBox(height: 8,),
                           SizedBox(
                             height: 60,
                             width: 150,
                             child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)),
-                                  backgroundColor: const Color(0xff002233),
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
-                                onPressed: () async {
-                                  await _con.doc(documentSnapshot!.id).update({
-                                    "Description": _description.text,
-                                    "Date": _Date(DateTime.now()),
-                                    "Time": _Time(DateTime.now()),
-                                    "Name": widget.name
-                                  });
-                                  _title.text = "";
-                                  _description.text = "";
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text(
-                                  "Update",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                )),
+                                backgroundColor: const Color(0xff002233),
+                              ),
+                              onPressed: () async {
+                                await _con.doc(documentSnapshot!.id).update({
+                                  "Description": _description.text,
+                                  "Date": _Date(DateTime.now()),
+                                  "Time": _Time(DateTime.now()),
+                                  "Name": widget.name
+                                });
+                                _title.text = "";
+                                _description.text = "";
+                                // ignore: use_build_context_synchronously
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text(
+                                "Update",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -246,6 +241,7 @@ class _MyWidgetState extends State<NoticeBoard> {
     await _con.doc(productID).delete();
 
     // for snackBar
+    // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text("Deleted")));
   }
@@ -265,25 +261,25 @@ class _MyWidgetState extends State<NoticeBoard> {
           backgroundColor: const Color(0xff002233),
           title: isSearchClicked
               ? Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: TextField(
-                    controller: _searchController,
-                    onChanged: _onSearchChanged,
-                    decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 12),
-                        hintStyle: TextStyle(color: Colors.black),
-                        border: InputBorder.none,
-                        hintText: 'Search..'),
-                  ),
-                )
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: TextField(
+              controller: _searchController,
+              onChanged: _onSearchChanged,
+              decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.fromLTRB(16, 20, 16, 12),
+                  hintStyle: TextStyle(color: Colors.black),
+                  border: InputBorder.none,
+                  hintText: 'Search..'),
+            ),
+          )
               : const Text(
-                  "Notice & Events",
-                  style: TextStyle(color: Colors.white),
-                ),
+            "Notice & Events",
+            style: TextStyle(color: Colors.white),
+          ),
           centerTitle: true,
           actions: [
             IconButton(
@@ -303,9 +299,10 @@ class _MyWidgetState extends State<NoticeBoard> {
           builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
             if (streamSnapshot.hasData) {
               final List<DocumentSnapshot> items = streamSnapshot.data!.docs
-                  .where((doc) => doc['Title'].toLowerCase().contains(
-                        searchText.toLowerCase(),
-                      ))
+                  .where((doc) =>
+                  doc['Title'].toLowerCase().contains(
+                    searchText.toLowerCase(),
+                  ))
                   .toList();
               return ListView.builder(
                   itemCount: items.length,
@@ -334,26 +331,29 @@ class _MyWidgetState extends State<NoticeBoard> {
                             ),
                             trailing: widget.user == 'Faculty'
                                 ? SizedBox(
-                                    width: 100,
-                                    child: Row(
-                                      children: [
-                                        IconButton(
-                                            color: Colors.white,
-                                            onPressed: () =>
-                                                _update(documentSnapshot),
-                                            icon: const Icon(Icons.edit)),
-                                        IconButton(
-                                            color: Colors.white,
-                                            onPressed: () =>
-                                                _delete(documentSnapshot.id),
-                                            icon: const Icon(Icons.delete)),
-                                      ],
-                                    ),
-                                  )
-                                : Text(
-                                    "- " + documentSnapshot['Name'],
-                                    style: const TextStyle(color: Colors.grey),
+                              width: 100,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    color: Colors.white,
+                                    onPressed: () =>
+                                        _update(documentSnapshot),
+                                    icon: const Icon(Icons.edit),
                                   ),
+                                  IconButton(
+                                    color: Colors.white,
+                                    onPressed: () =>
+                                        _delete(documentSnapshot.id),
+                                    icon: const Icon(Icons.delete),
+                                  ),
+                                ],
+                              ),
+                            )
+                                : Text(
+                              // ignore: prefer_interpolation_to_compose_strings
+                              "- " + documentSnapshot['Name'],
+                              style: const TextStyle(color: Colors.grey),
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(10),
@@ -375,11 +375,17 @@ class _MyWidgetState extends State<NoticeBoard> {
                                       constraints: BoxConstraints(
                                         minWidth: double.infinity,
                                         minHeight:
-                                            MediaQuery.of(context).size.height /
-                                                1.5,
+                                        MediaQuery
+                                            .of(context)
+                                            .size
+                                            .height /
+                                            1.5,
                                         maxHeight:
-                                            MediaQuery.of(context).size.height /
-                                                1.5,
+                                        MediaQuery
+                                            .of(context)
+                                            .size
+                                            .height /
+                                            1.5,
                                       ),
                                       context: context,
                                       isScrollControlled: true,
@@ -389,10 +395,10 @@ class _MyWidgetState extends State<NoticeBoard> {
                                             children: [
                                               Padding(
                                                 padding:
-                                                    const EdgeInsets.all(10),
+                                                const EdgeInsets.all(10),
                                                 child: Text(
                                                   documentSnapshot[
-                                                      'Description'],
+                                                  'Description'],
                                                   style: const TextStyle(
                                                       fontSize: 15,
                                                       color: Colors.white),
@@ -419,12 +425,12 @@ class _MyWidgetState extends State<NoticeBoard> {
         // Create new project button
         floatingActionButton: widget.user == 'Faculty'
             ? FloatingActionButton(
-                onPressed: () => _create(),
-                backgroundColor: const Color(0xff002233),
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ))
+            onPressed: () => _create(),
+            backgroundColor: const Color(0xff002233),
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+            ))
             : null);
   }
 }

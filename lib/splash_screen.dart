@@ -6,16 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class SplashScreen extends StatefulWidget {
-  SplashScreen({super.key});
+  const SplashScreen({super.key});
+
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
+
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
     _checkInternetConnection();
   }
+
   Future<void> _checkInternetConnection() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
@@ -24,10 +27,13 @@ class _SplashScreenState extends State<SplashScreen> {
       await Future.delayed(const Duration(seconds: 3));
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomeMain()),
+        MaterialPageRoute(
+          builder: (context) => HomeMain(),
+        ),
       );
     }
   }
+
   showDialogBox() {
     showDialog(
         barrierDismissible: false,
@@ -40,44 +46,51 @@ class _SplashScreenState extends State<SplashScreen> {
                     child: const Text('Retry'),
                     onPressed: () {
                       Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SplashScreen(),
-                          ));
-                      runApp(MaterialApp(
-                        home: SplashScreen(),
-                        color: const Color(0xff002233),
-                        debugShowCheckedModeBanner: false,
-                        theme: ThemeData(
-                          colorScheme: ColorScheme.fromSeed(
-                              seedColor: const Color(0xff002233)),
-                          useMaterial3: true,
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SplashScreen(),
                         ),
-                      ));
+                      );
+                      runApp(
+                        MaterialApp(
+                          home: const SplashScreen(),
+                          color: const Color(0xff002233),
+                          debugShowCheckedModeBanner: false,
+                          theme: ThemeData(
+                            colorScheme: ColorScheme.fromSeed(
+                              seedColor: const Color(0xff002233),
+                            ),
+                            useMaterial3: true,
+                          ),
+                        ),
+                      );
                     })
               ],
             ));
   }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      width: double.infinity,
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Image(image: AssetImage("assets/images/logo.png")),
-          const SizedBox(
-            height: 15,
-          ),
-          LoadingAnimationWidget.discreteCircle(
-            color: Colors.black,
-            secondRingColor: const Color(0xff002233),
-            thirdRingColor: Colors.grey,
-            size: 50,
-          ),
-        ],
+      body: Container(
+        width: double.infinity,
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Image(image: AssetImage("assets/images/logo.png")),
+            const SizedBox(
+              height: 15,
+            ),
+            LoadingAnimationWidget.discreteCircle(
+              color: Colors.black,
+              secondRingColor: const Color(0xff002233),
+              thirdRingColor: Colors.grey,
+              size: 50,
+            ),
+          ],
+        ),
       ),
-    ));
+    );
   }
 }

@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class StorageService {
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+
   Future<void> uplaodFile(String fileName, String filePath) async {
     File file = File(filePath);
     try {
@@ -14,6 +15,7 @@ class StorageService {
       log("Error: $e");
     }
   }
+
   Future<ListResult> listFiles() async {
     ListResult listResults = await firebaseStorage.ref('Files').listAll();
     return listResults;
