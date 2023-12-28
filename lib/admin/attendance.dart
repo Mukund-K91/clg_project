@@ -10,11 +10,56 @@ class _AttendanceState extends State<Attendance> {
   List<Map<String, dynamic>> studentList = [];
   String selectedDivision = 'Div';
   final _divison = ["Div", "A", "B", "C", "D"];
+  List<int> clickCounts = [];
 
   @override
   void initState() {
     super.initState();
+    _initializeClickCounts();
     fetchData();
+  }
+
+  void _changeColorAndText(int index) {
+    setState(() {
+      studentList[index]['clickCounts'] = (
+        studentList[index],
+        clickCounts[index] = (clickCounts[index] + 1) % 3
+      );
+    });
+  }
+
+  Color _getButtonColor(int index) {
+    switch (clickCounts[index]) {
+      case 1:
+        return Colors.green;
+      case 2:
+        return Colors.red;
+      default:
+        return Colors.white;
+    }
+  }
+
+  String _getButtonText(int index) {
+    switch (clickCounts[index]) {
+      case 1:
+        return 'Present';
+      case 2:
+        return 'Absent';
+      default:
+        return 'Take';
+    }
+  }
+
+  void _initializeClickCounts() {
+    // Fetch the total number of students and set initial clickCounts
+    FirebaseFirestore.instance
+        .collection('students')
+        .get()
+        .then((querySnapshot) {
+      setState(() {
+        clickCounts = List.generate(querySnapshot.size, (index) => 0);
+      });
+    });
   }
 
   Future<void> fetchData() async {
@@ -96,6 +141,21 @@ class _AttendanceState extends State<Attendance> {
                         subtitle: Text(
                           student['First Name'] + " " + student['Last Name'],
                           style: const TextStyle(color: Colors.white),
+                        ),
+                        trailing: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              maximumSize: Size(100, 40),
+                              minimumSize: Size(100, 40),
+                              primary: _getButtonColor(index)),
+                          onPressed: () {
+                            _changeColorAndText(index);
+                          },
+                          child: Text(
+                            _getButtonText(index),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     );
