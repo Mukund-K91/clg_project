@@ -16,7 +16,8 @@ class StudentDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<DocumentSnapshot>(
+      body:
+      FutureBuilder<DocumentSnapshot>(
         future: fetchDataByEmail(email),
         // Replace with the desired email
         builder: (context, snapshot) {

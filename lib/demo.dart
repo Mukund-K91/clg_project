@@ -233,4 +233,145 @@
 //     }
 //   }
 // }
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Demo(),
+    );
+  }
+}
+
+class Demo extends StatefulWidget {
+  @override
+  _DemoState createState() => _DemoState();
+}
+
+class _DemoState extends State<Demo> {
+  List<Map<String, dynamic>> studentList = [];
+  String selectedDivision = 'A';
+  List<int> clickCounts = [0];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    // Fetch data from Firestore
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await FirebaseFirestore.instance.collection('students').get();
+
+    // Convert QuerySnapshot to List
+    List<Map<String, dynamic>> allStudents = querySnapshot.docs
+        .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+      return doc.data();
+    }).toList();
+
+    // Filter and sort the data based on the selected division and roll number
+    setState(() {
+      studentList = allStudents
+          .where((student) => student['Div'] == selectedDivision)
+          .toList();
+      studentList.sort((a, b) => a['Roll No'].compareTo(b['Roll No']));
+    });
+  }
+
+  void _changeColorAndText(int index) {
+    setState(() {
+      studentList[index]['clickCounts'] = (
+      studentList[index],
+      clickCounts[index] = (clickCounts[index] + 1) % 3
+      );
+    });
+  }
+
+  void _resetButtonColor() {
+    setState(() {
+      studentList.forEach((student) {
+        student['clickCount'] = 0;
+      });
+    });
+  }
+
+  Color _getButtonColor(int index) {
+    switch (studentList[index]['clickCount']) {
+      case 1:
+        return Colors.red;
+      case 2:
+        return Colors.green;
+      default:
+        return Colors.white;
+    }
+  }
+
+  String _getButtonText(int index) {
+    switch (studentList[index]['clickCount']) {
+      case 1:
+        return 'Red Button';
+      case 2:
+        return 'Green Button';
+      default:
+        return 'Click me';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Student List by Division and Roll No'),
+      ),
+      body: Column(
+        children: [
+          DropdownButton<String>(
+            value: selectedDivision,
+            onChanged: (value) {
+              setState(() {
+                selectedDivision = value!;
+                _resetButtonColor(); // Reset button color when changing division
+                fetchData(); // Fetch and update data when the division changes
+              });
+            },
+            items: ['A', 'B', 'C'] // Add other divisions as needed
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text('Division $value'),
+              );
+            }).toList(),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: studentList.length,
+              itemBuilder: (context, index) {
+                var student = studentList[index];
+                var name = student['First Name'];
+                var rollNo = student['Roll No'];
+
+                return ListTile(
+                  title: Text('$name - Roll No: $rollNo'),
+                  trailing: ElevatedButton(
+                    onPressed: () => _changeColorAndText(index),
+                    style: ElevatedButton.styleFrom(
+                      primary: _getButtonColor(index),
+                    ),
+                    child: Text(_getButtonText(index)),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
