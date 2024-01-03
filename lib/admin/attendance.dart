@@ -109,8 +109,8 @@ class _AttendanceState extends State<Attendance> {
                     .toList(),
                 onChanged: (val) {
                   setState(() {
-                    selectedDivision = val as String;
                     _resetButtonColor();
+                    selectedDivision = val!;
                     fetchData();
                   });
                 }),
@@ -139,7 +139,7 @@ class _AttendanceState extends State<Attendance> {
                         ),
                         title: InkWell(
                           child: Text(
-                            student['Roll No'],
+                            student['Roll No'].toString(),
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),
@@ -167,6 +167,27 @@ class _AttendanceState extends State<Attendance> {
                       ),
                     );
                   })),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: SizedBox(
+              width: double.infinity,
+              height: 60,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  backgroundColor: const Color(0xff002233),
+                ),
+                onPressed: (){
+                  _resetButtonColor();
+                },
+                child: const Text(
+                  "SUBMIT",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
