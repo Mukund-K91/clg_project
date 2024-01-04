@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -98,14 +99,14 @@ class _DemoState extends State<Demo> {
       DocumentReference studentDocRef =
       studentCollection.doc(student.documentId);
 
-      CollectionReference dailyAttendanceCollection =
-      studentDocRef.collection('dailyAttendance');
+      CollectionReference monthlyAttendanceCollection =
+      studentDocRef.collection('monthlyAttendance');
 
       String dateKey =
           '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}';
 
       DocumentReference dailyAttendanceDocRef =
-      dailyAttendanceCollection.doc(dateKey);
+      monthlyAttendanceCollection.doc(dateKey);
 
       DocumentSnapshot<Object?> dailyAttendanceDoc =
       await dailyAttendanceDocRef.get();
@@ -114,41 +115,22 @@ class _DemoState extends State<Demo> {
         // Create new daily attendance record if not exists for the current date
         batch.set(dailyAttendanceDocRef, {
           'date': selectedDate,
-          'presentCount': 0,
-          'absentCount': 0,
+          'subjectAttendance': {
+            selectedSubject: {
+              'presentCount': 0,
+              'absentCount': 0,
+            }
+          },
         });
       }
 
       // Update daily attendance count based on the recorded counts
       AttendanceRecord record = attendanceRecords[i];
       batch.update(dailyAttendanceDocRef, {
-        'presentCount': FieldValue.increment(record.presentCount),
-        'absentCount': FieldValue.increment(record.absentCount),
-      });
-
-      // Create or update subject-wise attendance subcollection
-      CollectionReference subjectAttendanceCollection =
-      studentDocRef.collection('subjectAttendance');
-
-      DocumentReference subjectAttendanceDocRef =
-      subjectAttendanceCollection.doc(selectedSubject);
-
-      DocumentSnapshot<Object?> subjectAttendanceDoc =
-      await subjectAttendanceDocRef.get();
-
-      if (!subjectAttendanceDoc.exists) {
-        // Create new subject-wise attendance record if not exists for the current subject
-        batch.set(subjectAttendanceDocRef, {
-          'subject': selectedSubject,
-          'presentCount': 0,
-          'absentCount': 0,
-        });
-      }
-
-      // Update subject-wise attendance count based on the recorded counts
-      batch.update(subjectAttendanceDocRef, {
-        'presentCount': FieldValue.increment(record.presentCount),
-        'absentCount': FieldValue.increment(record.absentCount),
+        'subjectAttendance.$selectedSubject.presentCount':
+        FieldValue.increment(record.presentCount),
+        'subjectAttendance.$selectedSubject.absentCount':
+        FieldValue.increment(record.absentCount),
       });
     }
 
@@ -251,3 +233,4 @@ class _DemoState extends State<Demo> {
     }
   }
 }
+
