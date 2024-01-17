@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 
 import 'admin/attendance.dart';
 import 'demo.dart';
+
 //HET
 //MUKUND
 //SAMEER K
@@ -18,11 +19,14 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
   //  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: SystemUiOverlay.values);
 }
+
 class MyApp extends StatefulWidget {
   MyApp({super.key});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
+
 class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,16 +37,19 @@ class _MyAppState extends State<MyApp> {
         ),
         debugShowCheckedModeBanner: false,
         home:
-        //Demo()
-        Attendance()
+            //Demo()
+            Login('Student')
+        //Attendance()
         //SplashScreen()
-         // FacultyDashboard('admin2@gmail.com', 'Faculty')
-       // StudentDashboard('mukundkoladiya05@gmail.com', 'Student')
-    );
+        // FacultyDashboard('admin2@gmail.com', 'Faculty')
+        // StudentDashboard('mukundkoladiya05@gmail.com', 'Student')
+        );
   }
 }
+
 class HomeMain extends StatelessWidget {
   const HomeMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

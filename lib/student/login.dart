@@ -27,48 +27,76 @@ class _LoginState extends State<Login> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<void> _login() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        final String email = _email.text;
-        final String password = _password.text;
-        await _auth.signInWithEmailAndPassword(
-            email: email, password: password);
-        // ignore: use_build_context_synchronously
-        AwesomeDialog(
-            context: context,
-            dialogType: DialogType.success,
-            animType: AnimType.bottomSlide,
-            showCloseIcon: false,
-            title: "Login Successfully",
-            btnOkOnPress: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Dashboard(widget._User, email),
-                  ));
-            }).show();
-      } catch (error) {
-        // ignore: use_build_context_synchronously
-        AwesomeDialog(
-                context: context,
-                dialogType: DialogType.error,
-                animType: AnimType.bottomSlide,
-                showCloseIcon: true,
-                btnOkOnPress: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomeMain(),
-                      ));
-                },
-                title: "${widget._User} Not Found",
-                desc: widget._User == "Student"
-                    ? "Please contact your respective faculty "
-                        "for Register yourself in eCollege App"
-                    : "Please contact admin for Register "
-                        "yourself in eCollege App")
-            .show();
-      }
+    // if (_formKey.currentState!.validate()) {
+    //   try {
+    //     final String email = _email.text;
+    //     final String password = _password.text;
+    //     await _auth.signInWithEmailAndPassword(
+    //         email: email, password: password);
+    //     // ignore: use_build_context_synchronously
+    //     AwesomeDialog(
+    //         context: context,
+    //         dialogType: DialogType.success,
+    //         animType: AnimType.bottomSlide,
+    //         showCloseIcon: false,
+    //         title: "Login Successfully",
+    //         btnOkOnPress: () {
+    //           Navigator.pushReplacement(
+    //               context,
+    //               MaterialPageRoute(
+    //                 builder: (context) => Dashboard(widget._User, email),
+    //               ));
+    //         }).show();
+    //   } catch (error) {
+    //     // ignore: use_build_context_synchronously
+    //     AwesomeDialog(
+    //             context: context,
+    //             dialogType: DialogType.error,
+    //             animType: AnimType.bottomSlide,
+    //             showCloseIcon: true,
+    //             btnOkOnPress: () {
+    //               Navigator.push(
+    //                   context,
+    //                   MaterialPageRoute(
+    //                     builder: (context) => const HomeMain(),
+    //                   ));
+    //             },
+    //             title: "${widget._User} Not Found",
+    //             desc: widget._User == "Student"
+    //                 ? "Please contact your respective faculty "
+    //                     "for Register yourself in eCollege App"
+    //                 : "Please contact admin for Register "
+    //                     "yourself in eCollege App")
+    //         .show();
+    //   }
+    // }
+
+  }
+  Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
+      String email) {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    try {
+      Future<QueryDocumentSnapshot<Map<String, dynamic>>> documentSnapshot =
+      firestore
+          .collection('students')
+          .where('SP ID', isEqualTo: email)
+          .get()
+          .then((querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => HomeMain(),));
+          print("Done");
+          return querySnapshot
+              .docs[0]; // Assuming there's only one matching document
+        } else {
+          print('Fail');
+          throw Exception('No document found with the given email.');
+        }
+      });
+      return documentSnapshot;
+    } catch (e) {
+      print('Error fetching data: $e');
+      return null;
     }
   }
 
@@ -219,7 +247,9 @@ class _LoginState extends State<Login> {
                                 borderRadius: BorderRadius.circular(5)),
                             backgroundColor: const Color(0xff002233),
                           ),
-                          onPressed: _login,
+                          onPressed: () {
+                            fetchDataByEmail(_email.text);
+                          },
                           child: const Text(
                             "LOGIN",
                             style: TextStyle(color: Colors.white, fontSize: 20),
@@ -229,6 +259,60 @@ class _LoginState extends State<Login> {
                     ],
                   ),
                 ),
+                // FutureBuilder<DocumentSnapshot>(
+                //   future: fetchDataByEmail("2021052569"),
+                //   // Replace with the desired email
+                //   builder: (context, snapshot) {
+                //     if (snapshot.connectionState == ConnectionState.waiting) {
+                //       return const Center(child: CircularProgressIndicator());
+                //     } else if (snapshot.hasError) {
+                //       return Column(
+                //         children: [
+                //           Text(
+                //               'Error: ${snapshot.error} USER NOT FOUND\nplease contact your administrator eCollegeAdmin@gmail.com'),
+                //           ElevatedButton(
+                //               onPressed: () {
+                //                 _auth.signOut().then((value) {
+                //                   Navigator.pushReplacement(
+                //                       context,
+                //                       MaterialPageRoute(
+                //                         builder: (context) => const HomeMain(),
+                //                       ));
+                //                 });
+                //               },
+                //               child: const Text('Return Home Page')),
+                //         ],
+                //       );
+                //     } else if (!snapshot.hasData || !snapshot.data!.exists) {
+                //       return const Text('No data found for the given email.');
+                //     } else {
+                //       // Data found, you can access it using snapshot.data
+                //       Map<String, dynamic> data =
+                //       snapshot.data!.data() as Map<String, dynamic>;
+                //       return SingleChildScrollView(
+                //         child: Align(
+                //           alignment: Alignment.center,
+                //           child: Padding(
+                //             padding: const EdgeInsets.all(10),
+                //             child: Column(
+                //               children: [
+                //                 ListTile(
+                //                   leading: Icon(
+                //                     FontAwesomeIcons.idCardClip,
+                //                   ),
+                //                   title: Text(
+                //                     data['First Name'],
+                //                     style: const TextStyle(fontSize: 15),
+                //                   ),
+                //                 ),
+                //               ],
+                //             ),
+                //           ),
+                //         ),
+                //       );
+                //     }
+                //   },
+                // )
               ],
             ),
           ),
@@ -237,3 +321,5 @@ class _LoginState extends State<Login> {
     );
   }
 }
+
+
