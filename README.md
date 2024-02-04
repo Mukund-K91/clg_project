@@ -3,7 +3,7 @@
 FINAL YEAR PROJECT 2024
 
 
-eCollege
+eCollege APP
 
 1. Kanani Sameer Dhirubhai
 2. Koladiya Mukund Himmatbhai
