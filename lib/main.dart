@@ -1,20 +1,16 @@
-import 'dart:async';
-import 'package:clg_project/admin/attendance.dart';
-import 'package:clg_project/admin/faculty_dashboard.dart';
-import 'package:clg_project/demo.dart';
-import 'package:clg_project/splash_screen.dart';
-import 'package:clg_project/student/dashboard.dart';
 import 'package:clg_project/student/login.dart';
-import 'package:clg_project/student/student_dashboard.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'admin/attendance.dart';
+import 'demo.dart';
 //HET
 //MUKUND
 //SAMEER K
+//OM KHENI
+//DONE
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -22,7 +18,6 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
   //  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: SystemUiOverlay.values);
 }
-
 class MyApp extends StatefulWidget {
   MyApp({super.key});
   @override
@@ -38,7 +33,7 @@ class _MyAppState extends State<MyApp> {
         ),
         debugShowCheckedModeBanner: false,
         home:
-        //DemoPage()
+        //Demo()
         Attendance()
         //SplashScreen()
          // FacultyDashboard('admin2@gmail.com', 'Faculty')
