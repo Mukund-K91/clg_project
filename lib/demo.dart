@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(MyApp());
@@ -48,6 +49,7 @@ class _DemoState extends State<Demo> {
   List<Student> students = [];
   String selectedSubject = 'Math'; // Default subject
   DateTime selectedDate = DateTime.now();
+
   List<AttendanceRecord> attendanceRecords = [];
 
   @override
@@ -102,8 +104,9 @@ class _DemoState extends State<Demo> {
       CollectionReference monthlyAttendanceCollection =
       studentDocRef.collection('monthlyAttendance');
 
+      String date=DateFormat.MMMM().format(selectedDate);
       String dateKey =
-          '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}';
+          '${date}';
 
       DocumentReference dailyAttendanceDocRef =
       monthlyAttendanceCollection.doc(dateKey);
@@ -114,13 +117,13 @@ class _DemoState extends State<Demo> {
       if (!dailyAttendanceDoc.exists) {
         // Create new daily attendance record if not exists for the current date
         batch.set(dailyAttendanceDocRef, {
-          'date': selectedDate,
+          '${selectedDate.day}':{
           'subjectAttendance': {
             selectedSubject: {
               'presentCount': 0,
               'absentCount': 0,
             }
-          },
+          }},
         });
       }
 
@@ -233,4 +236,6 @@ class _DemoState extends State<Demo> {
     }
   }
 }
+
+
 
