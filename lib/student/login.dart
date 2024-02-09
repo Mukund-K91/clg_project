@@ -84,7 +84,7 @@ class _LoginState extends State<Login> {
           .get()
           .then((querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => HomeMain(),));
+          // Navigator.push(context, MaterialPageRoute(builder: (context) => HomeMain(),));
           print("Done");
           return querySnapshot
               .docs[0]; // Assuming there's only one matching document

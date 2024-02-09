@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -60,7 +59,7 @@ class _DemoState extends State<Demo> {
 
   Future<void> fetchData() async {
     QuerySnapshot<Map<String, dynamic>> studentsQuery =
-    await FirebaseFirestore.instance.collection('students').get();
+        await FirebaseFirestore.instance.collection('students').get();
 
     students = studentsQuery.docs.map((doc) {
       return Student(
@@ -90,7 +89,7 @@ class _DemoState extends State<Demo> {
 
   Future<void> _submitAttendance() async {
     CollectionReference studentCollection =
-    FirebaseFirestore.instance.collection('students');
+        FirebaseFirestore.instance.collection('students');
 
     WriteBatch batch = FirebaseFirestore.instance.batch();
 
@@ -99,31 +98,29 @@ class _DemoState extends State<Demo> {
 
       // Create or update daily attendance subcollection
       DocumentReference studentDocRef =
-      studentCollection.doc(student.documentId);
+          studentCollection.doc(student.documentId);
 
       CollectionReference monthlyAttendanceCollection =
-      studentDocRef.collection('monthlyAttendance');
+          studentDocRef.collection('monthlyAttendance');
 
-      String date=DateFormat.MMMM().format(selectedDate);
-      String dateKey =
-          '${date}';
+      String date = DateFormat.MMMM().format(selectedDate);
+      String dateKey = '${date}';
 
       DocumentReference dailyAttendanceDocRef =
-      monthlyAttendanceCollection.doc(dateKey);
+          monthlyAttendanceCollection.doc(dateKey);
 
       DocumentSnapshot<Object?> dailyAttendanceDoc =
-      await dailyAttendanceDocRef.get();
+          await dailyAttendanceDocRef.get();
 
       if (!dailyAttendanceDoc.exists) {
         // Create new daily attendance record if not exists for the current date
         batch.set(dailyAttendanceDocRef, {
-          '${selectedDate.day}':{
           'subjectAttendance': {
             selectedSubject: {
               'presentCount': 0,
               'absentCount': 0,
             }
-          }},
+          },
         });
       }
 
@@ -131,9 +128,9 @@ class _DemoState extends State<Demo> {
       AttendanceRecord record = attendanceRecords[i];
       batch.update(dailyAttendanceDocRef, {
         'subjectAttendance.$selectedSubject.presentCount':
-        FieldValue.increment(record.presentCount),
+            FieldValue.increment(record.presentCount),
         'subjectAttendance.$selectedSubject.absentCount':
-        FieldValue.increment(record.absentCount),
+            FieldValue.increment(record.absentCount),
       });
     }
 
@@ -147,7 +144,8 @@ class _DemoState extends State<Demo> {
       }).toList();
     });
 
-    print('Attendance submitted for date: $selectedDate, subject: $selectedSubject');
+    print(
+        'Attendance submitted for date: $selectedDate, subject: $selectedSubject');
   }
 
   @override
@@ -169,8 +167,9 @@ class _DemoState extends State<Demo> {
                 }).toList();
               });
             },
-            items: ['Math', 'Science', 'English'] // Add other subjects as needed
-                .map<DropdownMenuItem<String>>((String value) {
+            items:
+                ['Math', 'Science', 'English'] // Add other subjects as needed
+                    .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
@@ -194,14 +193,16 @@ class _DemoState extends State<Demo> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Checkbox(
-                        value: false, // Placeholder value, replace with actual logic
+                        value: false,
+                        // Placeholder value, replace with actual logic
                         onChanged: (value) =>
                             _toggleAttendance(index, value ?? false),
                       ),
                       Text('Present'),
                       SizedBox(width: 10),
                       Checkbox(
-                        value: false, // Placeholder value, replace with actual logic
+                        value: false,
+                        // Placeholder value, replace with actual logic
                         onChanged: (value) =>
                             _toggleAttendance(index, !value! ?? false),
                       ),
@@ -236,6 +237,3 @@ class _DemoState extends State<Demo> {
     }
   }
 }
-
-
-
