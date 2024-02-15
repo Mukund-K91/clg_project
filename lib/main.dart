@@ -1,3 +1,4 @@
+import 'package:clg_project/splash_screen.dart';
 import 'package:clg_project/student/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,8 +35,8 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         home:
         //Demo()
-        Attendance()
-        //SplashScreen()
+        //Attendance()
+        SplashScreen()
          // FacultyDashboard('admin2@gmail.com', 'Faculty')
        // StudentDashboard('mukundkoladiya05@gmail.com', 'Student')
     );
