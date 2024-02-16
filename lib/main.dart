@@ -1,3 +1,4 @@
+import 'package:clg_project/admin/assignment.dart';
 import 'package:clg_project/splash_screen.dart';
 import 'package:clg_project/student/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -36,7 +37,7 @@ class _MyAppState extends State<MyApp> {
         home:
         //Demo()
         //Attendance()
-        SplashScreen()
+        AssignmentPage()
          // FacultyDashboard('admin2@gmail.com', 'Faculty')
        // StudentDashboard('mukundkoladiya05@gmail.com', 'Student')
     );
