@@ -1,12 +1,14 @@
 import 'package:clg_project/admin/assignment.dart';
 import 'package:clg_project/splash_screen.dart';
 import 'package:clg_project/student/login.dart';
+import 'package:clg_project/student/student_dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'admin/attendance.dart';
+import 'admin/faculty_dashboard.dart';
 import 'demo.dart';
 //HET
 //MUKUND
@@ -16,16 +18,17 @@ import 'demo.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
   //  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: SystemUiOverlay.values);
 }
 class MyApp extends StatefulWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
   @override
   State<MyApp> createState() => _MyAppState();
 }
 class _MyAppState extends State<MyApp> {
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Flutter Demo',
@@ -37,9 +40,10 @@ class _MyAppState extends State<MyApp> {
         home:
         //Demo()
         //Attendance()
-        AssignmentPage()
-         // FacultyDashboard('admin2@gmail.com', 'Faculty')
-       // StudentDashboard('mukundkoladiya05@gmail.com', 'Student')
+        // const AssignmentPage()
+        HomeMain()
+         //FacultyDashboard('admin2@gmail.com', 'Faculty')
+        //StudentDashboard('sameer@gmail.com', 'Student')
     );
   }
 }

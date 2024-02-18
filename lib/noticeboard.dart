@@ -100,35 +100,22 @@ class _MyWidgetState extends State<NoticeBoard> {
                             keyboardType: TextInputType.multiline,
                           ),
                           const SizedBox(height: 8,),
-                          SizedBox(
-                            height: 60,
-                            width: 150,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                backgroundColor: const Color(0xff002233),
-                              ),
-                              onPressed: () async {
-                                await _con.add({
-                                  "Title": _title.text,
-                                  "Description": _description.text,
-                                  "Date": _Date(DateTime.now()),
-                                  "Time": _Time(DateTime.now()),
-                                  "Name": widget.name
-                                });
-                                _title.text = "";
-                                _description.text = "";
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text(
-                                "Publish",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
-                              ),
-                            ),
-                          ),
+                          ReusablebuttonHome(onPressed: () async {
+                            await _con.add({
+                              "Title": _title.text,
+                              "Description": _description.text,
+                              "Date": _Date(DateTime.now()),
+                              "Time": _Time(DateTime.now()),
+                              "Name": widget.name
+                            });
+                            _title.text = "";
+                            _description.text = "";
+                            Navigator.of(context).pop();
+                          }, child: const Text(
+                            "Publish",
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 20),
+                          )),
                         ],
                       ),
                     ),

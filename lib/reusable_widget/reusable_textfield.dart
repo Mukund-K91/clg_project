@@ -55,3 +55,68 @@ class ReusableTextField extends StatelessWidget {
     );
   }
 }
+
+class ReusablebuttonFaculty extends StatelessWidget {
+
+  final Widget child;
+  final Function() onPressed;
+
+
+  const ReusablebuttonFaculty({
+    super.key,
+    required this.onPressed,
+    required this.child,});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        maximumSize: const Size(150, 65),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5)),
+        backgroundColor: const Color(0xff002233),
+      ),
+      child:
+      Container(
+          constraints: const BoxConstraints(
+              maxWidth: 200.0,
+              minHeight: 50.0),
+          alignment: Alignment.center,
+          child: child
+      ),
+    );
+  }
+}
+
+class ReusablebuttonHome extends StatelessWidget {
+
+  final Widget child;
+  final Function() onPressed;
+
+
+  const ReusablebuttonHome({
+    super.key,
+    required this.onPressed,
+    required this.child,});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5)),
+        backgroundColor: const Color(0xff002233),
+      ),
+      child:
+      Container(
+          constraints: const BoxConstraints(
+              maxWidth: 200.0,
+              minHeight: 50.0),
+          alignment: Alignment.center,
+          child: child
+      ),
+    );
+  }
+}
