@@ -93,10 +93,12 @@ class ReusablebuttonHome extends StatelessWidget {
 
   final Widget child;
   final Function() onPressed;
+  final bool color;
 
 
   const ReusablebuttonHome({
     super.key,
+    this.color = true,
     required this.onPressed,
     required this.child,});
 
@@ -107,7 +109,7 @@ class ReusablebuttonHome extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5)),
-        backgroundColor: const Color(0xff002233),
+        backgroundColor: color ? Colors.white :  const Color(0xff002233),
       ),
       child:
       Container(

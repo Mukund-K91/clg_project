@@ -1,4 +1,5 @@
 import 'package:clg_project/admin/assignment.dart';
+import 'package:clg_project/reusable_widget/reusable_textfield.dart';
 import 'package:clg_project/splash_screen.dart';
 import 'package:clg_project/student/login.dart';
 import 'package:clg_project/student/student_dashboard.dart';
@@ -110,11 +111,7 @@ class HomeMain extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       height: 50,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5))),
+                      child: ReusablebuttonHome(
                           onPressed: () {
                             Navigator.push(
                                 context,
@@ -122,11 +119,11 @@ class HomeMain extends StatelessWidget {
                                   builder: (context) => Login("Faculty"),
                                 ));
                           },
-                          child: const Text(
-                            "LOGIN AS FACULTY",
-                            style: TextStyle(
-                                color: Color(0xff002233), fontSize: 15),
-                          )),
+                        child: const Text(
+                          "LOGIN AS FACULTY",
+                          style: TextStyle(
+                              color: Color(0xff002233), fontSize: 15),
+                        )),
                     ),
                   ],
                 ),

@@ -238,24 +238,31 @@ class _LoginState extends State<Login> {
                       const SizedBox(
                         height: 20,
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 60,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
-                            backgroundColor: const Color(0xff002233),
-                          ),
-                          onPressed: () {
-                            fetchDataByEmail(_email.text);
-                          },
-                          child: const Text(
-                            "LOGIN",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          ),
-                        ),
-                      ),
+                      ReusablebuttonFaculty(onPressed: (){
+                        fetchDataByEmail(_email.text);
+                      },
+                        child: const Text(
+                        "LOGIN",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),),
+                      // SizedBox(
+                      //   width: double.infinity,
+                      //   height: 60,
+                      //   child: ElevatedButton(
+                      //     style: ElevatedButton.styleFrom(
+                      //       shape: RoundedRectangleBorder(
+                      //           borderRadius: BorderRadius.circular(5)),
+                      //       backgroundColor: const Color(0xff002233),
+                      //     ),
+                      //     onPressed: () {
+                      //       fetchDataByEmail(_email.text);
+                      //     },
+                      //     child: const Text(
+                      //       "LOGIN",
+                      //       style: TextStyle(color: Colors.white, fontSize: 20),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
