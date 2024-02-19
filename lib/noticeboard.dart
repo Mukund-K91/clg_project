@@ -100,22 +100,24 @@ class _MyWidgetState extends State<NoticeBoard> {
                             keyboardType: TextInputType.multiline,
                           ),
                           const SizedBox(height: 8,),
-                          ReusablebuttonHome(onPressed: () async {
-                            await _con.add({
-                              "Title": _title.text,
-                              "Description": _description.text,
-                              "Date": _Date(DateTime.now()),
-                              "Time": _Time(DateTime.now()),
-                              "Name": widget.name
-                            });
-                            _title.text = "";
-                            _description.text = "";
-                            Navigator.of(context).pop();
-                          }, child: const Text(
-                            "Publish",
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 20),
-                          )),
+                          Reusablebutton(
+                            onPressed: () async {
+                              await _con.add({
+                                "Title": _title.text,
+                                "Description": _description.text,
+                                "Date": _Date(DateTime.now()),
+                                "Time": _Time(DateTime.now()),
+                                "Name": widget.name
+                              });
+                              _title.text = "";
+                              _description.text = "";
+                              Navigator.of(context).pop();
+                            },
+                            Style: false,
+                            child: const Text(
+                              " Publish ",
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                            ),),
                         ],
                       ),
                     ),

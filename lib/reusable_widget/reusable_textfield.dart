@@ -13,19 +13,20 @@ class ReusableTextField extends StatelessWidget {
   final bool isMulti;
   final bool enable;
 
-  const ReusableTextField(
-      {super.key,
-      this.controller,
-      this.validator,
-      this.keyboardType = TextInputType.text,
-      this.obSecure = false,
-      this.isMulti = false,
-        this.enable = false,
-      this.errorText,
-      required this.label,
-      this.sufIcon,
-      this.preIcon,
-      this.onChanged,});
+  const ReusableTextField({
+    super.key,
+    this.controller,
+    this.validator,
+    this.keyboardType = TextInputType.text,
+    this.obSecure = false,
+    this.isMulti = false,
+    this.enable = false,
+    this.errorText,
+    required this.label,
+    this.sufIcon,
+    this.preIcon,
+    this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -56,69 +57,94 @@ class ReusableTextField extends StatelessWidget {
   }
 }
 
-class ReusablebuttonFaculty extends StatelessWidget {
+// class ReusablebuttonFaculty extends StatelessWidget {
+//   final Widget child;
+//   final Function() onPressed;
+//
+//   const ReusablebuttonFaculty({
+//     super.key,
+//     required this.onPressed,
+//     required this.child,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return ElevatedButton(
+//       onPressed: onPressed,
+//       style: ElevatedButton.styleFrom(
+//         maximumSize: const Size(150, 65),
+//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+//         backgroundColor: const Color(0xff002233),
+//       ),
+//       child: Container(
+//           constraints: const BoxConstraints(maxWidth: 200.0, minHeight: 50.0),
+//           alignment: Alignment.center,
+//           child: child),
+//     );
+//   }
+// }
+//
+// class ReusablebuttonHome extends StatelessWidget {
+//   final Widget child;
+//   final Function() onPressed;
+//   final bool color;
+//
+//   const ReusablebuttonHome({
+//     super.key,
+//     this.color = true,
+//     required this.onPressed,
+//     required this.child,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return ElevatedButton(
+//       onPressed: onPressed,
+//       style: ElevatedButton.styleFrom(
+//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+//         backgroundColor: color ? Colors.white : const Color(0xff002233),
+//       ),
+//       child: Container(
+//           constraints: const BoxConstraints(maxWidth: 200.0, minHeight: 50.0),
+//           alignment: Alignment.center,
+//           child: child),
+//     );
+//   }
+// }
+
+class Reusablebutton extends StatelessWidget {
 
   final Widget child;
   final Function() onPressed;
+  final bool Style;
 
-
-  const ReusablebuttonFaculty({
+  Reusablebutton({
     super.key,
+    required this.child,
+    required this.Style,
     required this.onPressed,
-    required this.child,});
+  });
+
+  final ButtonStyle style = ElevatedButton.styleFrom(
+      maximumSize: const Size(150, 65),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      backgroundColor: Colors.white);
+  final ButtonStyle style1 = ElevatedButton.styleFrom(
+      maximumSize: const Size(150, 65),
+      minimumSize: const Size(130,45),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      backgroundColor: const Color(0xff002233),
+      side: const BorderSide(color: Colors.white));
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        maximumSize: const Size(150, 65),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5)),
-        backgroundColor: const Color(0xff002233),
-      ),
-      child:
-      Container(
-          constraints: const BoxConstraints(
-              maxWidth: 200.0,
-              minHeight: 50.0),
+      style: Style ? style : style1,
+      child: Container(
+          constraints: const BoxConstraints(maxWidth: 200.0, minHeight: 50.0),
           alignment: Alignment.center,
-          child: child
-      ),
-    );
-  }
-}
-
-class ReusablebuttonHome extends StatelessWidget {
-
-  final Widget child;
-  final Function() onPressed;
-  final bool color;
-
-
-  const ReusablebuttonHome({
-    super.key,
-    this.color = true,
-    required this.onPressed,
-    required this.child,});
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5)),
-        backgroundColor: color ? Colors.white :  const Color(0xff002233),
-      ),
-      child:
-      Container(
-          constraints: const BoxConstraints(
-              maxWidth: 200.0,
-              minHeight: 50.0),
-          alignment: Alignment.center,
-          child: child
-      ),
+          child: child),
     );
   }
 }

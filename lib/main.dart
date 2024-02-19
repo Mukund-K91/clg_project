@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'admin/attendance.dart';
 import 'admin/faculty_dashboard.dart';
 import 'demo.dart';
+
 //HET
 //MUKUND
 //SAMEER K
@@ -23,11 +24,14 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
   //  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: SystemUiOverlay.values);
 }
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
+
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
@@ -39,17 +43,19 @@ class _MyAppState extends State<MyApp> {
         ),
         debugShowCheckedModeBanner: false,
         home:
-        //Demo()
-        //Attendance()
-        // const AssignmentPage()
-        HomeMain()
-         //FacultyDashboard('admin2@gmail.com', 'Faculty')
+            //Demo()
+            //Attendance()
+            // const AssignmentPage()
+           // HomeMain()
+        FacultyDashboard('admin2@gmail.com', 'Faculty')
         //StudentDashboard('sameer@gmail.com', 'Student')
-    );
+        );
   }
 }
+
 class HomeMain extends StatelessWidget {
   const HomeMain({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,23 +93,20 @@ class HomeMain extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       height: 50,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              backgroundColor: Colors.transparent,
-                              side: const BorderSide(color: Colors.white)),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Login("Student"),
-                                ));
-                          },
-                          child: const Text(
-                            "LOGIN AS STUDENT",
-                            style: TextStyle(color: Colors.white, fontSize: 15),
-                          )),
+                      child: Reusablebutton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Login("Student"),
+                              ));
+                        },
+                        Style: false,
+                        child: const Text(
+                          "LOGIN AS STUDENT",
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        ),
+                      ),
                     ),
                     const SizedBox(
                       height: 15,
@@ -111,19 +114,20 @@ class HomeMain extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       height: 50,
-                      child: ReusablebuttonHome(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Login("Faculty"),
-                                ));
-                          },
+                      child: Reusablebutton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Login("Faculty"),
+                            ));
+                        },
+                        Style: true,
                         child: const Text(
                           "LOGIN AS FACULTY",
-                          style: TextStyle(
-                              color: Color(0xff002233), fontSize: 15),
-                        )),
+                          style: TextStyle(color: Color(0xff002233), fontSize: 15),
+                        ),
+                      ),
                     ),
                   ],
                 ),
