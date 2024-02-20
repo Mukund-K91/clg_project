@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:clg_project/admin/attendance.dart';
+import 'package:clg_project/demo.dart';
 import 'package:clg_project/noticeboard.dart';
 import 'package:clg_project/reusable_widget/reusable_textfield.dart';
 import 'package:clg_project/student/attendance.dart';
@@ -38,7 +39,7 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
   // pages to display
   final List<Widget> _pages = [
     // Home page
-    HomeMain(),
+    Demo(),
     // cart page
     Attendance(),
   ];
@@ -285,7 +286,6 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
                               ],
                             ),
                           ),
-                          _pages[_selectedindex],
                         ],
                       ),
                     ),

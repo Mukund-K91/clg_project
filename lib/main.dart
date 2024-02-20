@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
         ),
         debugShowCheckedModeBanner: false,
         home:
-            //Demo()
+        //Demo()
             //Attendance()
             // const AssignmentPage()
             //HomeMain()
