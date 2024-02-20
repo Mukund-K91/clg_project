@@ -70,19 +70,19 @@ class _LoginState extends State<Login> {
     //         .show();
     //   }
     // }
-
   }
+
   Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
       String email) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     try {
       Future<QueryDocumentSnapshot<Map<String, dynamic>>> documentSnapshot =
-      firestore
-          .collection('students')
-          .where('SP ID', isEqualTo: email)
-          .get()
-          .then((querySnapshot) {
+          firestore
+              .collection('students')
+              .where('SP ID', isEqualTo: email)
+              .get()
+              .then((querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {
           // Navigator.push(context, MaterialPageRoute(builder: (context) => HomeMain(),));
           print("Done");
@@ -238,24 +238,34 @@ class _LoginState extends State<Login> {
                       const SizedBox(
                         height: 20,
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 60,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
-                            backgroundColor: const Color(0xff002233),
-                          ),
-                          onPressed: () {
-                            fetchDataByEmail(_email.text);
-                          },
-                          child: const Text(
-                            "LOGIN",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          ),
-                        ),
-                      ),
+
+                      Reusablebutton(
+                        onPressed: () {
+                          fetchDataByEmail(_email.text);
+                        },
+                        Style: false,
+                        child: const Text(
+                          "LOGIN ",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),),
+                      // SizedBox(
+                      //   width: double.infinity,
+                      //   height: 60,
+                      //   child: ElevatedButton(
+                      //     style: ElevatedButton.styleFrom(
+                      //       shape: RoundedRectangleBorder(
+                      //           borderRadius: BorderRadius.circular(5)),
+                      //       backgroundColor: const Color(0xff002233),
+                      //     ),
+                      //     onPressed: () {
+                      //       fetchDataByEmail(_email.text);
+                      //     },
+                      //     child: const Text(
+                      //       "LOGIN",
+                      //       style: TextStyle(color: Colors.white, fontSize: 20),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -321,5 +331,3 @@ class _LoginState extends State<Login> {
     );
   }
 }
-
-

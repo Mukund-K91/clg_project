@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class StudentManage extends StatefulWidget {
-  StudentManage({super.key});
+  const StudentManage({super.key});
 
   @override
   State<StudentManage> createState() => _MyWidgetState();
@@ -178,49 +178,83 @@ class _MyWidgetState extends State<StudentManage> {
                                   });
                                 }),
                           ),
-                          SizedBox(
-                            height: 60,
-                            width: 150,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)),
-                                  backgroundColor: const Color(0xff002233),
-                                ),
-                                onPressed: () async {
-                                  final String email = _email.text;
-                                  final String password = _mobile.text;
-                                  if (_formKey.currentState!.validate()) {
-                                    final credential = await FirebaseAuth
-                                        .instance
-                                        .createUserWithEmailAndPassword(
-                                            email: email, password: password);
-                                    await _items.add({
-                                      "SP ID": _id.text,
-                                      "Roll No":_rollno.text,
-                                      "First Name": _fname.text,
-                                      "Last Name": _lname.text,
-                                      "Mobile": _mobile.text,
-                                      "Email": _email.text,
-                                      "Password": _mobile.text,
-                                      "Div": _selectedDiv
-                                    });
-                                    _id.text = '';
-                                    _rollno.text='';
-                                    _fname.text = '';
-                                    _lname.text = '';
-                                    _email.text = '';
-                                    _mobile.text = '';
-                                    _selectedDiv = "Div";
-                                    Navigator.of(context).pop();
-                                  }
-                                },
-                                child: const Text(
-                                  "Register",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                )),
-                          ),
+                          Reusablebutton(
+                            onPressed: () async {
+                              final String email = _email.text;
+                              final String password = _mobile.text;
+                              if (_formKey.currentState!.validate()) {
+                                final credential = await FirebaseAuth
+                                    .instance
+                                    .createUserWithEmailAndPassword(
+                                    email: email, password: password);
+                                await _items.add({
+                                  "SP ID": _id.text,
+                                  "Roll No":_rollno.text,
+                                  "First Name": _fname.text,
+                                  "Last Name": _lname.text,
+                                  "Mobile": _mobile.text,
+                                  "Email": _email.text,
+                                  "Password": _mobile.text,
+                                  "Div": _selectedDiv
+                                });
+                                _id.text = '';
+                                _rollno.text='';
+                                _fname.text = '';
+                                _lname.text = '';
+                                _email.text = '';
+                                _mobile.text = '';
+                                _selectedDiv = "Div";
+                                Navigator.of(context).pop();
+                              }
+                            },
+                            Style: false,
+                            child: const Text(
+                              " Register ",
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                            ),),
+                          // SizedBox(
+                          //   height: 60,
+                          //   width: 150,
+                          //   child: ElevatedButton(
+                          //       style: ElevatedButton.styleFrom(
+                          //         shape: RoundedRectangleBorder(
+                          //             borderRadius: BorderRadius.circular(5)),
+                          //         backgroundColor: const Color(0xff002233),
+                          //       ),
+                          //       onPressed: () async {
+                          //         final String email = _email.text;
+                          //         final String password = _mobile.text;
+                          //         if (_formKey.currentState!.validate()) {
+                          //           final credential = await FirebaseAuth
+                          //               .instance
+                          //               .createUserWithEmailAndPassword(
+                          //                   email: email, password: password);
+                          //           await _items.add({
+                          //             "SP ID": _id.text,
+                          //             "Roll No":_rollno.text,
+                          //             "First Name": _fname.text,
+                          //             "Last Name": _lname.text,
+                          //             "Mobile": _mobile.text,
+                          //             "Email": _email.text,
+                          //             "Password": _mobile.text,
+                          //             "Div": _selectedDiv
+                          //           });
+                          //           _id.text = '';
+                          //           _rollno.text='';
+                          //           _fname.text = '';
+                          //           _lname.text = '';
+                          //           _email.text = '';
+                          //           _mobile.text = '';
+                          //           _selectedDiv = "Div";
+                          //           Navigator.of(context).pop();
+                          //         }
+                          //       },
+                          //       child: const Text(
+                          //         "Register",
+                          //         style: TextStyle(
+                          //             color: Colors.white, fontSize: 20),
+                          //       )),
+                          // ),
                         ],
                       ),
                     ),
@@ -367,42 +401,32 @@ class _MyWidgetState extends State<StudentManage> {
                                   });
                                 }),
                           ),
-                          SizedBox(
-                            height: 60,
-                            width: 150,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)),
-                                  backgroundColor: const Color(0xff002233),
-                                ),
-                                onPressed: () async {
-                                  await _items
-                                      .doc(documentSnapshot!.id)
-                                      .update({
-                                    "SP ID": _id.text,
-                                    "First Name": _fname.text,
-                                    "Last Name": _lname.text,
-                                    "Mobile": _mobile.text,
-                                    "Email": _email.text,
-                                    "Password": _mobile.text,
-                                    "Div": _selectedDiv
-                                  });
-                                  _id.text = '';
-                                  _fname.text = '';
-                                  _lname.text = '';
-                                  _email.text = '';
-                                  _mobile.text = '';
-                                  _selectedDiv = "Div";
+                          Reusablebutton(onPressed: () async {
+                            await _items
+                                .doc(documentSnapshot!.id)
+                                .update({
+                              "SP ID": _id.text,
+                              "First Name": _fname.text,
+                              "Last Name": _lname.text,
+                              "Mobile": _mobile.text,
+                              "Email": _email.text,
+                              "Password": _mobile.text,
+                              "Div": _selectedDiv
+                            });
+                            _id.text = '';
+                            _fname.text = '';
+                            _lname.text = '';
+                            _email.text = '';
+                            _mobile.text = '';
+                            _selectedDiv = "Div";
 
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text(
-                                  "Update",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                )),
-                          ),
+                            Navigator.of(context).pop();
+                          }, Style: false,
+                          child: const Text(
+                            "Update",
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 20),
+                          )),
                         ],
                       ),
                     ),
