@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
             //Demo()
             //Attendance()
             // const AssignmentPage()
-           // HomeMain()
+            //HomeMain()
         FacultyDashboard('admin2@gmail.com', 'Faculty')
         //StudentDashboard('sameer@gmail.com', 'Student')
         );
@@ -90,10 +90,7 @@ class HomeMain extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: Reusablebutton(
+                    Reusablebutton(
                         onPressed: () {
                           Navigator.push(
                               context,
@@ -106,15 +103,11 @@ class HomeMain extends StatelessWidget {
                           "LOGIN AS STUDENT",
                           style: TextStyle(color: Colors.white, fontSize: 15),
                         ),
-                      ),
                     ),
                     const SizedBox(
                       height: 15,
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: Reusablebutton(
+                    Reusablebutton(
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -123,12 +116,10 @@ class HomeMain extends StatelessWidget {
                             ));
                         },
                         Style: true,
-                        child: const Text(
-                          "LOGIN AS FACULTY",
-                          style: TextStyle(color: Color(0xff002233), fontSize: 15),
+                        child:
+                          Text("LOGIN AS FACULTY",style: TextStyle(color: Color(0xff002233), fontSize: 15),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),

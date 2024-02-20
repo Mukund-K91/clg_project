@@ -117,21 +117,22 @@ class Reusablebutton extends StatelessWidget {
   final Widget child;
   final Function() onPressed;
   final bool Style;
+  final String? text;
 
   Reusablebutton({
     super.key,
+    this.text,
     required this.child,
     required this.Style,
     required this.onPressed,
   });
 
   final ButtonStyle style = ElevatedButton.styleFrom(
-      maximumSize: const Size(150, 65),
+      minimumSize: const Size(double.infinity,50),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       backgroundColor: Colors.white);
   final ButtonStyle style1 = ElevatedButton.styleFrom(
-      maximumSize: const Size(150, 65),
-      minimumSize: const Size(130,45),
+      minimumSize: const Size(double.infinity,50),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       backgroundColor: const Color(0xff002233),
       side: const BorderSide(color: Colors.white));
@@ -142,7 +143,7 @@ class Reusablebutton extends StatelessWidget {
       onPressed: onPressed,
       style: Style ? style : style1,
       child: Container(
-          constraints: const BoxConstraints(maxWidth: 200.0, minHeight: 50.0),
+          constraints: const BoxConstraints(maxWidth: 200, minHeight: 50.0),
           alignment: Alignment.center,
           child: child),
     );

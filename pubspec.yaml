@@ -54,6 +54,7 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   table_calendar: ^3.0.2
   carousel_slider: ^4.0.0
+  google_nav_bar: ^5.0.6
 
 
 
