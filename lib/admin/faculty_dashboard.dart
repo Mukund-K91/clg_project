@@ -12,6 +12,7 @@ import '../reusable_widget/bottom_navigationbar.dart';
 import 'Material.dart';
 import 'PageNotAvailable.dart';
 import 'admin.dart';
+import 'assignment.dart';
 
 class FacultyDashboard extends StatefulWidget {
   String email;
@@ -24,32 +25,9 @@ class FacultyDashboard extends StatefulWidget {
 }
 
 class _FacultyDashboardState extends State<FacultyDashboard> {
-
-  // this selected index is control the bottom navigator bar
-  int _selectedindex = 0;
-
-  // this method will update your selected index
-  // when the user tap on bottom bar
-  void navigatorbottombar(int index) {
-    setState(() {
-      _selectedindex = index;
-    });
-  }
-
-  // pages to display
-  final List<Widget> _pages = [
-    // Home page
-    Demo(),
-    // cart page
-    Attendance(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Mybottomnav(
-        onTabChange: (index) => navigatorbottombar(index),
-      ),
       body: FutureBuilder<DocumentSnapshot>(
         future: fetchDataByEmail(widget.email),
         builder: (context, snapshot) {

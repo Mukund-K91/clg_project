@@ -47,7 +47,8 @@ class _MyAppState extends State<MyApp> {
             //Attendance()
             // const AssignmentPage()
             //HomeMain()
-        FacultyDashboard('admin2@gmail.com', 'Faculty')
+        //FacultyDashboard('admin2@gmail.com', 'Faculty')
+      Myhome()
         //StudentDashboard('sameer@gmail.com', 'Student')
         );
   }

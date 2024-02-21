@@ -1,6 +1,12 @@
+import 'package:clg_project/noticeboard.dart';
+import 'package:clg_project/reusable_widget/bottom_navigationbar.dart';
+import 'package:clg_project/student/student_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+
+import 'admin/assignment.dart';
+import 'admin/faculty_dashboard.dart';
 
 void main() {
   runApp(MyApp());
@@ -237,146 +243,43 @@ class _DemoState extends State<Demo> {
     }
   }
 }
-// import 'package:flutter/material.dart';
-//
-// /// Flutter code sample for [NavigationBar].
-//
-// void main() => runApp(const NavigationBarApp());
-//
-// class NavigationBarApp extends StatelessWidget {
-//   const NavigationBarApp({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       theme: ThemeData(useMaterial3: true),
-//       home: const NavigationExample(),
-//     );
-//   }
-// }
-//
-// class NavigationExample extends StatefulWidget {
-//   const NavigationExample({super.key});
-//
-//   @override
-//   State<NavigationExample> createState() => _NavigationExampleState();
-// }
-//
-// class _NavigationExampleState extends State<NavigationExample> {
-//   int currentPageIndex = 0;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final ThemeData theme = Theme.of(context);
-//     return Scaffold(
-//       bottomNavigationBar: NavigationBar(
-//         onDestinationSelected: (int index) {
-//           setState(() {
-//             currentPageIndex = index;
-//           });
-//         },
-//         indicatorColor: Colors.amber,
-//         selectedIndex: currentPageIndex,
-//         destinations: const <Widget>[
-//           NavigationDestination(
-//             selectedIcon: Icon(Icons.home),
-//             icon: Icon(Icons.home_outlined),
-//             label: 'Home',
-//           ),
-//           NavigationDestination(
-//             icon: Badge(child: Icon(Icons.notifications_sharp)),
-//             label: 'Notifications',
-//           ),
-//           NavigationDestination(
-//             icon: Badge(
-//               label: Text('2'),
-//               child: Icon(Icons.messenger_sharp),
-//             ),
-//             label: 'Messages',
-//           ),
-//         ],
-//       ),
-//       body: <Widget>[
-//         /// Home page
-//         Card(
-//           shadowColor: Colors.transparent,
-//           margin: const EdgeInsets.all(8.0),
-//           child: SizedBox.expand(
-//             child: Center(
-//               child: Text(
-//                 'Home page',
-//                 style: theme.textTheme.titleLarge,
-//               ),
-//             ),
-//           ),
-//         ),
-//
-//         /// Notifications page
-//         const Padding(
-//           padding: EdgeInsets.all(8.0),
-//           child: Column(
-//             children: <Widget>[
-//               Card(
-//                 child: ListTile(
-//                   leading: Icon(Icons.notifications_sharp),
-//                   title: Text('Notification 1'),
-//                   subtitle: Text('This is a notification'),
-//                 ),
-//               ),
-//               Card(
-//                 child: ListTile(
-//                   leading: Icon(Icons.notifications_sharp),
-//                   title: Text('Notification 2'),
-//                   subtitle: Text('This is a notification'),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//
-//         /// Messages page
-//         ListView.builder(
-//           reverse: true,
-//           itemCount: 2,
-//           itemBuilder: (BuildContext context, int index) {
-//             if (index == 0) {
-//               return Align(
-//                 alignment: Alignment.centerRight,
-//                 child: Container(
-//                   margin: const EdgeInsets.all(8.0),
-//                   padding: const EdgeInsets.all(8.0),
-//                   decoration: BoxDecoration(
-//                     color: theme.colorScheme.primary,
-//                     borderRadius: BorderRadius.circular(8.0),
-//                   ),
-//                   child: Text(
-//                     'Hello',
-//                     style: theme.textTheme.bodyLarge!
-//                         .copyWith(color: theme.colorScheme.onPrimary),
-//                   ),
-//                 ),
-//               );
-//             }
-//             return Align(
-//               alignment: Alignment.centerLeft,
-//               child: Container(
-//                 margin: const EdgeInsets.all(8.0),
-//                 padding: const EdgeInsets.all(8.0),
-//                 decoration: BoxDecoration(
-//                   color: theme.colorScheme.primary,
-//                   borderRadius: BorderRadius.circular(8.0),
-//                 ),
-//                 child: Text(
-//                   'Hi!',
-//                   style: theme.textTheme.bodyLarge!
-//                       .copyWith(color: theme.colorScheme.onPrimary),
-//                 ),
-//               ),
-//             );
-//           },
-//         ),
-//       ][currentPageIndex],
-//     );
-//   }
-// }
 
+class Myhome extends StatefulWidget {
+
+  @override
+  State<StatefulWidget> createState() {
+    return myhomestate();
+  }
+}
+
+class myhomestate extends State<Myhome> {
+  // this selected index is control the bottom navigator bar
+  int _selectedindex = 0;
+
+  // this method will update your selected index
+  // when the user tap on bottom bar
+  void navigatorbottombar(int index) {
+    setState(() {
+      _selectedindex = index;
+    });
+  }
+
+  // pages to display
+  final List<Widget> _pages = [
+    // shop page
+    FacultyDashboard('admin2@gmail.com', 'Faculty'),
+    NoticeBoard('Dimple'+'Patel', 'Faculty'),
+    const AssignmentPage()
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final txtname = Theme.of(context).textTheme;
+    return Scaffold(
+      bottomNavigationBar: Mybottomnav(
+        onTabChange: (index) => navigatorbottombar(index),
+      ),
+      body: _pages[_selectedindex],
+    );
+  }
+}

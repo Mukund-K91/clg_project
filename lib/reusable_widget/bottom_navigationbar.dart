@@ -18,7 +18,7 @@ class Mybottomnav extends StatelessWidget {
       tabBorderRadius: 30,
       gap: 10,
       onTabChange: (value)=> onTabChange!(value),
-      tabs: [
+      tabs: const [
         GButton(icon: Icons.home,
           text: 'Home', ),
         GButton(icon: Icons.newspaper,
