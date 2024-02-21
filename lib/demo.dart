@@ -274,7 +274,6 @@ class myhomestate extends State<Myhome> {
 
   @override
   Widget build(BuildContext context) {
-    final txtname = Theme.of(context).textTheme;
     return Scaffold(
       bottomNavigationBar: Mybottomnav(
         onTabChange: (index) => navigatorbottombar(index),
