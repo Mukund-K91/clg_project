@@ -6,13 +6,34 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Profile extends StatefulWidget {
-  String _email;
-  Profile(this._email, {super.key});
+  String _UserId;
+  Profile(this._UserId, {super.key});
+
+
+
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
+  Future<Map<String, dynamic>?> profileData(String enteredUserId) async {
+    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+    await FirebaseFirestore.instance.collectionGroup('student').get();
+
+    for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+    in querySnapshot.docs) {
+      final userData = document.data();
+      final String documentUserId = document.id;
+      final String mobile = userData?['Mobile'];
+
+      // Check if the document userId (user ID) matches the entered userId and mobile number matches the entered mobile number
+      if (documentUserId == enteredUserId) {
+        return userData;
+      }
+    }
+
+    return null; // Return null if user data is not found
+  }
   @override
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -25,36 +46,25 @@ class _ProfileState extends State<Profile> {
           backgroundColor: const Color(0xff002233),
           title: const Text('PROFILE'),
         ),
-        body: FutureBuilder<DocumentSnapshot>(
-          future: fetchDataByEmail(widget._email),
-          // Replace with the desired email
+        body:  FutureBuilder<Map<String, dynamic>?>(
+          future: profileData(widget._UserId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return CircularProgressIndicator();
             } else if (snapshot.hasError) {
-              return Column(
-                children: [
-                  Text(
-                      'Error: ${snapshot.error} USER NOT FOUND\nplease contact your administrator eCollegeAdmin@gmail.com'),
-                  ElevatedButton(
-                      onPressed: () {
-                        _auth.signOut().then((value) {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const HomeMain(),
-                              ));
-                        });
-                      },
-                      child: const Text('Return Home Page')),
-                ],
-              );
-            } else if (!snapshot.hasData || !snapshot.data!.exists) {
-              return const Text('No data found for the given email.');
+              return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              return Text('User not found or invalid credentials');
             } else {
-              // Data found, you can access it using snapshot.data
-              Map<String, dynamic> data =
-                  snapshot.data!.data() as Map<String, dynamic>;
+              final userData = snapshot.data!;
+              final String Name =
+                  userData['First Name'] + " " + userData['Last Name'];
+              final String program = userData['program'] +
+                  " | " +
+                  userData['programTerm'] +
+                  " | " +
+                  userData['division'];
+              final String ProfileUrl = userData['Profile Img'];
               return SingleChildScrollView(
                 child: Align(
                   alignment: Alignment.center,
@@ -81,7 +91,7 @@ class _ProfileState extends State<Profile> {
                             color: themeColor,
                           ),
                           title: Text(
-                            data['SP ID'],
+                           userData['User Id'],
                             style: const TextStyle(fontSize: 15),
                           ),
                         ),
@@ -94,7 +104,7 @@ class _ProfileState extends State<Profile> {
                             color: themeColor,
                           ),
                           title: Text(
-                            '${data['First Name']} ${data['Last Name']}',
+                            '${Name}',
                             style: const TextStyle(fontSize: 15),
                           ),
                         ),
@@ -107,7 +117,7 @@ class _ProfileState extends State<Profile> {
                             color: themeColor,
                           ),
                           title: Text(
-                            'TYBCA-${data['Div']}',
+                            '${program}',
                             style: const TextStyle(fontSize: 15),
                           ),
                         ),
@@ -120,7 +130,7 @@ class _ProfileState extends State<Profile> {
                             color: themeColor,
                           ),
                           title: Text(
-                            '${data['Mobile']}',
+                            '${userData['Mobile']}',
                             style: const TextStyle(fontSize: 15),
                           ),
                         ),
@@ -133,7 +143,7 @@ class _ProfileState extends State<Profile> {
                             color: themeColor,
                           ),
                           title: Text(
-                            '${data['Email']}',
+                            '${userData['Email']}',
                             style: const TextStyle(fontSize: 15),
                           ),
                         ),
@@ -143,14 +153,14 @@ class _ProfileState extends State<Profile> {
                         TextButton(
                             onPressed: () {
                               try {
-                                final String email = widget._email;
+                                final String email = widget._UserId;
                                 _auth.sendPasswordResetEmail(email: email);
                                 AwesomeDialog(
                                   context: context,
                                   dialogType: DialogType.success,
                                   title: "Reset Password Mail Sent",
                                   desc:
-                                      "New Password Email sent to ${widget._email}! Please Check Inbox",
+                                      "New Password Email sent to ${widget._UserId}! Please Check Inbox",
                                   showCloseIcon: true,
                                 ).show();
                               } catch (error) {
