@@ -64,6 +64,7 @@ class StudentDashboard extends StatelessWidget {
           } else {
             final userData = snapshot.data!;
             final String Name = userData['First Name']+" "+userData['Last Name'];
+            final String program=userData['program']+"|"+userData['prograTerm']+"|"+userData['division'];
             return Stack(
               children: [
                 Container(
@@ -84,24 +85,23 @@ class StudentDashboard extends StatelessWidget {
                         child: Expanded(
                           child: Container(
                             width: double.infinity,
-                            child: Card(
-                              color: Colors.white,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const CircleAvatar(
-                                    radius: 50,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ListTile(
+                                  leading: const CircleAvatar(
+                                    radius: 30,
                                     foregroundImage:
                                         AssetImage("assets/images/ex_img.png"),
                                   ),
-                                  Text(
+                                  title:  Text(
                                     "${Name}",
-                                    style: const TextStyle(fontSize: 20),
+                                    style: const TextStyle(fontSize: 20,color: Colors.white),
                                   ),
-                                  Text(userData['program']),
-                                ],
-                              ),
+                                  subtitle: Text(program,style: const TextStyle(color: Colors.white)),
+                                ),
+                              ],
                             ),
                           ),
                         ),
