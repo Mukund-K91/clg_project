@@ -63,9 +63,7 @@ class StudentDashboard extends StatelessWidget {
             return Text('User not found or invalid credentials');
           } else {
             final userData = snapshot.data!;
-            final String firstName = userData['First Name'];
-            final String lastName = userData['Last Name'];
-
+            final String Name = userData['First Name']+" "+userData['Last Name'];
             return Stack(
               children: [
                 Container(
@@ -83,26 +81,27 @@ class StudentDashboard extends StatelessWidget {
                       alignment: Alignment.topCenter,
                       child: Padding(
                         padding: const EdgeInsets.all(15),
-                        child: Container(
-                          width: double.infinity,
-                          height: 200,
-                          child: Card(
-                            color: Colors.white,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const CircleAvatar(
-                                  radius: 50,
-                                  foregroundImage:
-                                      AssetImage("assets/images/ex_img.png"),
-                                ),
-                                Text(
-                                  "${firstName}",
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-                                Text("${userData['Mobile']}")
-                              ],
+                        child: Expanded(
+                          child: Container(
+                            width: double.infinity,
+                            child: Card(
+                              color: Colors.white,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const CircleAvatar(
+                                    radius: 50,
+                                    foregroundImage:
+                                        AssetImage("assets/images/ex_img.png"),
+                                  ),
+                                  Text(
+                                    "${Name}",
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                  Text(userData['program']),
+                                ],
+                              ),
                             ),
                           ),
                         ),
