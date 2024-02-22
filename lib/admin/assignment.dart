@@ -305,20 +305,27 @@ class _AssignmentPageState extends State<AssignmentPage> {
                     width: MediaQuery.of(context).size.width * .9,
                     height: 65,
                     color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          CupertinoIcons.plus_circle_fill,
-                          color: Color(0xff225779),
-                          size: 37,
-                        ),
-                        SizedBox(
-                          width: 18,
-                        ),
-                        Text('Create Assignment',
-                            style: TextStyle(fontSize: 20)),
-                      ],
+                    child:
+                        //button ma asvhe a e nthi khabar mane ama inkwell thay ?
+                        ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: ContinuousRectangleBorder()),
+                      onPressed: () {},
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            CupertinoIcons.plus_circle_fill,
+                            color: Color(0xff225779),
+                            size: 37,
+                          ),
+                          SizedBox(
+                            width: 18,
+                          ),
+                          Text('Create Assignment',
+                              style: TextStyle(fontSize: 20)),
+                        ],
+                      ),
                     ),
                   ),
                 )
