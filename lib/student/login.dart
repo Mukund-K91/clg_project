@@ -9,27 +9,6 @@ import '../main.dart';
 import '../reusable_widget/reusable_textfield.dart';
 import 'dashboard.dart';
 
-class Student {
-  final String? program;
-  final String? programTerm;
-  final String? division;
-
-  Student(
-      {
-       this.program,
-       this.programTerm,
-       this.division});
-
-  // Convert Student object to a Map for Firestore
-  Map<String, dynamic> toMap() {
-    return {
-      'program': program,
-      'programTerm': programTerm,
-      'division': division,
-    };
-  }
-}
-
 class Login extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
   final _User;
@@ -47,10 +26,10 @@ class _LoginState extends State<Login> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<void> checkUser(String enteredUserId ,String password) async {
-
-    final String email = _email.text;
-    final String enteredMobile = _password.text; // assuming _mobile is your TextEditingController for the mobile number
+  Future<void> checkUser(String enteredUserId, String password) async {
+    final String email = _userIdController.text;
+    final String enteredMobile = _passwordController
+        .text; // assuming _mobile is your TextEditingController for the mobile number
 
 // Query Firestore to get the user IDs
     final QuerySnapshot<Map<String, dynamic>> querySnapshot =
@@ -58,7 +37,8 @@ class _LoginState extends State<Login> {
 
 // Loop through the documents and check if the entered user ID and mobile number matches any of them
     bool isUserAuthenticated = false;
-    for (final QueryDocumentSnapshot<Map<String, dynamic>> document in querySnapshot.docs) {
+    for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+    in querySnapshot.docs) {
       final userData = document.data();
       final String documentEmail = document.id;
       final String mobile = userData?['Mobile'];
@@ -67,7 +47,6 @@ class _LoginState extends State<Login> {
       if (documentEmail == email && mobile == enteredMobile) {
         final String firstName = userData?['First Name'];
         final String lastName = userData?['Last Name'];
-
         // Now you have the data from the user ID document, you can use it as needed
         print('First Name: $firstName');
         print('Last Name: $lastName');
@@ -78,7 +57,6 @@ class _LoginState extends State<Login> {
         break;
       }
     }
-
     if (isUserAuthenticated) {
       // User authenticated successfully, navigate to the main application screen
       print('done');
@@ -86,147 +64,81 @@ class _LoginState extends State<Login> {
       // Invalid user ID or mobile number, display error message
       print('fail');
     }
+  }
+  Future<void> _login(String enteredUserId, String password) async {
+    final String email = _userIdController.text;
+    final String password = _passwordController
+        .text; // assuming _mobile is your TextEditingController for the mobile number
+// Query Firestore to get the user IDs
+    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+    await FirebaseFirestore.instance.collectionGroup('student').get();
+    bool isUserAuthenticated = false;
+    if (_formKey.currentState!.validate()) {
+      for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+      in querySnapshot.docs) {
+        final userData = document.data();
+        final String documentEmail = document.id;
+        final String mobile = userData?['Mobile'];
 
+        // Check if the document email (user ID) matches the entered email and mobile number matches the entered mobile number
+        if (documentEmail == email && mobile == password) {
+          final String firstName = userData?['First Name'];
+          final String lastName = userData?['Last Name'];
 
+          // Now you have the data from the user ID document, you can use it as needed
+          print('First Name: $firstName');
+          print('Last Name: $lastName');
+          print('Mobile: $mobile');
 
-    // Reference to the Firestore document with the entered user ID
-    //   final DocumentSnapshot<Map<String, dynamic>> snapshot = (await FirebaseFirestore.instance
-    //       .collection('students')
-    //       .get()) as DocumentSnapshot<Map<String, dynamic>>;
-    //
-    //   // Check if the document exists
-    //   if (snapshot.exists) {
-    //     // Document with the entered user ID exists
-    //     final userData = snapshot.data();
-    //     final String userId = userData?['User Id'];
-    //     final String mobile = userData?['Mobile'];
-    //
-    //     // Now you have the user ID and mobile number, you can compare it with the entered values
-    //     print('Retrieved User ID: $userId');
-    //     print('Retrieved Mobile: $mobile');
-    //
-    //     // Perform comparison with entered user ID and mobile number here
-    //   } else {
-    //     // Document with the entered user ID does not exist
-    //     print('User with ID $enteredUserId does not exist.');
-    //   }
-    // } catch (error) {
-    //   // Handle any errors that occur during the query
-    //   print('Error: $error');
-    // }
+          // Set isUserAuthenticated to true since the user ID and mobile number exist
+          isUserAuthenticated = true;
+          break;
+        }
+      }
+      // ignore: use_build_context_synchronously
+      if (isUserAuthenticated) {
+        // User authenticated successfully, navigate to the main application screen
+        AwesomeDialog(
+            context: context,
+            dialogType: DialogType.success,
+            animType: AnimType.bottomSlide,
+            showCloseIcon: false,
+            title: "Login Successfully",
+            btnOkOnPress: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MainDashboard(widget._User, email),
+                  ));
+            }).show();
+      }
+      // ignore: use_build_context_synchronously
+      else{
+        AwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            animType: AnimType.bottomSlide,
+            showCloseIcon: true,
+            btnOkOnPress: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeMain(),
+                  ));
+            },
+            title: "${widget._User} Not Found",
+            desc: widget._User == "Student"
+                ? "Please check userId or Password "
+                : "Please check userId or Password "
+                "Contact Admin for any query")
+            .show();
+      }
+    }
   }
 
 
-
-  Future<void> _login() async {
-    // if (_formKey.currentState!.validate()) {
-    //   try {
-    //     final String email = _email.text;
-    //     final String password = _password.text;
-    //     await _auth.signInWithEmailAndPassword(
-    //         email: email, password: password);
-    //     // ignore: use_build_context_synchronously
-    //     AwesomeDialog(
-    //         context: context,
-    //         dialogType: DialogType.success,
-    //         animType: AnimType.bottomSlide,
-    //         showCloseIcon: false,
-    //         title: "Login Successfully",
-    //         btnOkOnPress: () {
-    //           Navigator.pushReplacement(
-    //               context,
-    //               MaterialPageRoute(
-    //                 builder: (context) => Dashboard(widget._User, email),
-    //               ));
-    //         }).show();
-    //   } catch (error) {
-    //     // ignore: use_build_context_synchronously
-    //     AwesomeDialog(
-    //             context: context,
-    //             dialogType: DialogType.error,
-    //             animType: AnimType.bottomSlide,
-    //             showCloseIcon: true,
-    //             btnOkOnPress: () {
-    //               Navigator.push(
-    //                   context,
-    //                   MaterialPageRoute(
-    //                     builder: (context) => const HomeMain(),
-    //                   ));
-    //             },
-    //             title: "${widget._User} Not Found",
-    //             desc: widget._User == "Student"
-    //                 ? "Please contact your respective faculty "
-    //                     "for Register yourself in eCollege App"
-    //                 : "Please contact admin for Register "
-    //                     "yourself in eCollege App")
-    //         .show();
-    //   }
-    // }
-  }
-
-  // Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
-  //     var userId) async {
-  //   CollectionReference studeref = FirebaseFirestore.instance.collection('students');
-  //   final programsnapshot=await studeref.doc('program').get();
-  //   final programId = programsnapshot.id;
-  //   final programTermSnapshot =
-  //   await studeref.doc(programId).collection('programterm').doc('programTermId').get();
-  //   final programTermId = programTermSnapshot.id;
-  //
-  //   final divisionSnapshot = await studeref
-  //       .doc(programId)
-  //       .collection('programterm')
-  //       .doc(programTermId)
-  //       .collection('division')
-  //       .doc('divisionId')
-  //       .get();
-  //   final divisionId = divisionSnapshot.id;
-  //
-  //   final studentSnapshot = await studeref
-  //       .doc(programId)
-  //       .collection('programterm')
-  //       .doc(programTermId)
-  //       .collection('division')
-  //       .doc(divisionId)
-  //       .collection('student')
-  //       .doc(_email as String?)
-  //       .get();
-  //
-  //   if (studentSnapshot.exists) {
-  //     setState(() {
-  //      print('done');
-  //     });
-  //   } else {
-  //     setState(() {
-  //       print('fail');
-  //     });
-  //   }
-  //   // try {
-  //   //   Future<QueryDocumentSnapshot<Map<String, dynamic>>> documentSnapshot =
-  //   //       firestore
-  //   //           .collection('students')
-  //   //           .where('User Id', isEqualTo: userId)
-  //   //           .get()
-  //   //           .then((querySnapshot) {
-  //   //     if (querySnapshot.docs.isNotEmpty) {
-  //   //       // Navigator.push(context, MaterialPageRoute(builder: (context) => HomeMain(),));
-  //   //       print("Done");
-  //   //       return querySnapshot
-  //   //           .docs[0]; // Assuming there's only one matching document
-  //   //     } else {
-  //   //       print('Fail');
-  //   //       throw Exception('No document found with the given email.');
-  //   //     }
-  //   //   });
-  //   //   return documentSnapshot;
-  //   // } catch (e) {
-  //   //   print('Error fetching data: $e');
-  //   //   return fa
-  //   // }
-  // }
-
-  final TextEditingController _email = TextEditingController();
-  final TextEditingController _password = TextEditingController();
+  final TextEditingController _userIdController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -264,80 +176,31 @@ class _LoginState extends State<Login> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      // TextFormField(
-                      //   controller: _email,
-                      //   decoration: InputDecoration(
-                      //       labelText: "Email ID",
-                      //       labelStyle: const TextStyle(fontSize: 15),
-                      //       prefixIcon: widget._User == "Student"
-                      //           ? const Icon(FontAwesomeIcons.userGraduate,
-                      //               color: Color(0xff002233))
-                      //           : const Icon(
-                      //               FontAwesomeIcons.userTie,
-                      //               color: Color(0xff002233),
-                      //             ),
-                      //       border: const OutlineInputBorder()),
-                      //   validator: (value) {
-                      //     if (value!.isEmpty) {
-                      //       return "Register Email Id is required for login";
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
                       ReusableTextField(
                         validator: (str) {
                           if (str!.isEmpty) {
-                            return "Register Email Id is required for login";
+                            return "User Id is required for login";
                           }
                           return null;
                         },
                         preIcon: widget._User == "Student"
                             ? const Icon(FontAwesomeIcons.userGraduate,
-                                color: Color(0xff002233))
+                            color: Color(0xff002233))
                             : const Icon(
-                                FontAwesomeIcons.userTie,
-                                color: Color(0xff002233),
-                              ),
-                        controller: _email,
-                        label: 'Email ID',
+                          FontAwesomeIcons.userTie,
+                          color: Color(0xff002233),
+                        ),
+                        controller: _userIdController,
+                        label: 'User ID',
                         enable: true,
                       ),
                       const SizedBox(
                         height: 15,
                       ),
-                      // TextFormField(
-                      //   controller: _password,
-                      //   obscureText: passwordObscured,
-                      //   obscuringCharacter: '*',
-                      //   decoration: InputDecoration(
-                      //       labelText: "PASSWORD",
-                      //       labelStyle: const TextStyle(fontSize: 15),
-                      //       prefixIcon: const Icon(
-                      //         Icons.fingerprint,
-                      //         color: Color(0xff002233),
-                      //       ),
-                      //       suffixIcon: IconButton(
-                      //         onPressed: () {
-                      //           setState(() {
-                      //             passwordObscured = !passwordObscured;
-                      //           });
-                      //         },
-                      //         icon: passwordObscured
-                      //             ? const Icon(Icons.visibility_off)
-                      //             : const Icon(Icons.visibility),
-                      //       ),
-                      //       border: const OutlineInputBorder()),
-                      //   validator: (value) {
-                      //     if (value!.isEmpty) {
-                      //       return "Password is required for login";
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
                       ReusableTextField(
                         label: 'PASSWORD',
                         obSecure: passwordObscured,
-                        controller: _password,
+                        controller: _passwordController,
                         enable: true,
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -366,70 +229,8 @@ class _LoginState extends State<Login> {
 
                       Reusablebutton(
                         onPressed: () async {
-                          checkUser(_email.text,_password.text);
-                          // final String email = _email.text;
-                          //
-                          // // Query Firestore to get the user IDs
-                          // final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-                          // await FirebaseFirestore.instance.collectionGroup('student').get();
-                          //
-                          // // Loop through the documents and check if the entered user ID matches any of them
-                          // bool isUserAuthenticated = false;
-                          // for (final QueryDocumentSnapshot<Map<String, dynamic>> document in querySnapshot.docs) {
-                          //   if (document.id == email) {
-                          //     isUserAuthenticated = true;
-                          //     break;
-                          //   }
-                          // }
-                          //
-                          // if (isUserAuthenticated) {
-                          //   // User authenticated successfully, navigate to the main application screen
-                          //   print('done');
-                          // } else {
-                          //   // Invalid user ID, display error message
-                          //   print('fail');
-                          // }
-                          // CollectionReference studeref =
-                          //     FirebaseFirestore.instance.collection('students');
-                          // final programsnapshot =
-                          //     await studeref.doc('program').get();
-                          // final programId = programsnapshot.id;
-                          // final programTermSnapshot = await studeref
-                          //     .doc(programId)
-                          //     .collection('programterm')
-                          //     .doc('programTermId')
-                          //     .get();
-                          // final programTermId = programTermSnapshot.id;
-                          //
-                          // final divisionSnapshot = await studeref
-                          //     .doc(programId)
-                          //     .collection('programterm')
-                          //     .doc(programTermId)
-                          //     .collection('division')
-                          //     .doc('divisionId')
-                          //     .get();
-                          // final divisionId = divisionSnapshot.id;
-                          //
-                          // final studentSnapshot = await studeref
-                          //     .doc(programId)
-                          //     .collection('programterm')
-                          //     .doc(programTermId)
-                          //     .collection('division')
-                          //     .doc(divisionId)
-                          //     .collection('student')
-                          //     .doc(email)
-                          //     .get();
-                          //
-                          // if (studentSnapshot.exists) {
-                          //   setState(() {
-                          //     print('donw');
-                          //   });
-                          // } else {
-                          //   setState(() {
-                          //     print('fail');
-                          //   });
-                          // }
-
+                          _login(_userIdController.text,
+                              _passwordController.text);
                         },
                         Style: false,
                         child: const Text(
@@ -437,81 +238,9 @@ class _LoginState extends State<Login> {
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
-                      // SizedBox(
-                      //   width: double.infinity,
-                      //   height: 60,
-                      //   child: ElevatedButton(
-                      //     style: ElevatedButton.styleFrom(
-                      //       shape: RoundedRectangleBorder(
-                      //           borderRadius: BorderRadius.circular(5)),
-                      //       backgroundColor: const Color(0xff002233),
-                      //     ),
-                      //     onPressed: () {
-                      //       fetchDataByEmail(_email.text);
-                      //     },
-                      //     child: const Text(
-                      //       "LOGIN",
-                      //       style: TextStyle(color: Colors.white, fontSize: 20),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
-                // FutureBuilder<DocumentSnapshot>(
-                //   future: fetchDataByEmail("2021052569"),
-                //   // Replace with the desired email
-                //   builder: (context, snapshot) {
-                //     if (snapshot.connectionState == ConnectionState.waiting) {
-                //       return const Center(child: CircularProgressIndicator());
-                //     } else if (snapshot.hasError) {
-                //       return Column(
-                //         children: [
-                //           Text(
-                //               'Error: ${snapshot.error} USER NOT FOUND\nplease contact your administrator eCollegeAdmin@gmail.com'),
-                //           ElevatedButton(
-                //               onPressed: () {
-                //                 _auth.signOut().then((value) {
-                //                   Navigator.pushReplacement(
-                //                       context,
-                //                       MaterialPageRoute(
-                //                         builder: (context) => const HomeMain(),
-                //                       ));
-                //                 });
-                //               },
-                //               child: const Text('Return Home Page')),
-                //         ],
-                //       );
-                //     } else if (!snapshot.hasData || !snapshot.data!.exists) {
-                //       return const Text('No data found for the given email.');
-                //     } else {
-                //       // Data found, you can access it using snapshot.data
-                //       Map<String, dynamic> data =
-                //       snapshot.data!.data() as Map<String, dynamic>;
-                //       return SingleChildScrollView(
-                //         child: Align(
-                //           alignment: Alignment.center,
-                //           child: Padding(
-                //             padding: const EdgeInsets.all(10),
-                //             child: Column(
-                //               children: [
-                //                 ListTile(
-                //                   leading: Icon(
-                //                     FontAwesomeIcons.idCardClip,
-                //                   ),
-                //                   title: Text(
-                //                     data['First Name'],
-                //                     style: const TextStyle(fontSize: 15),
-                //                   ),
-                //                 ),
-                //               ],
-                //             ),
-                //           ),
-                //         ),
-                //       );
-                //     }
-                //   },
-                // )
               ],
             ),
           ),
