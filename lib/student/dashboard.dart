@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class MainDashboard extends StatelessWidget {
   final String user;
-  var email;
-  MainDashboard(this.user, this.email, {super.key});
+  var UserId;
+  MainDashboard(this.user, this.UserId, {super.key});
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
-    print(email);
+    print(UserId);
     return Scaffold(
         appBar: AppBar(
           leading: user == "Student"
@@ -26,7 +26,7 @@ class MainDashboard extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Profile(email),
+                          builder: (context) => Profile(UserId),
                         ));
                   },
                 )
@@ -70,7 +70,7 @@ class MainDashboard extends StatelessWidget {
           backgroundColor: const Color(0xff002233),
         ),
         body: user == "Student"
-            ? StudentDashboard(email, user)
-            : FacultyDashboard(email, user));
+            ? StudentDashboard(UserId, user)
+            : FacultyDashboard(UserId, user));
   }
 }

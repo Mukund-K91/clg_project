@@ -23,65 +23,25 @@ class _LoginState extends State<Login> {
   bool passwordObscured = true;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<void> checkUser(String enteredUserId, String password) async {
-    final String email = _userIdController.text;
-    final String enteredMobile = _passwordController
-        .text; // assuming _mobile is your TextEditingController for the mobile number
-
-// Query Firestore to get the user IDs
-    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-    await FirebaseFirestore.instance.collectionGroup('student').get();
-
-// Loop through the documents and check if the entered user ID and mobile number matches any of them
-    bool isUserAuthenticated = false;
-    for (final QueryDocumentSnapshot<Map<String, dynamic>> document
-    in querySnapshot.docs) {
-      final userData = document.data();
-      final String documentEmail = document.id;
-      final String mobile = userData?['Mobile'];
-
-      // Check if the document email (user ID) matches the entered email and mobile number matches the entered mobile number
-      if (documentEmail == email && mobile == enteredMobile) {
-        final String firstName = userData?['First Name'];
-        final String lastName = userData?['Last Name'];
-        // Now you have the data from the user ID document, you can use it as needed
-        print('First Name: $firstName');
-        print('Last Name: $lastName');
-        print('Mobile: $mobile');
-
-        // Set isUserAuthenticated to true since the user ID and mobile number exist
-        isUserAuthenticated = true;
-        break;
-      }
-    }
-    if (isUserAuthenticated) {
-      // User authenticated successfully, navigate to the main application screen
-      print('done');
-    } else {
-      // Invalid user ID or mobile number, display error message
-      print('fail');
-    }
-  }
   Future<void> _login(String enteredUserId, String password) async {
-    final String email = _userIdController.text;
+    final String userId = _userIdController.text;
     final String password = _passwordController
         .text; // assuming _mobile is your TextEditingController for the mobile number
 // Query Firestore to get the user IDs
     final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-    await FirebaseFirestore.instance.collectionGroup('student').get();
+        await FirebaseFirestore.instance.collectionGroup('student').get();
     bool isUserAuthenticated = false;
     if (_formKey.currentState!.validate()) {
       for (final QueryDocumentSnapshot<Map<String, dynamic>> document
-      in querySnapshot.docs) {
+          in querySnapshot.docs) {
         final userData = document.data();
-        final String documentEmail = document.id;
+        final String documentUserId = document.id;
         final String mobile = userData?['Mobile'];
 
-        // Check if the document email (user ID) matches the entered email and mobile number matches the entered mobile number
-        if (documentEmail == email && mobile == password) {
+        // Check if the document userId (user ID) matches the entered userId and mobile number matches the entered mobile number
+        if (documentUserId == userId && mobile == password) {
           final String firstName = userData?['First Name'];
           final String lastName = userData?['Last Name'];
 
@@ -108,34 +68,33 @@ class _LoginState extends State<Login> {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MainDashboard(widget._User, email),
+                    builder: (context) => MainDashboard(widget._User, userId),
                   ));
             }).show();
       }
       // ignore: use_build_context_synchronously
-      else{
+      else {
         AwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            animType: AnimType.bottomSlide,
-            showCloseIcon: true,
-            btnOkOnPress: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomeMain(),
-                  ));
-            },
-            title: "${widget._User} Not Found",
-            desc: widget._User == "Student"
-                ? "Please check userId or Password "
-                : "Please check userId or Password "
-                "Contact Admin for any query")
+                context: context,
+                dialogType: DialogType.error,
+                animType: AnimType.bottomSlide,
+                showCloseIcon: true,
+                btnOkOnPress: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeMain(),
+                      ));
+                },
+                title: "${widget._User} Not Found",
+                desc: widget._User == "Student"
+                    ? "Please check userId or Password "
+                    : "Please check userId or Password "
+                        "Contact Admin for any query")
             .show();
       }
     }
   }
-
 
   final TextEditingController _userIdController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -185,13 +144,14 @@ class _LoginState extends State<Login> {
                         },
                         preIcon: widget._User == "Student"
                             ? const Icon(FontAwesomeIcons.userGraduate,
-                            color: Color(0xff002233))
+                                color: Color(0xff002233))
                             : const Icon(
-                          FontAwesomeIcons.userTie,
-                          color: Color(0xff002233),
-                        ),
+                                FontAwesomeIcons.userTie,
+                                color: Color(0xff002233),
+                              ),
                         controller: _userIdController,
-                        label: 'User ID',
+                        label:
+                            widget._User == 'Student' ? 'STUDENT ID' : 'Emp Id',
                         enable: true,
                       ),
                       const SizedBox(
@@ -226,11 +186,10 @@ class _LoginState extends State<Login> {
                       const SizedBox(
                         height: 20,
                       ),
-
                       Reusablebutton(
                         onPressed: () async {
-                          _login(_userIdController.text,
-                              _passwordController.text);
+                          _login(
+                              _userIdController.text, _passwordController.text);
                         },
                         Style: false,
                         child: const Text(

@@ -6,46 +6,65 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../admin/Material.dart';
 import '../admin/PageNotAvailable.dart';
 import 'attendance.dart';
+class Student {
+  final String name;
+  final String mobile;
+
+  Student({
+    required this.name,
+    required this.mobile,
+  });
+
+  factory Student.fromMap(Map<String, dynamic> map) {
+    return Student(
+      name: map['First Name'] ?? '',
+      mobile: map['Mobile'] ?? '',
+    );
+  }
+}
 
 
 class StudentDashboard extends StatelessWidget {
-  String email;
+  String UserId;
   String _user;
-  StudentDashboard(this.email, this._user, {super.key});
+  StudentDashboard(this.UserId, this._user, {super.key});
+
+  Future<Map<String, dynamic>?> _login(String enteredUserId) async {
+    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+    await FirebaseFirestore.instance.collectionGroup('student').get();
+
+    for (final QueryDocumentSnapshot<Map<String, dynamic>> document in querySnapshot.docs) {
+      final userData = document.data();
+      final String documentUserId = document.id;
+      final String mobile = userData?['Mobile'];
+
+      // Check if the document userId (user ID) matches the entered userId and mobile number matches the entered mobile number
+      if (documentUserId == enteredUserId) {
+        return userData;
+      }
+    }
+
+    return null; // Return null if user data is not found
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body:
-      FutureBuilder<DocumentSnapshot>(
-        future: fetchDataByEmail(email),
-        // Replace with the desired email
+      FutureBuilder<Map<String, dynamic>?>(
+        future: _login(UserId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return CircularProgressIndicator();
           } else if (snapshot.hasError) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                    'Error: ${snapshot.error} USER NOT FOUND\nplease contact your administrator eCollegeAdmin@gmail.com'),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomeMain(),
-                          ));
-                    },
-                    child: const Text('Return Home Page')),
-              ],
-            );
-          } else if (!snapshot.hasData || !snapshot.data!.exists) {
-            return const Text('No data found for the given email.');
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData || snapshot.data == null) {
+            return Text('User not found or invalid credentials');
           } else {
-            // Data found, you can access it using snapshot.data
-            Map<String, dynamic> data =
-                snapshot.data!.data() as Map<String, dynamic>;
+            final userData = snapshot.data!;
+            final String Name = userData['First Name']+" "+userData['Last Name'];
+            final String program=userData['program']+"|"+userData['prograTerm']+"|"+userData['division'];
             return Stack(
               children: [
                 Container(
@@ -63,25 +82,25 @@ class StudentDashboard extends StatelessWidget {
                       alignment: Alignment.topCenter,
                       child: Padding(
                         padding: const EdgeInsets.all(15),
-                        child: Container(
-                          width: double.infinity,
-                          height: 200,
-                          child: Card(
-                            color: Colors.white,
+                        child: Expanded(
+                          child: Container(
+                            width: double.infinity,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const CircleAvatar(
-                                  radius: 50,
-                                  foregroundImage:
-                                      AssetImage("assets/images/ex_img.png"),
+                                ListTile(
+                                  leading: const CircleAvatar(
+                                    radius: 30,
+                                    foregroundImage:
+                                        AssetImage("assets/images/ex_img.png"),
+                                  ),
+                                  title:  Text(
+                                    "${Name}",
+                                    style: const TextStyle(fontSize: 20,color: Colors.white),
+                                  ),
+                                  subtitle: Text(program,style: const TextStyle(color: Colors.white)),
                                 ),
-                                Text(
-                                  "${data['First Name']}",
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-                                Text("${data['SP ID']}")
                               ],
                             ),
                           ),
@@ -205,7 +224,7 @@ class StudentDashboard extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => NoticeBoard(email,_user),
+                                builder: (context) => NoticeBoard(UserId,_user),
                               ));
                         },
                       ),
@@ -221,28 +240,29 @@ class StudentDashboard extends StatelessWidget {
   }
 }
 
-Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
-    String email) {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+// Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
+//     String userId) {
+//   FirebaseFirestore firestore = FirebaseFirestore.instance;
+//
+//   try {
+//     Future<QueryDocumentSnapshot<Map<String, dynamic>>> documentSnapshot =
+//         firestore
+//             .collectionGroup('student')
+//             .where('User Id', isEqualTo: userId)
+//             .get()
+//             .then((querySnapshot) {
+//       if (querySnapshot.docs.isNotEmpty) {
+//         return querySnapshot
+//             .docs[0]; // Assuming there's only one matching document
+//       } else {
+//         throw Exception('No document found with the given email.');
+//       }
+//     });
+//     return documentSnapshot;
+//   } catch (e) {
+//     print('Error fetching data: $e');
+//     return null;
+//   }
+// }
 
-  try {
-    Future<QueryDocumentSnapshot<Map<String, dynamic>>> documentSnapshot =
-        firestore
-            .collection('students')
-            .where('Email', isEqualTo: email)
-            .get()
-            .then((querySnapshot) {
-      if (querySnapshot.docs.isNotEmpty) {
-        return querySnapshot
-            .docs[0]; // Assuming there's only one matching document
-      } else {
-        throw Exception('No document found with the given email.');
-      }
-    });
 
-    return documentSnapshot;
-  } catch (e) {
-    print('Error fetching data: $e');
-    return null;
-  }
-}
