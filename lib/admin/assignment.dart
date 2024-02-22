@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +7,7 @@ void main() {
 }
 
 String dropdownValue = '';
+String dpdownValue = '';
 
 const carType = <String>[
   '1',
@@ -72,10 +74,13 @@ class _AssignmentPageState extends State<AssignmentPage> {
             Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                  ),
                   child: Expanded(
                     child: Container(
-                      width: 371, // Set your desired width here
+                      width: MediaQuery.of(context).size.width *
+                          .9, // Set your desired width here
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Colors.grey, // Border color
@@ -86,15 +91,14 @@ class _AssignmentPageState extends State<AssignmentPage> {
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                       child: DropdownButton<String>(
-                        value:
-                            dropdownValue.isEmpty ? selectItem : dropdownValue,
+                        value: dpdownValue.isEmpty ? selectItem : dpdownValue,
                         icon: Icon(Icons.keyboard_arrow_down_outlined),
                         iconSize: 24,
                         elevation: 16,
                         style: TextStyle(color: Colors.black),
                         onChanged: (String? newValue) {
                           setState(() {
-                            dropdownValue = newValue!;
+                            dpdownValue = newValue!;
                           });
                         },
                         items: carType.map<DropdownMenuItem<String>>(
@@ -117,10 +121,13 @@ class _AssignmentPageState extends State<AssignmentPage> {
             Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                  ),
                   child: Expanded(
                     child: Container(
-                      width: 371, // Set your desired width here
+                      width: MediaQuery.of(context).size.width *
+                          .9, // Set your desired width here
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Colors.grey, // Border color
@@ -287,21 +294,35 @@ class _AssignmentPageState extends State<AssignmentPage> {
             SizedBox(
               height: 25,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStatePropertyAll(Color(0xffffffff))),
-                  onPressed: () {},
-                  child: Row(
-                    children: [
-                      Icon(
-                        CupertinoIcons.plus_circle_fill,
-                        color: Color(0xff225779),
-                      ),
-                    ],
-                  )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                DottedBorder(
+                  color: Colors.blue,
+                  strokeWidth: 3,
+                  dashPattern: [12, 11],
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * .9,
+                    height: 65,
+                    color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          CupertinoIcons.plus_circle_fill,
+                          color: Color(0xff225779),
+                          size: 37,
+                        ),
+                        SizedBox(
+                          width: 18,
+                        ),
+                        Text('Create Assignment',
+                            style: TextStyle(fontSize: 20)),
+                      ],
+                    ),
+                  ),
+                )
+              ],
             ),
             SizedBox(
               height: 20,
