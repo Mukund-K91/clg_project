@@ -107,6 +107,15 @@ class StudentDashboard extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: double.infinity,
+                        color: Colors.grey,
+                        height: 200,
+                        child: Text('SLIDER Coming soon....'),
+                      ),
+                    ),
                     Expanded(
                       child: GridView.count(
                         primary: false,
@@ -210,27 +219,27 @@ class StudentDashboard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    ListTile(
-                      leading: const Icon(
-                        FontAwesomeIcons.newspaper,
-                        color: Color(0xff002233),
-                      ),
-                      title: const Text("Latest Notice & Events"),
-                      trailing: IconButton(
-                        icon: const Icon(
-                          FontAwesomeIcons.anglesRight,
-                          color: Color(0xff002233),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    NoticeBoard(UserId, _user),
-                              ));
-                        },
-                      ),
-                    )
+                    // ListTile(
+                    //   leading: const Icon(
+                    //     FontAwesomeIcons.newspaper,
+                    //     color: Color(0xff002233),
+                    //   ),
+                    //   title: const Text("Latest Notice & Events"),
+                    //   trailing: IconButton(
+                    //     icon: const Icon(
+                    //       FontAwesomeIcons.anglesRight,
+                    //       color: Color(0xff002233),
+                    //     ),
+                    //     onPressed: () {
+                    //       Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //             builder: (context) =>
+                    //                 NoticeBoard(UserId, _user),
+                    //           ));
+                    //     },
+                    //   ),
+                    // )
                   ],
                 )
               ],
