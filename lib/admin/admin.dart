@@ -538,7 +538,7 @@ class _MyWidgetState extends State<StudentManage> {
                         radius: 17,
                         backgroundColor: const Color(0xffffffff),
                         child: Text(
-                          documentSnapshot['Div'].toString(),
+                          documentSnapshot['Division'].toString(),
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.black),
                         ),
@@ -553,7 +553,7 @@ class _MyWidgetState extends State<StudentManage> {
                         ),
                       ),
                       subtitle: Text(
-                        documentSnapshot['SP ID'].toString(),
+                        documentSnapshot['User Id'].toString(),
                         style: const TextStyle(color: Colors.white),
                       ),
                       trailing: SizedBox(

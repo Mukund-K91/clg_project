@@ -354,9 +354,8 @@ class _DisplayStudentsState extends State<DisplayStudents> {
                                 ),
                                 trailing: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      maximumSize: Size(100, 40),
-                                      minimumSize: Size(100, 40),
-                                      primary: _getButtonColor(index)),
+                                      maximumSize: Size(100, 40), backgroundColor: _getButtonColor(index),
+                                      minimumSize: Size(100, 40)),
                                   onPressed: () {
                                     _changeColorAndText(index);
                                   },

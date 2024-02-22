@@ -129,7 +129,7 @@ class Reusablebutton extends StatelessWidget {
 
   final ButtonStyle style = ElevatedButton.styleFrom(
       minimumSize: const Size(double.infinity,50),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),),
       backgroundColor: Colors.white);
   final ButtonStyle style1 = ElevatedButton.styleFrom(
       minimumSize: const Size(double.infinity,50),

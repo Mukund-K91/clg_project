@@ -5,10 +5,10 @@ import 'package:clg_project/student/student_dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-class Dashboard extends StatelessWidget {
+class MainDashboard extends StatelessWidget {
   final String user;
   var email;
-  Dashboard(this.user, this.email, {super.key});
+  MainDashboard(this.user, this.email, {super.key});
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override

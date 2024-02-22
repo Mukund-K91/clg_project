@@ -1,13 +1,13 @@
 import 'package:clg_project/admin/assignment.dart';
 import 'package:clg_project/reusable_widget/reusable_textfield.dart';
 import 'package:clg_project/splash_screen.dart';
+import 'package:clg_project/student/dashboard.dart';
 import 'package:clg_project/student/login.dart';
 import 'package:clg_project/student/student_dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'admin/attendance.dart';
 import 'admin/faculty_dashboard.dart';
 import 'demo.dart';
@@ -46,9 +46,10 @@ class _MyAppState extends State<MyApp> {
         //Demo()
             //Attendance()
             // const AssignmentPage()
-            //HomeMain()
+            HomeMain()
+        //MainDashboard('Student','koladiyamukund76@gmail.com.com')
         //FacultyDashboard('admin2@gmail.com', 'Faculty')
-      Myhome()
+     // Myhome()
         //StudentDashboard('sameer@gmail.com', 'Student')
         );
   }

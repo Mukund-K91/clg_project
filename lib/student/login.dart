@@ -9,6 +9,27 @@ import '../main.dart';
 import '../reusable_widget/reusable_textfield.dart';
 import 'dashboard.dart';
 
+class Student {
+  final String? program;
+  final String? programTerm;
+  final String? division;
+
+  Student(
+      {
+       this.program,
+       this.programTerm,
+       this.division});
+
+  // Convert Student object to a Map for Firestore
+  Map<String, dynamic> toMap() {
+    return {
+      'program': program,
+      'programTerm': programTerm,
+      'division': division,
+    };
+  }
+}
+
 class Login extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
   final _User;
@@ -25,6 +46,77 @@ class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  Future<void> checkUser(String enteredUserId ,String password) async {
+
+    final String email = _email.text;
+    final String enteredMobile = _password.text; // assuming _mobile is your TextEditingController for the mobile number
+
+// Query Firestore to get the user IDs
+    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+    await FirebaseFirestore.instance.collectionGroup('student').get();
+
+// Loop through the documents and check if the entered user ID and mobile number matches any of them
+    bool isUserAuthenticated = false;
+    for (final QueryDocumentSnapshot<Map<String, dynamic>> document in querySnapshot.docs) {
+      final userData = document.data();
+      final String documentEmail = document.id;
+      final String mobile = userData?['Mobile'];
+
+      // Check if the document email (user ID) matches the entered email and mobile number matches the entered mobile number
+      if (documentEmail == email && mobile == enteredMobile) {
+        final String firstName = userData?['First Name'];
+        final String lastName = userData?['Last Name'];
+
+        // Now you have the data from the user ID document, you can use it as needed
+        print('First Name: $firstName');
+        print('Last Name: $lastName');
+        print('Mobile: $mobile');
+
+        // Set isUserAuthenticated to true since the user ID and mobile number exist
+        isUserAuthenticated = true;
+        break;
+      }
+    }
+
+    if (isUserAuthenticated) {
+      // User authenticated successfully, navigate to the main application screen
+      print('done');
+    } else {
+      // Invalid user ID or mobile number, display error message
+      print('fail');
+    }
+
+
+
+    // Reference to the Firestore document with the entered user ID
+    //   final DocumentSnapshot<Map<String, dynamic>> snapshot = (await FirebaseFirestore.instance
+    //       .collection('students')
+    //       .get()) as DocumentSnapshot<Map<String, dynamic>>;
+    //
+    //   // Check if the document exists
+    //   if (snapshot.exists) {
+    //     // Document with the entered user ID exists
+    //     final userData = snapshot.data();
+    //     final String userId = userData?['User Id'];
+    //     final String mobile = userData?['Mobile'];
+    //
+    //     // Now you have the user ID and mobile number, you can compare it with the entered values
+    //     print('Retrieved User ID: $userId');
+    //     print('Retrieved Mobile: $mobile');
+    //
+    //     // Perform comparison with entered user ID and mobile number here
+    //   } else {
+    //     // Document with the entered user ID does not exist
+    //     print('User with ID $enteredUserId does not exist.');
+    //   }
+    // } catch (error) {
+    //   // Handle any errors that occur during the query
+    //   print('Error: $error');
+    // }
+  }
+
+
 
   Future<void> _login() async {
     // if (_formKey.currentState!.validate()) {
@@ -72,33 +164,66 @@ class _LoginState extends State<Login> {
     // }
   }
 
-  Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
-      String email) {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    try {
-      Future<QueryDocumentSnapshot<Map<String, dynamic>>> documentSnapshot =
-          firestore
-              .collection('students')
-              .where('SP ID', isEqualTo: email)
-              .get()
-              .then((querySnapshot) {
-        if (querySnapshot.docs.isNotEmpty) {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => HomeMain(),));
-          print("Done");
-          return querySnapshot
-              .docs[0]; // Assuming there's only one matching document
-        } else {
-          print('Fail');
-          throw Exception('No document found with the given email.');
-        }
-      });
-      return documentSnapshot;
-    } catch (e) {
-      print('Error fetching data: $e');
-      return null;
-    }
-  }
+  // Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
+  //     var userId) async {
+  //   CollectionReference studeref = FirebaseFirestore.instance.collection('students');
+  //   final programsnapshot=await studeref.doc('program').get();
+  //   final programId = programsnapshot.id;
+  //   final programTermSnapshot =
+  //   await studeref.doc(programId).collection('programterm').doc('programTermId').get();
+  //   final programTermId = programTermSnapshot.id;
+  //
+  //   final divisionSnapshot = await studeref
+  //       .doc(programId)
+  //       .collection('programterm')
+  //       .doc(programTermId)
+  //       .collection('division')
+  //       .doc('divisionId')
+  //       .get();
+  //   final divisionId = divisionSnapshot.id;
+  //
+  //   final studentSnapshot = await studeref
+  //       .doc(programId)
+  //       .collection('programterm')
+  //       .doc(programTermId)
+  //       .collection('division')
+  //       .doc(divisionId)
+  //       .collection('student')
+  //       .doc(_email as String?)
+  //       .get();
+  //
+  //   if (studentSnapshot.exists) {
+  //     setState(() {
+  //      print('done');
+  //     });
+  //   } else {
+  //     setState(() {
+  //       print('fail');
+  //     });
+  //   }
+  //   // try {
+  //   //   Future<QueryDocumentSnapshot<Map<String, dynamic>>> documentSnapshot =
+  //   //       firestore
+  //   //           .collection('students')
+  //   //           .where('User Id', isEqualTo: userId)
+  //   //           .get()
+  //   //           .then((querySnapshot) {
+  //   //     if (querySnapshot.docs.isNotEmpty) {
+  //   //       // Navigator.push(context, MaterialPageRoute(builder: (context) => HomeMain(),));
+  //   //       print("Done");
+  //   //       return querySnapshot
+  //   //           .docs[0]; // Assuming there's only one matching document
+  //   //     } else {
+  //   //       print('Fail');
+  //   //       throw Exception('No document found with the given email.');
+  //   //     }
+  //   //   });
+  //   //   return documentSnapshot;
+  //   // } catch (e) {
+  //   //   print('Error fetching data: $e');
+  //   //   return fa
+  //   // }
+  // }
 
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
@@ -240,14 +365,78 @@ class _LoginState extends State<Login> {
                       ),
 
                       Reusablebutton(
-                        onPressed: () {
-                          fetchDataByEmail(_email.text);
+                        onPressed: () async {
+                          checkUser(_email.text,_password.text);
+                          // final String email = _email.text;
+                          //
+                          // // Query Firestore to get the user IDs
+                          // final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+                          // await FirebaseFirestore.instance.collectionGroup('student').get();
+                          //
+                          // // Loop through the documents and check if the entered user ID matches any of them
+                          // bool isUserAuthenticated = false;
+                          // for (final QueryDocumentSnapshot<Map<String, dynamic>> document in querySnapshot.docs) {
+                          //   if (document.id == email) {
+                          //     isUserAuthenticated = true;
+                          //     break;
+                          //   }
+                          // }
+                          //
+                          // if (isUserAuthenticated) {
+                          //   // User authenticated successfully, navigate to the main application screen
+                          //   print('done');
+                          // } else {
+                          //   // Invalid user ID, display error message
+                          //   print('fail');
+                          // }
+                          // CollectionReference studeref =
+                          //     FirebaseFirestore.instance.collection('students');
+                          // final programsnapshot =
+                          //     await studeref.doc('program').get();
+                          // final programId = programsnapshot.id;
+                          // final programTermSnapshot = await studeref
+                          //     .doc(programId)
+                          //     .collection('programterm')
+                          //     .doc('programTermId')
+                          //     .get();
+                          // final programTermId = programTermSnapshot.id;
+                          //
+                          // final divisionSnapshot = await studeref
+                          //     .doc(programId)
+                          //     .collection('programterm')
+                          //     .doc(programTermId)
+                          //     .collection('division')
+                          //     .doc('divisionId')
+                          //     .get();
+                          // final divisionId = divisionSnapshot.id;
+                          //
+                          // final studentSnapshot = await studeref
+                          //     .doc(programId)
+                          //     .collection('programterm')
+                          //     .doc(programTermId)
+                          //     .collection('division')
+                          //     .doc(divisionId)
+                          //     .collection('student')
+                          //     .doc(email)
+                          //     .get();
+                          //
+                          // if (studentSnapshot.exists) {
+                          //   setState(() {
+                          //     print('donw');
+                          //   });
+                          // } else {
+                          //   setState(() {
+                          //     print('fail');
+                          //   });
+                          // }
+
                         },
                         Style: false,
                         child: const Text(
                           "LOGIN ",
                           style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),),
+                        ),
+                      ),
                       // SizedBox(
                       //   width: double.infinity,
                       //   height: 60,
