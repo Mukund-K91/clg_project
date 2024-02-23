@@ -25,29 +25,52 @@ class FacultyDashboard extends StatefulWidget {
 }
 
 class _FacultyDashboardState extends State<FacultyDashboard> {
+  // this selected index is control the bottom navigator bar
+  int _selectedindex = 0;
+
+  // this method will update your selected index
+  // when the user tap on bottom bar
+  void navigatorbottombar(int index) {
+    setState(() {
+      _selectedindex = index;
+    });
+  }
+
+  // pages to display
+  final List<Widget> _pages = [
+    // shop page
+    FacultyDashboard('admin2@gmail.com', 'Faculty'),
+    NoticeBoard('Dimple'+'Patel', 'Faculty'),
+    const AssignmentPage()
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Mybottomnav(
+        onTabChange: (index) => navigatorbottombar(index),
+      ),
       body: FutureBuilder<DocumentSnapshot>(
         future: fetchDataByEmail(widget.email),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: const CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                     'Error: ${snapshot.error} USER NOT FOUND\nplease contact your administrator eCollegeAdmin@gmail.com'),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomeMain(),
-                          ));
-                    },
-                    child: const Text('Return Home Page')),
+                Reusablebutton(
+                  Style: true,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeMain(),
+                        ));
+                  },
+                  child: const Text('Return Home Page'),
+                )
               ],
             );
           } else if (!snapshot.hasData || !snapshot.data!.exists) {
@@ -58,6 +81,7 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
                 snapshot.data!.data() as Map<String, dynamic>;
             return Stack(
               children: [
+                _pages[_selectedindex],
                 Container(
                   height: 100,
                   decoration: const BoxDecoration(
