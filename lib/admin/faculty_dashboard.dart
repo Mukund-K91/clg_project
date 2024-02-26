@@ -32,22 +32,24 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
         future: fetchDataByEmail(widget.email),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: const CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                     'Error: ${snapshot.error} USER NOT FOUND\nplease contact your administrator eCollegeAdmin@gmail.com'),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomeMain(),
-                          ));
-                    },
-                    child: const Text('Return Home Page')),
+                Reusablebutton(
+                  Style: true,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeMain(),
+                        ));
+                  },
+                  child: const Text('Return Home Page'),
+                )
               ],
             );
           } else if (!snapshot.hasData || !snapshot.data!.exists) {

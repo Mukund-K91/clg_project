@@ -6,34 +6,20 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../admin/Material.dart';
 import '../admin/PageNotAvailable.dart';
 import 'attendance.dart';
-class Student {
-  final String name;
-  final String mobile;
-
-  Student({
-    required this.name,
-    required this.mobile,
-  });
-
-  factory Student.fromMap(Map<String, dynamic> map) {
-    return Student(
-      name: map['First Name'] ?? '',
-      mobile: map['Mobile'] ?? '',
-    );
-  }
-}
 
 
 class StudentDashboard extends StatelessWidget {
   String UserId;
   String _user;
+
   StudentDashboard(this.UserId, this._user, {super.key});
 
-  Future<Map<String, dynamic>?> _login(String enteredUserId) async {
+  Future<Map<String, dynamic>?> _UserData(String enteredUserId) async {
     final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-    await FirebaseFirestore.instance.collectionGroup('student').get();
+        await FirebaseFirestore.instance.collectionGroup('student').get();
 
-    for (final QueryDocumentSnapshot<Map<String, dynamic>> document in querySnapshot.docs) {
+    for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+        in querySnapshot.docs) {
       final userData = document.data();
       final String documentUserId = document.id;
       final String mobile = userData?['Mobile'];
@@ -47,13 +33,12 @@ class StudentDashboard extends StatelessWidget {
     return null; // Return null if user data is not found
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body:
       FutureBuilder<Map<String, dynamic>?>(
-        future: _login(UserId),
+        future: _UserData(UserId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
@@ -63,8 +48,14 @@ class StudentDashboard extends StatelessWidget {
             return Text('User not found or invalid credentials');
           } else {
             final userData = snapshot.data!;
-            final String Name = userData['First Name']+" "+userData['Last Name'];
-            final String program=userData['program']+"|"+userData['prograTerm']+"|"+userData['division'];
+            final String Name =
+                userData['First Name'] + " " + userData['Last Name'];
+            final String program = userData['program'] +
+                " | " +
+                userData['programTerm'] +
+                " | " +
+                userData['division'];
+            final String ProfileUrl = userData['Profile Img'];
             return Stack(
               children: [
                 Container(
@@ -90,21 +81,39 @@ class StudentDashboard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 ListTile(
-                                  leading: const CircleAvatar(
-                                    radius: 30,
-                                    foregroundImage:
-                                        AssetImage("assets/images/ex_img.png"),
+                                  leading: CircleAvatar(
+                                    radius: 27,
+                                    child: ClipOval(
+                                      child: Image.network(
+                                        ProfileUrl,
+                                        fit: BoxFit.cover,
+                                        height: 70,
+                                        width: 70,
+                                      ),
+                                    ),
                                   ),
-                                  title:  Text(
+                                  title: Text(
                                     "${Name}",
-                                    style: const TextStyle(fontSize: 20,color: Colors.white),
+                                    style: const TextStyle(
+                                        fontSize: 20, color: Colors.white),
                                   ),
-                                  subtitle: Text(program,style: const TextStyle(color: Colors.white)),
+                                  subtitle: Text("${program}",
+                                      style:
+                                          const TextStyle(color: Colors.white)),
                                 ),
                               ],
                             ),
                           ),
                         ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: double.infinity,
+                        color: Colors.grey,
+                        height: 200,
+                        child: Text('SLIDER Coming soon....'),
                       ),
                     ),
                     Expanded(
@@ -122,8 +131,7 @@ class StudentDashboard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
-                                  onPressed: () {
-                                  },
+                                  onPressed: () {},
                                   iconSize: 50,
                                   icon: const Icon(
                                     FontAwesomeIcons.calendarDay,
@@ -171,7 +179,8 @@ class StudentDashboard extends StatelessWidget {
                               children: [
                                 IconButton(
                                   onPressed: () async {
-                                    await pagenotfound(context,'No assignment to submit woo hoo :)');
+                                    await pagenotfound(context,
+                                        'No assignment to submit woo hoo :)');
                                   },
                                   iconSize: 50,
                                   icon: const Icon(FontAwesomeIcons.filePen,
@@ -191,8 +200,9 @@ class StudentDashboard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
-                                  onPressed:() async {
-                                    await pagenotfound(context,'Results not published yet...!');
+                                  onPressed: () async {
+                                    await pagenotfound(context,
+                                        'Results not published yet...!');
                                   },
                                   iconSize: 50,
                                   icon: const Icon(
@@ -209,26 +219,27 @@ class StudentDashboard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    ListTile(
-                      leading: const Icon(
-                        FontAwesomeIcons.newspaper,
-                        color: Color(0xff002233),
-                      ),
-                      title: const Text("Latest Notice & Events"),
-                      trailing: IconButton(
-                        icon: const Icon(
-                          FontAwesomeIcons.anglesRight,
-                          color: Color(0xff002233),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => NoticeBoard(UserId,_user),
-                              ));
-                        },
-                      ),
-                    )
+                    // ListTile(
+                    //   leading: const Icon(
+                    //     FontAwesomeIcons.newspaper,
+                    //     color: Color(0xff002233),
+                    //   ),
+                    //   title: const Text("Latest Notice & Events"),
+                    //   trailing: IconButton(
+                    //     icon: const Icon(
+                    //       FontAwesomeIcons.anglesRight,
+                    //       color: Color(0xff002233),
+                    //     ),
+                    //     onPressed: () {
+                    //       Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //             builder: (context) =>
+                    //                 NoticeBoard(UserId, _user),
+                    //           ));
+                    //     },
+                    //   ),
+                    // )
                   ],
                 )
               ],
@@ -264,5 +275,3 @@ class StudentDashboard extends StatelessWidget {
 //     return null;
 //   }
 // }
-
-

@@ -291,7 +291,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <Widget>[
                 DottedBorder(
                   color: Colors.blue,
                   strokeWidth: 3,

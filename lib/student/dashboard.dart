@@ -68,6 +68,7 @@ class MainDashboard extends StatelessWidget {
             style: TextStyle(color: Colors.white),
           ),
           backgroundColor: const Color(0xff002233),
+          shape: ContinuousRectangleBorder(),
         ),
         body: user == "Student"
             ? StudentDashboard(UserId, user)
