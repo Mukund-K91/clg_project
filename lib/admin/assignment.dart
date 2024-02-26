@@ -55,9 +55,8 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 ),
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset('assets/images/arrow.png'),
                   Text(
                     'Create Assignment',
                     style: TextStyle(color: Colors.white, fontSize: 23),
@@ -242,58 +241,54 @@ class _AssignmentPageState extends State<AssignmentPage> {
             SizedBox(
               height: 25,
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 20, left: 20),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        labelText: 'Resubmission Of Rejected Assignment ',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        suffixIcon: Switch(
-                          value: isSwitched,
-                          onChanged: (value) {
-                            setState(() {
-                              isSwitched = value;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 20, left: 20),
-                    child: TextFormField(
-                      style: TextStyle(fontSize: 18),
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        labelText:
-                            'Extra Days For Resubmission Of Rejected Assignment',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        // floatingLabelBehavior: FloatingLabelBehavior.always
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 25,
-            ),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: Padding(
+            //         padding: const EdgeInsets.only(right: 20, left: 20),
+            //         child: TextField(
+            //           decoration: InputDecoration(
+            //             labelText: 'Resubmission Of Rejected Assignment ',
+            //             border: OutlineInputBorder(
+            //               borderRadius: BorderRadius.circular(10),
+            //             ),
+            //             suffixIcon: Switch(
+            //               value: isSwitched,
+            //               onChanged: (value) {
+            //                 setState(() {
+            //                   isSwitched = value;
+            //                 });
+            //               },
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: Padding(
+            //         padding: const EdgeInsets.only(right: 20, left: 20),
+            //         child: TextFormField(
+            //           style: TextStyle(fontSize: 18),
+            //           textAlign: TextAlign.center,
+            //           decoration: InputDecoration(
+            //             labelText:
+            //                 'Extra Days For Resubmission Of Rejected Assignment',
+            //             border: OutlineInputBorder(
+            //               borderRadius: BorderRadius.circular(10),
+            //             ),
+            //             // floatingLabelBehavior: FloatingLabelBehavior.always
+            //           ),
+            //         ),
+            //       ),
+            //     )
+            //   ],
+            // ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
