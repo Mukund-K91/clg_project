@@ -61,9 +61,6 @@ class _AssignmentPageState extends State<AssignmentPage> {
                     'Create Assignment',
                     style: TextStyle(color: Colors.white, fontSize: 23),
                   ),
-                  SizedBox(
-                    width: 40,
-                  )
                 ],
               ),
             ),
