@@ -1,9 +1,10 @@
-import 'package:clg_project/admin/assignment.dart';
 import 'package:clg_project/reusable_widget/reusable_textfield.dart';
 import 'package:clg_project/student/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'admin/assignment.dart';
 
 //DONE
 void main() async {

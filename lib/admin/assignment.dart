@@ -1,3 +1,4 @@
+import 'package:clg_project/reusable_widget/reusable_textfield.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -219,13 +220,17 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(right: 20, left: 20),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Assignment Name',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
+                    // child: TextFormField(
+                    //   decoration: InputDecoration(
+                    //     labelText: 'Assignment Name',
+                    //     border: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //     ),
+                    //   ),
+                    // ),
+                    child: ReusableTextField(
+                      label: 'Assignment Name',
+                      enable: true,
                     ),
                   ),
                 ),
@@ -239,15 +244,20 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(right: 20, left: 20),
-                    child: TextFormField(
-                      textAlign: TextAlign.start,
-                      decoration: InputDecoration(
-                        labelText: 'Instructions',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      maxLines: 3,
+                    // child: TextFormField(
+                    //   textAlign: TextAlign.start,
+                    //   decoration: InputDecoration(
+                    //     labelText: 'Instructions',
+                    //     border: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //     ),
+                    //   ),
+                    //   maxLines: 3,
+                    // ),
+                    child: ReusableTextField(
+                      label: 'Instructions',
+                      enable: true,
+                      isMulti: true,
                     ),
                   ),
                 ),
