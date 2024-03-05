@@ -207,12 +207,6 @@ class _LoginState extends State<Login> {
                   child: Column(
                     children: [
                       ReusableTextField(
-                        validator: (str) {
-                          if (str!.isEmpty) {
-                            return "User Id is required for login";
-                          }
-                          return null;
-                        },
                         preIcon: widget._User == "Student"
                             ? const Icon(FontAwesomeIcons.userGraduate,
                                 color: Color(0xff002233))
@@ -221,24 +215,16 @@ class _LoginState extends State<Login> {
                                 color: Color(0xff002233),
                               ),
                         controller: _userIdController,
-                        label:
+                        title:
                             widget._User == 'Student' ? 'STUDENT ID' : 'Emp Id',
-                        enable: true,
                       ),
                       const SizedBox(
                         height: 15,
                       ),
                       ReusableTextField(
-                        label: 'PASSWORD',
+                        title: 'PASSWORD',
                         obSecure: passwordObscured,
                         controller: _passwordController,
-                        enable: true,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Password is required for login";
-                          }
-                          return null;
-                        },
                         preIcon: const Icon(
                           Icons.fingerprint,
                           color: Color(0xff002233),

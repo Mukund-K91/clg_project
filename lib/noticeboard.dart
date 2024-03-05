@@ -88,15 +88,13 @@ class _MyWidgetState extends State<NoticeBoard> {
                         children: [
                           ReusableTextField(
                             controller: _title,
-                            label: 'Title',
-                            enable: true,
+                            title: 'Title',
                           ),
                           const SizedBox(height: 4),
                           ReusableTextField(
                             controller: _description,
-                            label: 'Description',
+                            title: 'Description',
                             isMulti: true,
-                            enable: true,
                             keyboardType: TextInputType.multiline,
                           ),
                           const SizedBox(height: 8,),
@@ -174,14 +172,12 @@ class _MyWidgetState extends State<NoticeBoard> {
                         children: [
                           ReusableTextField(
                             controller: _title,
-                            enable: false,
-                            label: 'Title',),
+                            title: 'Title',),
                           const SizedBox(height: 4,),
                           ReusableTextField(
                             controller: _description,
-                            label: 'Description',
+                            title: 'Description',
                             keyboardType: TextInputType.multiline,
-                            enable: true,
                             isMulti: true
                           ),
                           const SizedBox(height: 8,),

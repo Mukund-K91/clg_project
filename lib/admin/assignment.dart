@@ -229,8 +229,8 @@ class _AssignmentPageState extends State<AssignmentPage> {
                     //   ),
                     // ),
                     child: ReusableTextField(
-                      label: 'Assignment Name',
-                      enable: true,
+                      title: 'Assignment Name',
+                      readOnly: false,
                     ),
                   ),
                 ),
@@ -255,8 +255,8 @@ class _AssignmentPageState extends State<AssignmentPage> {
                     //   maxLines: 3,
                     // ),
                     child: ReusableTextField(
-                      label: 'Instructions',
-                      enable: true,
+                      title: 'Instructions',
+                      readOnly:false,
                       isMulti: true,
                     ),
                   ),
