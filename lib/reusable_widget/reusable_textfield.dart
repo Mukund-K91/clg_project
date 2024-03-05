@@ -41,7 +41,7 @@ class ReusableTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         RichText(
-            text: TextSpan(text: title, children: [
+            text: TextSpan(text: title,style: TextStyle(color: Colors.black), children: [
               TextSpan(text: "*", style: TextStyle(color: Colors.red))
             ])),
         TextFormField(

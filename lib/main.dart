@@ -37,10 +37,10 @@ class _MyAppState extends State<MyApp> {
             //Demo()
             //Attendance()
             //AssignmentPage()
-        //HomeMain()
+        HomeMain()
         // Myhome()
         //FacultyDashboard('admin2@gmail.com', 'Faculty')
-        MainDashboard('Student', '202400101')
+        //MainDashboard('Student', '202400101')
         //StudentDashboard('202400101', 'Student')
         );
   }
