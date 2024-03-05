@@ -118,9 +118,43 @@ class _MainDashboardState extends State<MainDashboard> {
       case 1:
         return AssignmentPage();
       case 2:
-        return Center(child: Text('Settings'));
+        return SettingsBottomSheet();
       default:
         return widget.user=="Student"?StudentDashboard(widget.UserId, widget.user):FacultyDashboard(widget.UserId, widget.user);
     }
+  }
+}
+class SettingsBottomSheet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ListTile(
+            leading: Icon(Icons.language),
+            title: Text('Language'),
+            onTap: () {
+              // Handle language settings
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.notifications),
+            title: Text('Notifications'),
+            onTap: () {
+              // Handle notification settings
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.account_circle),
+            title: Text('Account'),
+            onTap: () {
+              // Handle account settings
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

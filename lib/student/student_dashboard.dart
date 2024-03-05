@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clg_project/noticeboard.dart';
 import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,6 +33,13 @@ class StudentDashboard extends StatelessWidget {
 
     return null; // Return null if user data is not found
   }
+  final List<String> imageUrls = [
+    'https://via.placeholder.com/600x300?text=Image1',
+    'https://via.placeholder.com/600x300?text=Image2',
+    'https://via.placeholder.com/600x300?text=Image3',
+    'https://via.placeholder.com/600x300?text=Image4',
+  ];
+  int _currentSlide = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -109,11 +117,30 @@ class StudentDashboard extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: double.infinity,
-                        color: Colors.grey,
-                        height: 150,
-                        child: Text('SLIDER Coming soon....'),
+                      child: Column(
+                        children: [
+                          CarouselSlider(
+                            options: CarouselOptions(
+                              autoPlay: true,
+                            ),
+                            items: imageUrls.map((url) {
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      image: DecorationImage(
+                                        image: NetworkImage(url),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ],
                       ),
                     ),
                     Expanded(

@@ -303,7 +303,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class ImageSliderDemo extends StatelessWidget {
+class ImageSliderDemo extends StatefulWidget {
+  @override
+  _ImageSliderDemoState createState() => _ImageSliderDemoState();
+}
+
+class _ImageSliderDemoState extends State<ImageSliderDemo> {
   final List<String> imageUrls = [
     'https://via.placeholder.com/600x300?text=Image1',
     'https://via.placeholder.com/600x300?text=Image2',
@@ -311,38 +316,64 @@ class ImageSliderDemo extends StatelessWidget {
     'https://via.placeholder.com/600x300?text=Image4',
   ];
 
+  int _currentSlide = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Image Slider Demo'),
       ),
-      body: Center(
-        child: CarouselSlider(
-          options: CarouselOptions(
-            aspectRatio: 16 / 9,
-            viewportFraction: 0.8,
-            autoPlay: true,
-            enlargeCenterPage: true,
-          ),
-          items: imageUrls.map((url) {
-            return Builder(
-              builder: (BuildContext context) {
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 5.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    image: DecorationImage(
-                      image: NetworkImage(url),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                );
+      body: Column(
+        children: [
+          CarouselSlider(
+            options: CarouselOptions(
+              aspectRatio: 16 / 9,
+              viewportFraction: 0.8,
+              autoPlay: true,
+              enlargeCenterPage: true,
+              onPageChanged: (index, _) {
+                setState(() {
+                  _currentSlide = index;
+                });
               },
-            );
-          }).toList(),
-        ),
+            ),
+            items: imageUrls.map((url) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      image: DecorationImage(
+                        image: NetworkImage(url),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                },
+              );
+            }).toList(),
+          ),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: imageUrls.map((url) {
+              int index = imageUrls.indexOf(url);
+              return Container(
+                width: 8.0,
+                height: 8.0,
+                margin: EdgeInsets.symmetric(horizontal: 4.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _currentSlide == index ? Colors.blue : Colors.grey,
+                ),
+              );
+            }).toList(),
+          ),
+        ],
       ),
     );
   }
 }
+
