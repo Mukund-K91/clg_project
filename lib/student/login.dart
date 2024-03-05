@@ -25,17 +25,17 @@ class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<void> _login(String enteredUserId, String password) async {
+  Future<void> _Studentlogin(String enteredUserId, String password) async {
     final String userId = _userIdController.text;
     final String password = _passwordController
         .text; // assuming _mobile is your TextEditingController for the mobile number
 // Query Firestore to get the user IDs
-    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+    final QuerySnapshot<Map<String, dynamic>> studentQuerySnapShot =
         await FirebaseFirestore.instance.collectionGroup('student').get();
     bool isUserAuthenticated = false;
     if (_formKey.currentState!.validate()) {
       for (final QueryDocumentSnapshot<Map<String, dynamic>> document
-          in querySnapshot.docs) {
+          in studentQuerySnapShot.docs) {
         final userData = document.data();
         final String documentUserId = document.id;
         final String mobile = userData?['Mobile'];
@@ -91,6 +91,77 @@ class _LoginState extends State<Login> {
                     ? "Please check userId or Password "
                     : "Please check userId or Password "
                         "Contact Admin for any query")
+            .show();
+      }
+    }
+  }
+
+  Future<void> _Facultylogin(String enteredUserId, String password) async {
+    final String userId = _userIdController.text;
+    final String password = _passwordController
+        .text; // assuming _mobile is your TextEditingController for the mobile number
+// Query Firestore to get the user IDs
+    final QuerySnapshot<Map<String, dynamic>> studentQuerySnapShot =
+    await FirebaseFirestore.instance.collectionGroup('faculty').get();
+    bool isUserAuthenticated = false;
+    if (_formKey.currentState!.validate()) {
+      for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+      in studentQuerySnapShot.docs) {
+        final userData = document.data();
+        final String documentUserId = document.id;
+        final String mobile = userData?['Password'];
+
+        // Check if the document userId (user ID) matches the entered userId and mobile number matches the entered mobile number
+        if (documentUserId == userId && mobile == password) {
+          final String firstName = userData?['First Name'];
+          final String lastName = userData?['Last Name'];
+
+          // Now you have the data from the user ID document, you can use it as needed
+          print('First Name: $firstName');
+          print('Last Name: $lastName');
+          print('Mobile: $mobile');
+
+          // Set isUserAuthenticated to true since the user ID and mobile number exist
+          isUserAuthenticated = true;
+          break;
+        }
+      }
+      // ignore: use_build_context_synchronously
+      if (isUserAuthenticated) {
+        // User authenticated successfully, navigate to the main application screen
+        AwesomeDialog(
+            context: context,
+            dialogType: DialogType.success,
+            animType: AnimType.bottomSlide,
+            showCloseIcon: false,
+            title: "Login Successfully",
+            btnOkOnPress: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MainDashboard(widget._User, userId),
+                  ));
+            }).show();
+      }
+      // ignore: use_build_context_synchronously
+      else {
+        AwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            animType: AnimType.bottomSlide,
+            showCloseIcon: true,
+            btnOkOnPress: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeMain(),
+                  ));
+            },
+            title: "${widget._User} Not Found",
+            desc: widget._User == "Student"
+                ? "Please check userId or Password "
+                : "Please check userId or Password "
+                "Contact Admin for any query")
             .show();
       }
     }
@@ -188,8 +259,8 @@ class _LoginState extends State<Login> {
                       ),
                       Reusablebutton(
                         onPressed: () async {
-                          _login(
-                              _userIdController.text, _passwordController.text);
+                          widget._User=="Student"?_Studentlogin(
+                              _userIdController.text, _passwordController.text):_Facultylogin(_userIdController.text, _passwordController.text);
                         },
                         Style: false,
                         child: const Text(

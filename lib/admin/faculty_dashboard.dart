@@ -1,63 +1,56 @@
-import 'dart:async';
-import 'package:clg_project/admin/attendance.dart';
-import 'package:clg_project/demo.dart';
 import 'package:clg_project/noticeboard.dart';
-import 'package:clg_project/reusable_widget/reusable_textfield.dart';
-import 'package:clg_project/student/attendance.dart';
+import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../main.dart';
-import '../reusable_widget/bottom_navigationbar.dart';
-import 'Material.dart';
-import 'PageNotAvailable.dart';
+import '../admin/Material.dart';
+import '../admin/PageNotAvailable.dart';
 import 'admin.dart';
-import 'assignment.dart';
+import 'attendance.dart';
 
-class FacultyDashboard extends StatefulWidget {
-  String email;
+
+class FacultyDashboard extends StatelessWidget {
+  String UserId;
   String _user;
 
-  FacultyDashboard(this.email, this._user, {super.key});
+  FacultyDashboard(this.UserId, this._user, {super.key});
 
-  @override
-  State<FacultyDashboard> createState() => _FacultyDashboardState();
-}
+  Future<Map<String, dynamic>?> _UserData(String enteredUserId) async {
+    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+    await FirebaseFirestore.instance.collectionGroup('faculty').get();
 
-class _FacultyDashboardState extends State<FacultyDashboard> {
+    for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+    in querySnapshot.docs) {
+      final userData = document.data();
+      final String documentUserId = document.id;
+
+      // Check if the document userId (user ID) matches the entered userId and mobile number matches the entered mobile number
+      if (documentUserId == enteredUserId) {
+        return userData;
+      }
+    }
+
+    return null; // Return null if user data is not found
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<DocumentSnapshot>(
-        future: fetchDataByEmail(widget.email),
+      body:
+      FutureBuilder<Map<String, dynamic>?>(
+        future: _UserData(UserId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return CircularProgressIndicator();
           } else if (snapshot.hasError) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                    'Error: ${snapshot.error} USER NOT FOUND\nplease contact your administrator eCollegeAdmin@gmail.com'),
-                Reusablebutton(
-                  Style: true,
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HomeMain(),
-                        ));
-                  },
-                  child: const Text('Return Home Page'),
-                )
-              ],
-            );
-          } else if (!snapshot.hasData || !snapshot.data!.exists) {
-            return const Text('No data found for the given email.');
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData || snapshot.data == null) {
+            return Text('User not found or invalid credentials');
           } else {
-            // Data found, you can access it using snapshot.data
-            Map<String, dynamic> data =
-                snapshot.data!.data() as Map<String, dynamic>;
+            final userData = snapshot.data!;
+            final String Name =
+                userData['First Name'] + " " + userData['Last Name'];
+            final String ProfileUrl =userData['Profile Img'];
             return Stack(
               children: [
                 Container(
@@ -84,22 +77,28 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                const CircleAvatar(
+                                 CircleAvatar(
                                   radius: 40,
-                                  foregroundImage:
-                                      AssetImage("assets/images/ex_img.png"),
+                                  child: ClipOval(
+                                    child: Image.network(
+                                      ProfileUrl,
+                                      fit: BoxFit.cover,
+                                      height: 100,
+                                      width: 100,
+                                    ),
+                                  ),
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      data['First Name'] +
+                                      userData['First Name'] +
                                           " " +
-                                          data['Last Name'],
+                                          userData['Last Name'],
                                       style: const TextStyle(fontSize: 20),
                                     ),
                                     Text(
-                                      data['Department'],
+                                      userData['program'],
                                       style: const TextStyle(fontSize: 15),
                                     ),
                                   ],
@@ -224,7 +223,7 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              FilesUpload(widget._user),
+                                              FilesUpload(_user),
                                         ));
                                   },
                                   iconSize: 50,
@@ -247,12 +246,12 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
                                 IconButton(
                                   onPressed: () {
                                     String name =
-                                        data['First Name'] + data['Last Name'];
+                                        userData['First Name'] + userData['Last Name'];
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              NoticeBoard(name, widget._user),
+                                              NoticeBoard(name, _user),
                                         ));
                                   },
                                   iconSize: 50,
@@ -277,31 +276,5 @@ class _FacultyDashboardState extends State<FacultyDashboard> {
         },
       ),
     );
-  }
-}
-
-Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
-    String email) {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  try {
-    Future<QueryDocumentSnapshot<Map<String, dynamic>>> documentSnapshot =
-        firestore
-            .collection('faculty')
-            .where('Email', isEqualTo: email)
-            .get()
-            .then((querySnapshot) {
-      if (querySnapshot.docs.isNotEmpty) {
-        return querySnapshot
-            .docs[0]; // Assuming there's only one matching document
-      } else {
-        throw Exception('No document found with the given email.');
-      }
-    });
-
-    return documentSnapshot;
-  } catch (e) {
-    print('Error fetching data: $e');
-    return null;
   }
 }

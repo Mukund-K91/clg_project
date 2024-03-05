@@ -41,7 +41,7 @@ class StudentDashboard extends StatelessWidget {
         future: _UserData(UserId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data == null) {
@@ -112,14 +112,14 @@ class StudentDashboard extends StatelessWidget {
                       child: Container(
                         width: double.infinity,
                         color: Colors.grey,
-                        height: 200,
+                        height: 150,
                         child: Text('SLIDER Coming soon....'),
                       ),
                     ),
                     Expanded(
                       child: GridView.count(
                         primary: false,
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(10),
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                         crossAxisCount: 2,
@@ -219,27 +219,6 @@ class StudentDashboard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // ListTile(
-                    //   leading: const Icon(
-                    //     FontAwesomeIcons.newspaper,
-                    //     color: Color(0xff002233),
-                    //   ),
-                    //   title: const Text("Latest Notice & Events"),
-                    //   trailing: IconButton(
-                    //     icon: const Icon(
-                    //       FontAwesomeIcons.anglesRight,
-                    //       color: Color(0xff002233),
-                    //     ),
-                    //     onPressed: () {
-                    //       Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //             builder: (context) =>
-                    //                 NoticeBoard(UserId, _user),
-                    //           ));
-                    //     },
-                    //   ),
-                    // )
                   ],
                 )
               ],
@@ -250,28 +229,3 @@ class StudentDashboard extends StatelessWidget {
     );
   }
 }
-
-// Future<QueryDocumentSnapshot<Map<String, dynamic>>>? fetchDataByEmail(
-//     String userId) {
-//   FirebaseFirestore firestore = FirebaseFirestore.instance;
-//
-//   try {
-//     Future<QueryDocumentSnapshot<Map<String, dynamic>>> documentSnapshot =
-//         firestore
-//             .collectionGroup('student')
-//             .where('User Id', isEqualTo: userId)
-//             .get()
-//             .then((querySnapshot) {
-//       if (querySnapshot.docs.isNotEmpty) {
-//         return querySnapshot
-//             .docs[0]; // Assuming there's only one matching document
-//       } else {
-//         throw Exception('No document found with the given email.');
-//       }
-//     });
-//     return documentSnapshot;
-//   } catch (e) {
-//     print('Error fetching data: $e');
-//     return null;
-//   }
-// }

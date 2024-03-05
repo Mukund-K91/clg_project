@@ -272,14 +272,6 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(right: 10, left: 20),
-                    // child: TextFormField(
-                    //   decoration: InputDecoration(
-                    //     labelText: 'Due Date',
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(10),
-                    //     ),
-                    //   ),
-                    // ),
                     child: TextFormField(
                       onTap: () async {
                         DateTime? pickedDate = await showDatePicker(
