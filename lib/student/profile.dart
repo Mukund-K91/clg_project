@@ -65,7 +65,7 @@ class _ProfileState extends State<Profile> {
                   " | " +
                   userData['division'];
               final String ProfileUrl = userData['Profile Img'];
-              return Text("Remove thi text widget and build profile after return ");
+              return Text("Remove this text widget and start building profile after return word ");
             }
           },
         ),
