@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 String dropdownValue = '';
@@ -20,9 +20,11 @@ const carType = <String>[
 ];
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: AssignmentPage(),
     );
   }
@@ -68,7 +70,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
     return difference.inDays;
   }
 
-  TextEditingController _timeController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
   TimeOfDay selectedTime = TimeOfDay.now();
 
   Future<void> _selectTime(BuildContext context) async {
@@ -94,20 +96,20 @@ class _AssignmentPageState extends State<AssignmentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffffffff),
+      backgroundColor: const Color(0xffffffff),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
               height: 130,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color(0xff225779),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(35),
                   bottomRight: Radius.circular(35),
                 ),
               ),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -117,7 +119,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             Row(
@@ -138,13 +140,13 @@ class _AssignmentPageState extends State<AssignmentPage> {
                         borderRadius:
                             BorderRadius.circular(8.0), // Border radius
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: DropdownButton<String>(
                         value: dpdownValue.isEmpty ? selectItem : dpdownValue,
-                        icon: Icon(Icons.keyboard_arrow_down_outlined),
+                        icon: const Icon(Icons.keyboard_arrow_down_outlined),
                         iconSize: 24,
                         elevation: 16,
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                         onChanged: (String? newValue) {
                           setState(() {
                             dpdownValue = newValue!;
@@ -164,7 +166,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             Row(
@@ -185,14 +187,14 @@ class _AssignmentPageState extends State<AssignmentPage> {
                         borderRadius:
                             BorderRadius.circular(8.0), // Border radius
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: DropdownButton<String>(
                         value:
                             dropdownValue.isEmpty ? selectItem : dropdownValue,
-                        icon: Icon(Icons.keyboard_arrow_down_outlined),
+                        icon: const Icon(Icons.keyboard_arrow_down_outlined),
                         iconSize: 24,
                         elevation: 16,
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                         onChanged: (String? newValue) {
                           setState(() {
                             dropdownValue = newValue!;
@@ -212,14 +214,14 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
-            Row(
+            const Row(
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 20, left: 20),
+                    padding: EdgeInsets.only(right: 20, left: 20),
                     // child: TextFormField(
                     //   decoration: InputDecoration(
                     //     labelText: 'Assignment Name',
@@ -236,14 +238,14 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
-            Row(
+            const Row(
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 20, left: 20),
+                    padding: EdgeInsets.only(right: 20, left: 20),
                     // child: TextFormField(
                     //   textAlign: TextAlign.start,
                     //   decoration: InputDecoration(
@@ -256,14 +258,14 @@ class _AssignmentPageState extends State<AssignmentPage> {
                     // ),
                     child: ReusableTextField(
                       title: 'Instructions',
-                      readOnly:false,
+                      readOnly: false,
                       isMulti: true,
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             Row(
@@ -344,7 +346,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),
                             labelText: 'Selected Time',
-                            prefixIcon: Icon(Icons.access_time),
+                            prefixIcon: const Icon(Icons.access_time),
                           ),
                         ),
                       ],
@@ -353,7 +355,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
             // Row(
@@ -419,9 +421,9 @@ class _AssignmentPageState extends State<AssignmentPage> {
                         //button ma asvhe a e nthi khabar mane ama inkwell thay ?
                         ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          shape: ContinuousRectangleBorder()),
+                          shape: const ContinuousRectangleBorder()),
                       onPressed: () {},
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
@@ -441,7 +443,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Padding(
@@ -451,7 +453,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {},
-                      child: Text('Create Assignment'),
+                      child: const Text('Create Assignment'),
                     ),
                   ),
                 ],

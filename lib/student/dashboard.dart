@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'Studentassignment.dart';
+
 class MainDashboard extends StatefulWidget {
   final String user;
   var UserId;
@@ -83,17 +85,17 @@ class _MainDashboardState extends State<MainDashboard> {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: const Color(0xff002233),
-        shape: ContinuousRectangleBorder(),
+        shape: const ContinuousRectangleBorder(),
       ),
       body:_getScreen(_selectedIndex),
 
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xff002233),
+        backgroundColor: const Color(0xff002233),
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.grey[400],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -116,7 +118,7 @@ class _MainDashboardState extends State<MainDashboard> {
       case 0:
         return widget.user=="Student"?StudentDashboard(widget.UserId, widget.user):FacultyDashboard(widget.UserId, widget.user);
       case 1:
-        return AssignmentPage();
+        return Studentassignment();
       case 2:
         return SettingsBottomSheet();
       default:
@@ -125,6 +127,8 @@ class _MainDashboardState extends State<MainDashboard> {
   }
 }
 class SettingsBottomSheet extends StatelessWidget {
+  const SettingsBottomSheet({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
