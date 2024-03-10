@@ -40,9 +40,10 @@ class _MyAppState extends State<MyApp> {
         home:
             //Demo()
             //Attendance()
-            Studentassignment()
+           // Studentassignment()
         //HomeMain()
       //SplashScreen()
+      MainDashboard('Student', '202400101')
         // Myhome()
         //FacultyDashboard('admin2@gmail.com', 'Faculty')
         //MainDashboard('Student', '202400101')

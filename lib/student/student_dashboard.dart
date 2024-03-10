@@ -272,7 +272,6 @@ class StudentDashboard extends StatelessWidget {
 
         return CarouselSlider(
           options: CarouselOptions(
-            aspectRatio: 16 / 9,
             viewportFraction: 0.8,
             enlargeCenterPage: true,
             autoPlay: true,
