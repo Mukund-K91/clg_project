@@ -119,27 +119,28 @@ class StudentDashboard extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          CarouselSlider(
-                            options: CarouselOptions(
-                              autoPlay: true,
-                            ),
-                            items: imageUrls.map((url) {
-                              return Builder(
-                                builder: (BuildContext context) {
-                                  return Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 5.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      image: DecorationImage(
-                                        image: NetworkImage(url),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            }).toList(),
-                          ),
+                          _Slider(context)
+                          // CarouselSlider(
+                          //   options: CarouselOptions(
+                          //     autoPlay: true,
+                          //   ),
+                          //   items: imageUrls.map((url) {
+                          //     return Builder(
+                          //       builder: (BuildContext context) {
+                          //         return Container(
+                          //           margin: EdgeInsets.symmetric(horizontal: 5.0),
+                          //           decoration: BoxDecoration(
+                          //             borderRadius: BorderRadius.circular(8.0),
+                          //             image: DecorationImage(
+                          //               image: NetworkImage(url),
+                          //               fit: BoxFit.cover,
+                          //             ),
+                          //           ),
+                          //         );
+                          //       },
+                          //     );
+                          //   }).toList(),
+                          // ),
                         ],
                       ),
                     ),
@@ -253,6 +254,48 @@ class StudentDashboard extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+  Widget _Slider(BuildContext context) {
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance.collection('slider_data').get(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+        final List<String> imageUrls = snapshot.data!.docs.map((doc) {
+          return doc['imageUrl'] as String;
+        }).toList();
+
+        return CarouselSlider(
+          options: CarouselOptions(
+            aspectRatio: 16 / 9,
+            viewportFraction: 0.8,
+            enlargeCenterPage: true,
+            autoPlay: true,
+          ),
+          items: imageUrls.map((imageUrl) {
+            return Builder(
+              builder: (BuildContext context) {
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                  ),
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                  ),
+                );
+              },
+            );
+          }).toList(),
+        );
+      },
     );
   }
 }
