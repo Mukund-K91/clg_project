@@ -1,5 +1,6 @@
 import 'package:clg_project/reusable_widget/reusable_textfield.dart';
 import 'package:clg_project/splash_screen.dart';
+import 'package:clg_project/student/Studentassignment.dart';
 import 'package:clg_project/student/dashboard.dart';
 import 'package:clg_project/student/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'admin/assignment.dart';
+
+import 'demo.dart';
 
 //DONE
 void main() async {
@@ -37,9 +40,9 @@ class _MyAppState extends State<MyApp> {
         home:
             //Demo()
             //Attendance()
-            //AssignmentPage()
+            Studentassignment()
         //HomeMain()
-      SplashScreen()
+      //SplashScreen()
         // Myhome()
         //FacultyDashboard('admin2@gmail.com', 'Faculty')
         //MainDashboard('Student', '202400101')
