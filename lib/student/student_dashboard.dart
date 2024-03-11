@@ -8,7 +8,6 @@ import '../admin/Material.dart';
 import '../admin/PageNotAvailable.dart';
 import 'attendance.dart';
 
-
 class StudentDashboard extends StatelessWidget {
   String UserId;
   String _user;
@@ -33,6 +32,7 @@ class StudentDashboard extends StatelessWidget {
 
     return null; // Return null if user data is not found
   }
+
   final List<String> imageUrls = [
     'https://via.placeholder.com/600x300?text=Image1',
     'https://via.placeholder.com/600x300?text=Image2',
@@ -44,8 +44,7 @@ class StudentDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-      FutureBuilder<Map<String, dynamic>?>(
+      body: FutureBuilder<Map<String, dynamic>?>(
         future: _UserData(UserId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -256,6 +255,7 @@ class StudentDashboard extends StatelessWidget {
       ),
     );
   }
+
   Widget _Slider(BuildContext context) {
     return FutureBuilder<QuerySnapshot>(
       future: FirebaseFirestore.instance.collection('slider_data').get(),
@@ -270,29 +270,34 @@ class StudentDashboard extends StatelessWidget {
           return doc['imageUrl'] as String;
         }).toList();
 
-        return CarouselSlider(
-          options: CarouselOptions(
-            viewportFraction: 0.8,
-            enlargeCenterPage: true,
-            autoPlay: true,
+        return Container(
+          width: MediaQuery.of(context).size.width, // Set container width to screen width
+          child: CarouselSlider(
+            options: CarouselOptions(
+              aspectRatio: 16 / 9,
+              viewportFraction: 1.0, // Set viewportFraction to 1.0 to occupy full width
+              enlargeCenterPage: true,
+              autoPlay: true,
+            ),
+            items: imageUrls.map((imageUrl) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return Container(
+                    width: MediaQuery.of(context).size.width, // Set image width to screen width
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.fill,
+                        width: double.infinity,
+                      ),
+                    ),
+                  );
+                },
+              );
+            }).toList(),
           ),
-          items: imageUrls.map((imageUrl) {
-            return Builder(
-              builder: (BuildContext context) {
-                return Container(
-
-                  width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.symmetric(horizontal: 5.0),
-                  decoration: BoxDecoration(
-                  ),
-                  child: Image.network(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                  ),
-                );
-              },
-            );
-          }).toList(),
         );
       },
     );
