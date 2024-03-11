@@ -1,8 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clg_project/noticeboard.dart';
 import 'package:clg_project/main.dart';
+import 'package:clg_project/reusable_widget/img_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../admin/Material.dart';
 import '../admin/PageNotAvailable.dart';
@@ -63,94 +66,67 @@ class StudentDashboard extends StatelessWidget {
                 " | " +
                 userData['division'];
             final String ProfileUrl = userData['Profile Img'];
-            return Stack(
+            return Column(
               children: [
                 Container(
-                  height: 100,
+                  height: MediaQuery.of(context).size.height / 7,
                   decoration: const BoxDecoration(
                       color: Color(0xff002233),
                       borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(40),
                           bottomRight: Radius.circular(40))),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Expanded(
-                          child: Container(
-                            width: double.infinity,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ListTile(
-                                  leading: CircleAvatar(
-                                    radius: 27,
-                                    child: ClipOval(
-                                      child: Image.network(
-                                        ProfileUrl,
-                                        fit: BoxFit.cover,
-                                        height: 70,
-                                        width: 70,
-                                      ),
-                                    ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Expanded(
+                      child: Container(
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ListTile(
+                              leading: CircleAvatar(
+                                radius: 27,
+                                child: ClipOval(
+                                  child: Image.network(
+                                    ProfileUrl,
+                                    fit: BoxFit.cover,
+                                    height: 70,
+                                    width: 70,
                                   ),
-                                  title: Text(
-                                    "${Name}",
-                                    style: const TextStyle(
-                                        fontSize: 20, color: Colors.white),
-                                  ),
-                                  subtitle: Text("${program}",
-                                      style:
-                                          const TextStyle(color: Colors.white)),
                                 ),
-                              ],
+                              ),
+                              title: Text(
+                                "${Name}",
+                                style: const TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                              ),
+                              subtitle: Text("${program}",
+                                  style: const TextStyle(color: Colors.white)),
                             ),
-                          ),
+                          ],
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          _Slider(context)
-                          // CarouselSlider(
-                          //   options: CarouselOptions(
-                          //     autoPlay: true,
-                          //   ),
-                          //   items: imageUrls.map((url) {
-                          //     return Builder(
-                          //       builder: (BuildContext context) {
-                          //         return Container(
-                          //           margin: EdgeInsets.symmetric(horizontal: 5.0),
-                          //           decoration: BoxDecoration(
-                          //             borderRadius: BorderRadius.circular(8.0),
-                          //             image: DecorationImage(
-                          //               image: NetworkImage(url),
-                          //               fit: BoxFit.cover,
-                          //             ),
-                          //           ),
-                          //         );
-                          //       },
-                          //     );
-                          //   }).toList(),
-                          // ),
-                        ],
+                  ),
+                ),
+                Expanded(
+                    child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ImgSlider(context),
                       ),
-                    ),
-                    Expanded(
-                      child: GridView.count(
-                        primary: false,
-                        padding: const EdgeInsets.all(10),
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
+                      GridView.count(
                         crossAxisCount: 2,
-                        children: <Widget>[
+                        // Number of columns in the grid
+                        shrinkWrap: true,
+                        // Ensure that the grid view occupies only the necessary space
+                        physics: NeverScrollableScrollPhysics(),
+                        // Disable scrolling
+                        children: [
                           Card(
                             color: Colors.white,
                             child: Column(
@@ -181,15 +157,18 @@ class StudentDashboard extends StatelessWidget {
                                 IconButton(
                                   onPressed: () {
                                     Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              FilesUpload(_user),
-                                        ));
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            FilesUpload(_user),
+                                      ),
+                                    );
                                   },
                                   iconSize: 50,
-                                  icon: const Icon(FontAwesomeIcons.book,
-                                      color: Color(0xff002233)),
+                                  icon: const Icon(
+                                    FontAwesomeIcons.book,
+                                    color: Color(0xff002233),
+                                  ),
                                 ),
                                 const Text(
                                   "Material",
@@ -210,8 +189,10 @@ class StudentDashboard extends StatelessWidget {
                                         'No assignment to submit woo hoo :)');
                                   },
                                   iconSize: 50,
-                                  icon: const Icon(FontAwesomeIcons.filePen,
-                                      color: Color(0xff002233)),
+                                  icon: const Icon(
+                                    FontAwesomeIcons.filePen,
+                                    color: Color(0xff002233),
+                                  ),
                                 ),
                                 const Text(
                                   "Assignment",
@@ -233,8 +214,9 @@ class StudentDashboard extends StatelessWidget {
                                   },
                                   iconSize: 50,
                                   icon: const Icon(
-                                      FontAwesomeIcons.fileContract,
-                                      color: Color(0xff002233)),
+                                    FontAwesomeIcons.fileContract,
+                                    color: Color(0xff002233),
+                                  ),
                                 ),
                                 const Text(
                                   "Results",
@@ -245,61 +227,14 @@ class StudentDashboard extends StatelessWidget {
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                )
+                    ],
+                  ),
+                ))
               ],
             );
           }
         },
       ),
-    );
-  }
-
-  Widget _Slider(BuildContext context) {
-    return FutureBuilder<QuerySnapshot>(
-      future: FirebaseFirestore.instance.collection('slider_data').get(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
-        final List<String> imageUrls = snapshot.data!.docs.map((doc) {
-          return doc['imageUrl'] as String;
-        }).toList();
-
-        return Container(
-          width: MediaQuery.of(context).size.width, // Set container width to screen width
-          child: CarouselSlider(
-            options: CarouselOptions(
-              aspectRatio: 16 / 9,
-              viewportFraction: 1.0, // Set viewportFraction to 1.0 to occupy full width
-              enlargeCenterPage: true,
-              autoPlay: true,
-            ),
-            items: imageUrls.map((imageUrl) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width, // Set image width to screen width
-                    margin: EdgeInsets.symmetric(horizontal: 5.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        imageUrl,
-                        fit: BoxFit.fill,
-                        width: double.infinity,
-                      ),
-                    ),
-                  );
-                },
-              );
-            }).toList(),
-          ),
-        );
-      },
     );
   }
 }

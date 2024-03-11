@@ -90,29 +90,26 @@ class _MainDashboardState extends State<MainDashboard> {
       body:_getScreen(_selectedIndex),
 
 
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(10),
-        child: BottomNavigationBar(
-          backgroundColor: const Color(0xff002233),
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.grey[400],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.assignment),
-              label: 'Assignment Screen',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Settings',
-            ),
-          ],
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color(0xff002233),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey[400],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assignment),
+            label: 'Assignment Screen',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
       ),
     );
   }
