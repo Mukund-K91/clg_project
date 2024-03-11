@@ -230,7 +230,15 @@ class StudentDashboard extends StatelessWidget {
                           "Latest News",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        trailing: TextButton(onPressed: ()=>EventList(), child: Text("view more>>")),
+                        trailing: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EventList(),
+                                  ));
+                            },
+                            child: Text("view all>>")),
                       ),
                       _buildEventList()
                     ],
@@ -296,35 +304,26 @@ class StudentDashboard extends StatelessWidget {
                       String fileUrl = eventData['File'];
 
                       return Card(
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EventList(),
-                                ));
-                          },
-                          child: ListTile(
-                            title: Text(
-                              eventData['title'] ?? 'Title not available',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: Colors.black,
-                              ),
+                        child: ListTile(
+                          title: Text(
+                            eventData['title'] ?? 'Title not available',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.black,
                             ),
-                            subtitle: Text(
-                              '${_date}',
-                              style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 15,
-                              ),
-                              maxLines: 1,
-                            ),
-                            onTap: () {
-                              // Add onTap logic here if needed
-                            },
                           ),
+                          subtitle: Text(
+                            '${_date}',
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 15,
+                            ),
+                            maxLines: 1,
+                          ),
+                          onTap: () {
+                            // Add onTap logic here if needed
+                          },
                         ),
                       );
                     },
