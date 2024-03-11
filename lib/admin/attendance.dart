@@ -62,7 +62,17 @@ class Student {
     };
   }
 }
+class AttendanceRecord {
+  final String subject;
+  int presentCount;
+  int absentCount;
 
+  AttendanceRecord({
+    required this.subject,
+    this.presentCount = 0,
+    this.absentCount = 0,
+  });
+}
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -355,7 +365,6 @@ class _StudentListState extends State<StudentList> {
             child: Text('No students found'),
           );
         }
-
         return ListView.builder(
           itemCount: students.length,
           itemBuilder: (context, index) {
