@@ -262,7 +262,7 @@ class StudentDashboard extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: eventsCollection
           // Filter events by assignTo value
-          .orderBy('date', descending: true)
+          .orderBy('date', descending: true).where('assignTo',arrayContains: 'Dashboard')
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -317,7 +317,7 @@ class StudentDashboard extends StatelessWidget {
                             '${_date}',
                             style: const TextStyle(
                               color: Colors.grey,
-                              fontSize: 15,
+                              fontSize: 10,
                             ),
                             maxLines: 1,
                           ),

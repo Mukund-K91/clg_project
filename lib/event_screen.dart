@@ -45,7 +45,7 @@ class EventListState extends State<EventList> {
     return StreamBuilder<QuerySnapshot>(
       stream: eventsCollection
           // Filter events by assignTo value
-          .orderBy('date', descending: true)
+          .orderBy('date', descending: true).where('assignTo',arrayContains: 'Dashboard')
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
