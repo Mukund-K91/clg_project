@@ -115,7 +115,7 @@ class StudentDashboard extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: ImgSlider(context),
+                        child: ImgSlider(),
                       ),
                       GridView.count(
                         crossAxisCount: 2,

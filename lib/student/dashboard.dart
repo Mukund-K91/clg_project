@@ -1,5 +1,6 @@
 import 'package:clg_project/admin/assignment.dart';
 import 'package:clg_project/admin/faculty_dashboard.dart';
+import 'package:clg_project/event_screen.dart';
 import 'package:clg_project/main.dart';
 import 'package:clg_project/student/profile.dart';
 import 'package:clg_project/student/student_dashboard.dart';
@@ -52,33 +53,22 @@ class _MainDashboardState extends State<MainDashboard> {
                 color: Colors.white,
               ),
         actions: [
-          widget.user == 'Faculty'
-              ? IconButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HomeMain(),
-                        ));
-                    runApp(MaterialApp(
-                      home: const HomeMain(),
-                      color: const Color(0xff002233),
-                      debugShowCheckedModeBanner: false,
-                      theme: ThemeData(
-                        colorScheme: ColorScheme.fromSeed(
-                            seedColor: const Color(0xff002233)),
-                        useMaterial3: true,
-                      ),
-                    ));
-                  },
-                  icon: const Icon(
-                    Icons.power_settings_new,
-                    color: Colors.white,
-                  ))
-              : const Icon(
-                  Icons.notifications,
-                  color: Colors.white,
-                ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EventList(),
+                          ));
+
+                    },
+                    icon: const Icon(
+                      Icons.notifications_active,
+                      color: Colors.white,
+                    )),
+          )
         ],
         title: const Text(
           "DASHBOARD",
