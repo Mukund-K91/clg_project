@@ -57,12 +57,11 @@ class _MainDashboardState extends State<MainDashboard> {
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => EventList(),
                           ));
-
                     },
                     icon: const Icon(
                       Icons.notifications_active,

@@ -1,398 +1,443 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
+import '../firebase_options.dart';
+import '../reusable_widget/reusable_textfield.dart';
+import '../storage_service.dart';
 
-class Attendance extends StatefulWidget {
-  @override
-  _AttendanceState createState() => _AttendanceState();
-}
+class Student {
+  final String firstname;
+  final String middlename;
+  final String lastname;
+  final String gender;
+  final String userId;
+  final String activationDate;
+  final String profile;
+  final String email;
+  final String mobile;
+  final String DOB;
+  final String program;
+  final String programTerm;
+  final String division;
+  final String password;
 
-class _AttendanceState extends State<Attendance> {
-  // List<Map<String, dynamic>> studentList = [];
-  // String selectedDivision = 'Div';
-  // final _divison = ["Div", "A", "B", "C", "D"];
-  // List<int> clickCounts = [];
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _initializeClickCounts();
-  //   fetchData();
-  // }
-  //
-  // void _changeColorAndText(int index) {
-  //   setState(() {
-  //     studentList[index]['clickCounts'] = (
-  //       studentList[index],
-  //       clickCounts[index] = (clickCounts[index] + 1) % 3
-  //     );
-  //   });
-  // }
-  // void _resetButtonColor() {
-  //   setState(() {
-  //     studentList.forEach((student) {
-  //       student['clickCount'] = 0;
-  //     });
-  //   });
-  // }
-  // Color _getButtonColor(int index) {
-  //   switch (clickCounts[index]) {
-  //     case 1:
-  //       return Colors.green;
-  //     case 2:
-  //       return Colors.red;
-  //     default:
-  //       return Colors.white;
-  //   }
-  // }
-  //
-  // String _getButtonText(int index) {
-  //   switch (clickCounts[index]) {
-  //     case 1:
-  //       return 'Present';
-  //     case 2:
-  //       return 'Absent';
-  //     default:
-  //       return 'Take';
-  //   }
-  // }
-  //
-  // void _initializeClickCounts() {
-  //   // Fetch the total number of students and set initial clickCounts
-  //   FirebaseFirestore.instance
-  //       .collection('students')
-  //       .get()
-  //       .then((querySnapshot) {
-  //     setState(() {
-  //       clickCounts = List.generate(querySnapshot.size, (index) => 0);
-  //     });
-  //   });
-  // }
-  //
-  // Future<void> fetchData() async {
-  //   // Fetch data from Firestore
-  //   QuerySnapshot<Map<String, dynamic>> querySnapshot =
-  //       await FirebaseFirestore.instance.collection('students').get();
-  //
-  //   // Convert QuerySnapshot to List
-  //   List<Map<String, dynamic>> allStudents = querySnapshot.docs
-  //       .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
-  //     return doc.data();
-  //   }).toList();
-  //
-  //   // Filter and sort the data based on the selected division and roll number
-  //   setState(() {
-  //     studentList = allStudents
-  //         .where((student) => student['Div'] == selectedDivision)
-  //         .toList();
-  //     studentList.sort((a, b) => a['Roll No'].compareTo(b['Roll No']));
-  //   });
-  // }
+  Student(
+      {required this.firstname,
+      required this.middlename,
+      required this.lastname,
+      required this.gender,
+      required this.userId,
+      required this.activationDate,
+      required this.profile,
+      required this.email,
+      required this.mobile,
+      required this.DOB,
+      required this.program,
+      required this.programTerm,
+      required this.division,
+      required this.password});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Attendance'),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: GridView.count(
-                primary: false,
-                padding: const EdgeInsets.all(20),
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                crossAxisCount: 2,
-                children: <Widget>[
-                  Card(
-                    color: Colors.white,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DisplayStudents("A"),
-                                ));
-                          },
-                          iconSize: 50,
-                          icon: const Icon(
-                            FontAwesomeIcons.a,
-                            color: Color(0xff002233),
-                          ),
-                        ),
-                        const Text(
-                          "TYBCA-A",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    color: Colors.white,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DisplayStudents("B"),
-                                ));
-                          },
-                          iconSize: 50,
-                          icon: const Icon(FontAwesomeIcons.b,
-                              color: Color(0xff002233)),
-                        ),
-                        const Text(
-                          "TYBCA-B",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    color: Colors.white,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          onPressed: () async {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DisplayStudents("C"),
-                                ));
-                          },
-                          iconSize: 50,
-                          icon: const Icon(FontAwesomeIcons.c,
-                              color: Color(0xff002233)),
-                        ),
-                        const Text(
-                          "TYBCA-C",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    color: Colors.white,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          onPressed: () async {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DisplayStudents("D"),
-                                ));
-                          },
-                          iconSize: 50,
-                          icon: const Icon(FontAwesomeIcons.d,
-                              color: Color(0xff002233)),
-                        ),
-                        const Text(
-                          "TYBCA-D",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        )
-        );
+  // Convert Student object to a Map for Firestore
+  Map<String, dynamic> toMap() {
+    return {
+      "First Name": firstname,
+      "Middle Name": middlename,
+      "Last Name": lastname,
+      "Gender": gender,
+      "User Id": userId,
+      "Activation Date": activationDate,
+      "Profile Img": profile,
+      "Email": email,
+      "Mobile": mobile,
+      "DOB": DOB,
+      'program': program,
+      'programTerm': programTerm,
+      'division': division,
+      'Password': password,
+    };
   }
 }
 
-class DisplayStudents extends StatefulWidget {
-  String _div;
+class FirestoreService {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  DisplayStudents(this._div, {super.key});
+  // Fetch students from Firestore based on program, program term, and division
+  Stream<List<Student>> getStudents(
+      String program, String programTerm, String division) {
+    return _firestore
+        .collection('students')
+        .doc(program)
+        .collection(programTerm)
+        .doc(division)
+        .collection('student')
+        .orderBy('User Id')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Student(
+                  firstname: doc['First Name'],
+                  middlename: doc['Middle Name'],
+                  lastname: doc['Last Name'],
+                  gender: doc['Gender'],
+                  userId: doc['User Id'],
+                  activationDate: doc['Activation Date'],
+                  profile: doc['Profile Img'],
+                  email: doc['Email'],
+                  mobile: doc['Mobile'],
+                  DOB: doc['DOB'],
+                  program: doc['program'],
+                  programTerm: doc['programTerm'],
+                  division: doc['division'],
+                  password: doc['Password'],
+                ))
+            .toList());
+  }
 
-  @override
-  State<DisplayStudents> createState() => _DisplayStudentsState();
+  Stream<List<Student>> searchStudents(
+      String program, String programTerm, String division, String searchTerm) {
+    return _firestore
+        .collection('students')
+        .doc(program)
+        .collection(programTerm)
+        .doc(division)
+        .collection('student')
+        .where('Mobile', isGreaterThanOrEqualTo: searchTerm)
+        .where('Mobile', isLessThanOrEqualTo: searchTerm + '\uf8ff')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Student(
+                  firstname: doc['First Name'],
+                  middlename: doc['Middle Name'],
+                  lastname: doc['Last Name'],
+                  gender: doc['Gender'],
+                  userId: doc['User Id'],
+                  activationDate: doc['Activation Date'],
+                  profile: doc['Profile Img'],
+                  email: doc['Email'],
+                  mobile: doc['Mobile'],
+                  DOB: doc['DOB'],
+                  program: doc['program'],
+                  programTerm: doc['programTerm'],
+                  division: doc['division'],
+                  password: doc['Password'],
+                ))
+            .toList());
+  }
 }
 
-class _DisplayStudentsState extends State<DisplayStudents> {
-  List<Map<String, dynamic>> studentList = [];
-  List<int> clickCounts = [];
+final _programs = ["--Please Select--", "BCA", "B-Com", "BBA"];
+final _programTerm = [
+  "--Please Select--",
+  "Sem - 1",
+  "Sem - 2",
+  "Sem - 3",
+  "Sem - 4",
+  "Sem - 5",
+  "Sem - 6"
+];
+final _Bcadivision = ["--Please Select--", "A", "B", "C", "D", "E", "F"];
+final _Bcomdivision = ["--Please Select--", "A", "B", "C", "D", "E", "F", "G"];
+final _Bbadivision = ["--Please Select--", "A", "B", "C", "D"];
+
+final TextEditingController _firstNameController = TextEditingController();
+final TextEditingController _middleNameController = TextEditingController();
+final TextEditingController _lastNameController = TextEditingController();
+final TextEditingController _emailController = TextEditingController();
+final TextEditingController _mobileNoController = TextEditingController();
+late TextEditingController _UserIdController;
+final TextEditingController _dobController = TextEditingController();
+late TextEditingController _fileNameController = TextEditingController();
+late TextEditingController _totalStudentsController = TextEditingController();
+TextEditingController _rollNumberController = TextEditingController();
+DateTime _activationDate = DateTime.now();
+TextEditingController _activeDate = TextEditingController();
+final FirestoreService _firestoreService = FirestoreService();
+final TextEditingController _searchController = TextEditingController();
+final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+StorageService service = StorageService();
+
+StorageService storageService = StorageService();
+late CollectionReference _studentsCollection;
+late DocumentReference _UserIdDoc;
+int _lastUserId = 202400101;
+int _totalStudent = 0;
+late String imjUrl;
+
+String? _selectedGender = 'Male';
+DateTime? _selectedDate;
+
+String? _selProgram = "--Please Select--";
+
+String? _selProgramTerm = "--Please Select--";
+
+String? _seldiv = "--Please Select--";
+final _formKey = GlobalKey<FormState>();
+
+/*===============================================*/
+/*===============================================*/
+/*===============================================*/
+
+class StudentList extends StatefulWidget {
+  final program;
+
+  const StudentList({super.key, this.program});
+
+  void main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    //  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: SystemUiOverlay.values);
+  }
+
+  @override
+  _StudentListState createState() => _StudentListState();
+}
+
+class _StudentListState extends State<StudentList> {
+  bool passwordObscured = true;
+
+  Future<void> _getUserId() async {
+    final userIdDocSnapshot = await _UserIdDoc.get();
+    setState(() {
+      _totalStudent =
+          userIdDocSnapshot.exists && userIdDocSnapshot.data() != null
+              ? (userIdDocSnapshot.data()
+                      as Map<String, dynamic>)['Total Students'] ??
+                  0
+              : 0;
+      _totalStudentsController.text = _totalStudent.toString();
+    });
+  }
+
+  Future<void> _decreamentTotalStudents() async {
+    _totalStudent--;
+    await _UserIdDoc.update({'Total Students': _totalStudent});
+  }
+
+  final FirestoreService _firestoreService = FirestoreService();
+  late TextEditingController _searchController;
+  String? _selectedProgramTerm = "--Please Select--";
+  String? _selectedDivision = "--Please Select--";
+  late String _searchTerm;
+  ScrollController _dataController1 = ScrollController();
+  ScrollController _dataController2 = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    _initializeClickCounts();
-    fetchData();
-  }
-
-  void _changeColorAndText(int index) {
-    setState(() {
-      studentList[index]['clickCounts'] = (
-        studentList[index],
-        clickCounts[index] = (clickCounts[index] + 1) % 3
-      );
-    });
-  }
-  void _resetButtonColor() {
-    setState(() {
-      studentList.forEach((student) {
-        student['clickCount'] = 0;
-      });
-    });
-  }
-
-  Color _getButtonColor(int index) {
-    switch (clickCounts[index]) {
-      case 1:
-        return Colors.green;
-      case 2:
-        return Colors.red;
-      default:
-        return Colors.white;
-    }
-  }
-
-  String _getButtonText(int index) {
-    switch (clickCounts[index]) {
-      case 1:
-        return 'Present';
-      case 2:
-        return 'Absent';
-      default:
-        return 'Take';
-    }
-  }
-
-  void _initializeClickCounts() {
-    // Fetch the total number of students and set initial clickCounts
-    FirebaseFirestore.instance
-        .collection('students')
-        .get()
-        .then((querySnapshot) {
-      setState(() {
-        clickCounts = List.generate(querySnapshot.size, (index) => 0);
-      });
-    });
-  }
-
-  Future<void> fetchData() async {
-    // Fetch data from Firestore
-    QuerySnapshot<Map<String, dynamic>> querySnapshot =
-        await FirebaseFirestore.instance.collection('students').get();
-
-    // Convert QuerySnapshot to List
-    List<Map<String, dynamic>> allStudents = querySnapshot.docs
-        .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
-      return doc.data();
-    }).toList();
-
-    // Filter and sort the data based on the selected division and roll number
-    setState(() {
-      studentList = allStudents
-          .where((student) => student['Div'] == widget._div)
-          .toList();
-      studentList.sort((a, b) => a['Roll No'].compareTo(b['Roll No']));
-    });
+    _searchTerm = '';
+    _searchController = TextEditingController();
+    _UserIdDoc =
+        FirebaseFirestore.instance.collection('metadata').doc('userId');
+    _getUserId();
   }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-        body: studentList.isEmpty
-            ? Center(
-                child: Text("No"),
-              )
-            : Column(
+      appBar: AppBar(
+        title: const Text('Student List'),
+      ),
+      body: Column(
+        children: [
+          _buildFilters(),
+          Expanded(
+            child: _buildStudentList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilters() {
+    final String _selectedProgram=widget.program;
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          TextField(
+            decoration: const InputDecoration(
+              labelText: 'Search',
+              hintText: 'Search by name',
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (value) {
+              setState(() {
+                _searchTerm = value;
+              });
+            },
+          ),
+          const SizedBox(width: 8),
+
+          const SizedBox(width: 8),
+          DropdownButton<String>(
+            value: _selectedProgramTerm,
+            onChanged: (String? value) {
+              setState(() {
+                _selectedProgramTerm = value!;
+              });
+            },
+            items: _selectedProgram == ''
+                ? []
+                : _programTerm.map<DropdownMenuItem<String>>(
+                    (String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    },
+                  ).toList(),
+            hint: const Text('Program Term'),
+          ),
+          const SizedBox(width: 8),
+          DropdownButton<String>(
+            value: _selectedDivision,
+            onChanged: (String? value) {
+              setState(() {
+                _selectedDivision = value!;
+              });
+            },
+            items: _selectedProgramTerm == '--Please Select--'
+                ? []
+                : _selectedProgram == "BCA"
+                    ? _Bcadivision.map((e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(e),
+                        )).toList()
+                    : _selectedProgram == "B-Com"
+                        ? _Bcomdivision.map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e),
+                            )).toList()
+                        : _Bbadivision.map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e),
+                            )).toList(),
+            hint: const Text('Class'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStudentList() {
+    final String _selectedProgram=widget.program;
+    return StreamBuilder<List<Student>>(
+      stream: _searchTerm.isEmpty
+          ? _firestoreService.getStudents(
+              _selectedProgram!, _selectedProgramTerm!, _selectedDivision!)
+          : _firestoreService.searchStudents(_selectedProgram!,
+              _selectedProgramTerm!, _selectedDivision!, _searchTerm),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(
+            child: Text('Error: ${snapshot.error}'),
+          );
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        final students = snapshot.data;
+
+        if (students == null || students.isEmpty) {
+          return const Center(
+            child: Text('No students found'),
+          );
+        }
+
+        return RawScrollbar(
+          padding: const EdgeInsets.all(20),
+          thumbVisibility: true,
+          trackVisibility: true,
+          thumbColor: const Color(0xff002233),
+          controller: _dataController2,
+          child: SingleChildScrollView(
+            controller: _dataController2,
+            scrollDirection: Axis.horizontal,
+            child: SingleChildScrollView(
+              controller: _dataController1,
+              child: Column(
                 children: [
-                  Expanded(
-                      child: ListView.builder(
-                          itemCount: studentList.length,
-                          itemBuilder: (context, index) {
-                            var student = studentList[index];
-                            return Card(
-                              color: const Color(0xff002233),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              margin: const EdgeInsets.all(10),
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  radius: 17,
-                                  backgroundColor: const Color(0xffffffff),
-                                  child: Text(
-                                    student['Div'].toString(),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black),
-                                  ),
-                                ),
-                                title: InkWell(
-                                  child: Text(
-                                    student['Roll No'].toString(),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  student['First Name'] +
-                                      " " +
-                                      student['Last Name'],
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                                trailing: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      maximumSize: Size(100, 40), backgroundColor: _getButtonColor(index),
-                                      minimumSize: Size(100, 40)),
-                                  onPressed: () {
-                                    _changeColorAndText(index);
-                                  },
-                                  child: Text(
-                                    _getButtonText(index),
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                  DataTable(
+                    border: TableBorder.all(),
+                    columns: const [
+                      DataColumn(label: Text('User Id')),
+                      DataColumn(label: Text('Name')),
+                      DataColumn(label: Text('Profile')),
+                      DataColumn(label: Text('Program')),
+                      DataColumn(label: Text('Program Term')),
+                      DataColumn(label: Text('Division')),
+                      DataColumn(label: Text('Activation Date')),
+                      DataColumn(label: Text('DOB')),
+                      DataColumn(label: Text('Mobile')),
+                      DataColumn(label: Text('Email')),
+                      DataColumn(label: Text('Action')),
+                    ],
+                    rows: students
+                        .map(
+                          (student) => DataRow(cells: [
+                            DataCell(Text(student.userId)),
+                            DataCell(Text(
+                                student.firstname + " " + student.lastname)),
+                            DataCell(CircleAvatar(
+                              radius: 27,
+                              child: ClipOval(
+                                child: Image.network(
+                                  student.profile,
+                                  fit: BoxFit.cover,
+                                  height: 70,
+                                  width: 70,
                                 ),
                               ),
-                            );
-                          })),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 60,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          backgroundColor: const Color(0xff002233),
-                        ),
-                        onPressed: () {
-                          studentList.forEach((student) {
-                            student['clickCount'] = 0;
-                          });
-                        },
-                        child: const Text(
-                          "SUBMIT",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                      ),
-                    ),
+                            )),
+                            DataCell(Text(student.program)),
+                            DataCell(Text(student.programTerm)),
+                            DataCell(Text(student.division)),
+                            DataCell(Text(student.activationDate)),
+                            DataCell(Text(student.DOB)),
+                            DataCell(Text(student.mobile)),
+                            DataCell(Text(student.email)),
+                            DataCell(widget.program == "Super Admin"
+                                ? Row(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {},
+                                          icon: const Icon(
+                                            FontAwesomeIcons.edit,
+                                            color: Colors.green,
+                                          )),
+                                      IconButton(
+                                          onPressed: () {},
+                                          icon: const Icon(
+                                            FontAwesomeIcons.trash,
+                                            color: Colors.redAccent,
+                                          )),
+                                    ],
+                                  )
+                                : Text("Not Allowed!!"))
+                          ]),
+                        )
+                        .toList(),
                   ),
+                  SizedBox(
+                    height: 30,
+                  )
                 ],
-              ));
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
