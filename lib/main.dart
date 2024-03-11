@@ -1,3 +1,4 @@
+import 'package:clg_project/event_screen.dart';
 import 'package:clg_project/reusable_widget/reusable_textfield.dart';
 import 'package:clg_project/splash_screen.dart';
 import 'package:clg_project/student/Studentassignment.dart';
@@ -45,6 +46,7 @@ class _MyAppState extends State<MyApp> {
       //SplashScreen()
       MainDashboard('Student', '202400101')
         // Myhome()
+      //EventList()
         //FacultyDashboard('admin2@gmail.com', 'Faculty')
         //MainDashboard('Student', '202400101')
         //StudentDashboard('202400101', 'Student')
