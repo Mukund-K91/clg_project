@@ -105,8 +105,8 @@ class FirestoreService {
         .collection(programTerm)
         .doc(division)
         .collection('student')
-        .where('Mobile', isGreaterThanOrEqualTo: searchTerm)
-        .where('Mobile', isLessThanOrEqualTo: searchTerm + '\uf8ff')
+        .where('First Name', isGreaterThanOrEqualTo: searchTerm)
+        .where('First Name', isLessThanOrEqualTo: searchTerm + '\uf8ff')
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => Student(
@@ -236,9 +236,9 @@ class _StudentListState extends State<StudentList> {
         FirebaseFirestore.instance.collection('metadata').doc('userId');
     _getUserId();
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Student List'),
@@ -255,7 +255,7 @@ class _StudentListState extends State<StudentList> {
   }
 
   Widget _buildFilters() {
-    final String _selectedProgram=widget.program;
+    final String _selectedProgram = widget.program;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -274,7 +274,7 @@ class _StudentListState extends State<StudentList> {
             },
           ),
           const SizedBox(width: 8),
-
+          Text('Program : ${widget.program}'),
           const SizedBox(width: 8),
           DropdownButton<String>(
             value: _selectedProgramTerm,
@@ -327,13 +327,14 @@ class _StudentListState extends State<StudentList> {
   }
 
   Widget _buildStudentList() {
-    final String _selectedProgram=widget.program;
+    final String _selectedProgram = widget.program;
+    int rollnumber=0;
     return StreamBuilder<List<Student>>(
       stream: _searchTerm.isEmpty
           ? _firestoreService.getStudents(
-              _selectedProgram!, _selectedProgramTerm!, _selectedDivision!)
+          _selectedProgram!, _selectedProgramTerm!, _selectedDivision!)
           : _firestoreService.searchStudents(_selectedProgram!,
-              _selectedProgramTerm!, _selectedDivision!, _searchTerm),
+          _selectedProgramTerm!, _selectedDivision!, _searchTerm),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(
@@ -355,89 +356,47 @@ class _StudentListState extends State<StudentList> {
           );
         }
 
-        return RawScrollbar(
-          padding: const EdgeInsets.all(20),
-          thumbVisibility: true,
-          trackVisibility: true,
-          thumbColor: const Color(0xff002233),
-          controller: _dataController2,
-          child: SingleChildScrollView(
-            controller: _dataController2,
-            scrollDirection: Axis.horizontal,
-            child: SingleChildScrollView(
-              controller: _dataController1,
-              child: Column(
-                children: [
-                  DataTable(
-                    border: TableBorder.all(),
-                    columns: const [
-                      DataColumn(label: Text('User Id')),
-                      DataColumn(label: Text('Name')),
-                      DataColumn(label: Text('Profile')),
-                      DataColumn(label: Text('Program')),
-                      DataColumn(label: Text('Program Term')),
-                      DataColumn(label: Text('Division')),
-                      DataColumn(label: Text('Activation Date')),
-                      DataColumn(label: Text('DOB')),
-                      DataColumn(label: Text('Mobile')),
-                      DataColumn(label: Text('Email')),
-                      DataColumn(label: Text('Action')),
-                    ],
-                    rows: students
-                        .map(
-                          (student) => DataRow(cells: [
-                            DataCell(Text(student.userId)),
-                            DataCell(Text(
-                                student.firstname + " " + student.lastname)),
-                            DataCell(CircleAvatar(
-                              radius: 27,
-                              child: ClipOval(
-                                child: Image.network(
-                                  student.profile,
-                                  fit: BoxFit.cover,
-                                  height: 70,
-                                  width: 70,
-                                ),
-                              ),
-                            )),
-                            DataCell(Text(student.program)),
-                            DataCell(Text(student.programTerm)),
-                            DataCell(Text(student.division)),
-                            DataCell(Text(student.activationDate)),
-                            DataCell(Text(student.DOB)),
-                            DataCell(Text(student.mobile)),
-                            DataCell(Text(student.email)),
-                            DataCell(widget.program == "Super Admin"
-                                ? Row(
-                                    children: [
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(
-                                            FontAwesomeIcons.edit,
-                                            color: Colors.green,
-                                          )),
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(
-                                            FontAwesomeIcons.trash,
-                                            color: Colors.redAccent,
-                                          )),
-                                    ],
-                                  )
-                                : Text("Not Allowed!!"))
-                          ]),
-                        )
-                        .toList(),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  )
-                ],
+        return ListView.builder(
+          itemCount: students.length,
+          itemBuilder: (context, index) {
+            final student = students[index];
+            rollnumber++;
+            return Card(
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Text('${rollnumber}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                ),
+                title: Text(student.firstname + " " + student.lastname,style: TextStyle(fontWeight: FontWeight.bold),),
+                subtitle: Text(
+                  student.userId
+                ),
+                trailing: widget.program == "Super Admin"
+                    ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        FontAwesomeIcons.edit,
+                        color: Colors.green,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        FontAwesomeIcons.trash,
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                  ],
+                )
+                    : null,
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );
   }
+
 }
