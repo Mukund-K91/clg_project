@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +31,7 @@ class EventListState extends State<EventList> {
         ),
         backgroundColor: Color(0xff002233),
       ),
-      body: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(), child: eventList()),
+      body: eventList(),
     );
   }
 
@@ -68,58 +69,53 @@ class EventListState extends State<EventList> {
               ? Center(
                   child: Text("No Announcement Published"),
                 )
-              : SizedBox(
-                  height: listViewHeight,
-                  child: ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: events.docs.length,
-                    itemBuilder: (context, index) {
-                      final event = events.docs[index];
-                      final eventData = event.data() as Map<String, dynamic>;
-                      final Timestamp timestamp =
-                          eventData['date']; // Get the Timestamp
-                      final DateTime date = timestamp.toDate();
-                      final _date = DateFormat('dd-MM-yyyy \nhh:mm')
-                          .format(date); // Convert to DateTime
-                      final _time = DateFormat('hh:mm').format(date);
-                      rowIndex++; // Increment row index for each row
-                      String fileUrl = eventData['File'];
+              : ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: events.docs.length,
+                  itemBuilder: (context, index) {
+                    final event = events.docs[index];
+                    final eventData = event.data() as Map<String, dynamic>;
+                    final Timestamp timestamp =
+                        eventData['date']; // Get the Timestamp
+                    final DateTime date = timestamp.toDate();
+                    final _date = DateFormat('dd-MM-yyyy \nhh:mm a')
+                        .format(date); // Convert to DateTime
+                    final _time = DateFormat('hh:mm').format(date);
+                    rowIndex++; // Increment row index for each row
+                    String fileUrl = eventData['File'];
 
-                      return Card(
-                        child: ListTile(
-                          title: Text(
-                            eventData['title'] ?? 'Title not available',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Colors.black,
-                            ),
+                    return Card(
+                      child: ListTile(
+                        title: Text(
+                          eventData['title'] ?? 'Title not available',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.black,
                           ),
-                          subtitle: ReadMoreText(
-                            eventData['description'],
-                            trimLines: 2,
-                            colorClickableText: Colors.pink,
-                            trimMode: TrimMode.Line,
-                            trimCollapsedText: 'Show more',
-                            trimExpandedText: 'Show less',
-                            moreStyle: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                          trailing: Text(
-                            "$_date",
-                            style: const TextStyle(
-                              color: Color(0xff4b8fbf),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                          onTap: () {
-                            // Add onTap logic here if needed
-                          },
                         ),
-                      );
-                    },
-                  ),
+                        subtitle: ReadMoreText(
+                          eventData['description'],
+                          style: TextStyle(color: Colors.black),
+                          trimMode: TrimMode.Line,
+                          trimCollapsedText: 'Show more',
+                          trimExpandedText: 'Show less',
+                          colorClickableText: Color(0xff4b8bfb),
+                        ),
+                        trailing: Text(
+                          "$_date",
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10,
+                          ),
+                        ),
+                        onTap: () {
+                          // Add onTap logic here if needed
+                        },
+                      ),
+                    );
+                  },
                 ),
         );
       },
