@@ -1,5 +1,6 @@
 import 'package:clg_project/event_screen.dart';
 import 'package:clg_project/reusable_widget/img_slider.dart';
+import 'package:clg_project/student/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -82,25 +83,30 @@ class StudentDashboard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            ListTile(
-                              leading: CircleAvatar(
-                                radius: 27,
-                                child: ClipOval(
-                                  child: Image.network(
-                                    ProfileUrl,
-                                    fit: BoxFit.cover,
-                                    height: 70,
-                                    width: 70,
+                            InkWell(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(userData['User Id']),));
+                              },
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  radius: 27,
+                                  child: ClipOval(
+                                    child: Image.network(
+                                      ProfileUrl,
+                                      fit: BoxFit.cover,
+                                      height: 70,
+                                      width: 70,
+                                    ),
                                   ),
                                 ),
+                                title: Text(
+                                  "${Name}",
+                                  style: const TextStyle(
+                                      fontSize: 20, color: Colors.white),
+                                ),
+                                subtitle: Text("${program}",
+                                    style: const TextStyle(color: Colors.white)),
                               ),
-                              title: Text(
-                                "${Name}",
-                                style: const TextStyle(
-                                    fontSize: 20, color: Colors.white),
-                              ),
-                              subtitle: Text("${program}",
-                                  style: const TextStyle(color: Colors.white)),
                             ),
                           ],
                         ),

@@ -34,24 +34,6 @@ class _MainDashboardState extends State<MainDashboard> {
     print(widget.UserId);
     return Scaffold(
       appBar: AppBar(
-        leading: widget.user == "Student"
-            ? IconButton(
-                icon: const Icon(
-                  FontAwesomeIcons.user,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Profile(widget.UserId),
-                      ));
-                },
-              )
-            : const Icon(
-                Icons.account_balance,
-                color: Colors.white,
-              ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
