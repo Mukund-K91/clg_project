@@ -118,9 +118,6 @@ class EventListState extends State<EventList> {
                               trimExpandedText: 'Show less',
                               colorClickableText: Color(0xff4b8bfb),
                             ),
-                            onTap: () {
-                              // Add onTap logic here
-                            },
                           ),
                         ),
                         SizedBox(width: 8),
@@ -139,7 +136,9 @@ class EventListState extends State<EventList> {
                           )
                               : IconButton(
                             iconSize: 30,
-                            onPressed: () {},
+                            onPressed: () {
+
+                            },
                             icon: Icon(
                               FontAwesomeIcons.fileArrowDown,
                               color: Colors.blueAccent,
