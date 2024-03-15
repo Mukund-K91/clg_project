@@ -34,14 +34,9 @@ class StudentDashboard extends StatelessWidget {
 
     return null; // Return null if user data is not found
   }
-
-  final List<String> imageUrls = [
-    'https://via.placeholder.com/600x300?text=Image1',
-    'https://via.placeholder.com/600x300?text=Image2',
-    'https://via.placeholder.com/600x300?text=Image3',
-    'https://via.placeholder.com/600x300?text=Image4',
-  ];
-  int _currentSlide = 0;
+  void initSate(){
+    ImgSlider();
+  }
 
   @override
   Widget build(BuildContext context) {
