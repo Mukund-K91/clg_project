@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 import 'package:path/path.dart' as path;
@@ -43,14 +44,14 @@ class EventListState extends State<EventList> {
   Widget eventList() {
     double? _progress;
     final CollectionReference eventsCollection =
-        FirebaseFirestore.instance.collection('events');
+    FirebaseFirestore.instance.collection('events');
     int rowIndex = 0; // Initialize the row index
     ScrollController _dataController1 = ScrollController();
     ScrollController _dataController2 = ScrollController();
 
     return StreamBuilder<QuerySnapshot>(
       stream: eventsCollection
-          // Filter events by assignTo value
+      // Filter events by assignTo value
           .orderBy('date', descending: true)
           .where('assignTo', arrayContains: 'Dashboard')
           .snapshots(),
@@ -74,28 +75,33 @@ class EventListState extends State<EventList> {
           padding: const EdgeInsets.all(8.0),
           child: events.docs.isEmpty
               ? Center(
-                  child: Text("No Announcement Published"),
-                )
+            child: Text("No Announcement Published"),
+          )
               : ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: events.docs.length,
-                  itemBuilder: (context, index) {
-                    final event = events.docs[index];
-                    final eventData = event.data() as Map<String, dynamic>;
-                    final Timestamp timestamp =
-                        eventData['date']; // Get the Timestamp
-                    final DateTime date = timestamp.toDate();
-                    final _date = DateFormat('dd-MMMM hh:mm a')
-                        .format(date); // Convert to DateTime
-                    rowIndex++; // Increment row index for each row
-                    String fileUrl = eventData['File'];
-                    final String fileName = event['FileName'] ?? '';
+            physics: AlwaysScrollableScrollPhysics(),
+            itemCount: events.docs.length,
+            itemBuilder: (context, index) {
+              final event = events.docs[index];
+              final eventData = event.data() as Map<String, dynamic>;
+              final Timestamp timestamp =
+              eventData['date']; // Get the Timestamp
+              final DateTime date = timestamp.toDate();
+              final _date = DateFormat('dd-MMMM hh:mm a')
+                  .format(date); // Convert to DateTime
+              rowIndex++; // Increment row index for each row
+              String fileUrl = eventData['File'];
+              final String fileName = event['FileName'] ?? '';
 
-                    return Card(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ListTile(
+              return Card(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: ListTile(
+                            enabled: false,
                             title: Text(
                               eventData['title'] ?? 'Title not available',
                               style: const TextStyle(
@@ -112,37 +118,53 @@ class EventListState extends State<EventList> {
                               trimExpandedText: 'Show less',
                               colorClickableText: Color(0xff4b8bfb),
                             ),
-                            trailing: fileName.isNotEmpty
-                                ? isImage(fileName)
-                                    ? Container(
-                                        height: 80,
-                                        width: 80,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: NetworkImage(fileUrl))),
-                                      )
-                                    : InkWell(
-                                        onTap: () {
-                                          // Add onTap logic for PDF file
-                                        },
-                                        child: Icon(Icons.picture_as_pdf),
-                                      )
-                                : Icon(Icons.insert_drive_file),
                             onTap: () {
                               // Add onTap logic here
                             },
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('${_date}',style: TextStyle(color: Colors.grey,fontSize: 10),),
+                        ),
+                        SizedBox(width: 8),
+                        // Add space between ListTile and trailing image
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          // Adjust padding as needed
+                          child: fileName.isNotEmpty &&
+                              fileUrl.toString() != "null"
+                              ? isImage(fileName)
+                              ? Image(
+                            width: 100,
+                            height: 100,
+                            image: NetworkImage(fileUrl),
+                            fit: BoxFit.cover,
                           )
-                        ],
+                              : IconButton(
+                            iconSize: 30,
+                            onPressed: () {},
+                            icon: Icon(
+                              FontAwesomeIcons.fileArrowDown,
+                              color: Colors.blueAccent,
+                            ),
+                          )
+                              : null,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        '${_date}',
+                        style:
+                        TextStyle(color: Colors.grey, fontSize: 10),
                       ),
-                    );
-                  },
+                    )
+                  ],
                 ),
+              );
+            },
+          ),
         );
       },
     );
   }
+
 }
