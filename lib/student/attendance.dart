@@ -64,36 +64,10 @@ class AttendanceDisplay extends StatelessWidget {
 
               return Padding(
                 padding: const EdgeInsets.all(10),
-                child: Container(
-                  width: double.infinity,
-                  height: 150,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    shadowColor: Colors.grey,
-                    elevation: 5,
-                    color: Colors.green.shade200,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            '$subject',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 30,
-                            child: Text(
-                              '$percentage %',
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                child: ListTile(
+                  title: Text("${subject}"),
+                  trailing: Text("${percentage}"),
+                )
               );
             }).toList(),
           );
