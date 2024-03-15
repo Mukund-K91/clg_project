@@ -51,6 +51,7 @@ class AttendanceDisplay extends StatelessWidget {
               data['subjectAttendance'] as Map<String, dynamic>? ?? {};
 
           return ListView(
+             physics: AlwaysScrollableScrollPhysics(),
             children: subjectAttendance.entries.map((entry) {
               final subject = entry.key;
               final attendanceData =
@@ -59,8 +60,7 @@ class AttendanceDisplay extends StatelessWidget {
               final presentCount = attendanceData['presentCount'] as int? ?? 0;
               final absentCount = attendanceData['absentCount'] as int? ?? 0;
               final totalLectures = presentCount + absentCount;
-              final percentage =
-              totalLectures != 0 ? (presentCount / totalLectures) * 100 : 0;
+              final percentage = totalLectures != 0 ? ((presentCount / totalLectures) * 100).toStringAsFixed(1) : '0.0';
 
               return Padding(
                 padding: const EdgeInsets.all(10),
@@ -85,7 +85,7 @@ class AttendanceDisplay extends StatelessWidget {
                             backgroundColor: Colors.white,
                             radius: 30,
                             child: Text(
-                              '$percentage',
+                              '$percentage %',
                               style: const TextStyle(fontSize: 20),
                             ),
                           )
