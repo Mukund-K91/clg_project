@@ -1,5 +1,6 @@
 import 'package:clg_project/event_screen.dart';
 import 'package:clg_project/reusable_widget/img_slider.dart';
+import 'package:clg_project/student/attendance.dart';
 import 'package:clg_project/student/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,7 +35,8 @@ class StudentDashboard extends StatelessWidget {
 
     return null; // Return null if user data is not found
   }
-  void initSate(){
+
+  void initSate() {
     ImgSlider();
   }
 
@@ -79,8 +81,13 @@ class StudentDashboard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             InkWell(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(userData['User Id']),));
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          Profile(userData['User Id']),
+                                    ));
                               },
                               child: ListTile(
                                 leading: CircleAvatar(
@@ -100,7 +107,8 @@ class StudentDashboard extends StatelessWidget {
                                       fontSize: 20, color: Colors.white),
                                 ),
                                 subtitle: Text("${program}",
-                                    style: const TextStyle(color: Colors.white)),
+                                    style:
+                                        const TextStyle(color: Colors.white)),
                               ),
                             ),
                           ],
@@ -133,7 +141,20 @@ class StudentDashboard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              AttendanceDisplay(
+                                            userId: userData['User Id'],
+                                            program: userData['program'],
+                                            programTerm:
+                                                userData['programTerm'],
+                                            division: userData['division'],
+                                          ),
+                                        ));
+                                  },
                                   iconSize: 50,
                                   icon: const Icon(
                                     FontAwesomeIcons.calendarDay,
@@ -239,7 +260,7 @@ class StudentDashboard extends StatelessWidget {
                                     builder: (context) => EventList(),
                                   ));
                             },
-                            child: Text("view all>>")),
+                            child: Text("view all >>")),
                       ),
                       _buildEventList()
                     ],
@@ -263,7 +284,8 @@ class StudentDashboard extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: eventsCollection
           // Filter events by assignTo value
-          .orderBy('date', descending: true).where('assignTo',arrayContains: 'Dashboard')
+          .orderBy('date', descending: true)
+          .where('assignTo', arrayContains: 'Dashboard')
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
