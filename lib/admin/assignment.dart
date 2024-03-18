@@ -2,6 +2,7 @@ import 'package:clg_project/reusable_widget/lists.dart';
 import 'package:clg_project/reusable_widget/reusable_appbar.dart';
 import 'package:clg_project/reusable_widget/reusable_textfield.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -303,7 +304,10 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 children: [
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final result = await FilePicker.platform
+                            .pickFiles(allowMultiple: true, type: FileType.any);
+                      },
                       child: const Text('Create Assignment'),
                     ),
                   ),

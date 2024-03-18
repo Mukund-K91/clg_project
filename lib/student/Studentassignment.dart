@@ -1,4 +1,5 @@
 import 'package:clg_project/reusable_widget/reusable_appbar.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,10 @@ class _StudentassignmentState extends State<Studentassignment> {
         height: 80.0,
         child: FittedBox(
           child: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () async {
+              final result = await FilePicker.platform
+                  .pickFiles(allowMultiple: true, type: FileType.any);
+            },
             backgroundColor: Color(0xff225779),
             tooltip: 'Increment',
             shape: RoundedRectangleBorder(
