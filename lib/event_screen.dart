@@ -37,7 +37,7 @@ class EventListState extends State<EventList> {
                 bottomRight: Radius.circular(80))),
         centerTitle: true,
         title: Text(
-          "Notice Board",
+          "News & Events",
         ),
         backgroundColor: Color(0xff002233),
       ),

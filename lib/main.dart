@@ -46,10 +46,10 @@ class _MyAppState extends State<MyApp> {
            // Studentassignment()
         //HomeMain()
       //SplashScreen()
-     //MainDashboard('202400101', 'Student')
+     MainDashboard('Student', '202400101')
         // Myhome()
       //EventList()
-       MainDashboard('Faculty', 'BCA-101')
+       //MainDashboard('Faculty', 'BCA-101')
         //StudentDashboard('202400101', 'Student')
         );
   }

@@ -1,6 +1,8 @@
 import 'package:clg_project/event_screen.dart';
+import 'package:clg_project/noticeboard.dart';
 import 'package:clg_project/reusable_widget/img_slider.dart';
 import 'package:clg_project/reusable_widget/notice_board_list.dart';
+import 'package:clg_project/student/Studentassignment.dart';
 import 'package:clg_project/student/attendance.dart';
 import 'package:clg_project/student/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -63,8 +65,7 @@ class StudentDashboard extends StatelessWidget {
                 " | " +
                 userData['division'];
             final String ProfileUrl = userData['Profile Img'];
-            return
-              Column(
+            return Column(
               children: [
                 Container(
                   height: MediaQuery.of(context).size.height / 7,
@@ -87,8 +88,8 @@ class StudentDashboard extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          Profile(userData['User Id'],'Student'),
+                                      builder: (context) => Profile(
+                                          userData['User Id'], 'Student'),
                                     ));
                               },
                               child: ListTile(
@@ -207,8 +208,12 @@ class StudentDashboard extends StatelessWidget {
                               children: [
                                 IconButton(
                                   onPressed: () async {
-                                    await pagenotfound(context,
-                                        'No assignment to submit woo hoo :)');
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              Studentassignment(),
+                                        ));
                                   },
                                   iconSize: 50,
                                   icon: const Icon(
@@ -259,12 +264,15 @@ class StudentDashboard extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => EventList(),
+                                    builder: (context) => NoticeBoard(
+                                        userData['First Name'], _user),
                                   ));
                             },
                             child: Text("view all >>")),
                       ),
-                      buildEventList()
+                      SizedBox(
+                        height: 30,
+                      )
                     ],
                   ),
                 ))
@@ -275,5 +283,4 @@ class StudentDashboard extends StatelessWidget {
       ),
     );
   }
-
 }
