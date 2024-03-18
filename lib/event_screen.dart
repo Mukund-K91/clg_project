@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
@@ -137,7 +141,30 @@ class EventListState extends State<EventList> {
                               : IconButton(
                             iconSize: 30,
                             onPressed: () {
-
+                              FileDownloader.downloadFile(
+                                url: fileUrl,
+                                onProgress: (name, progress) {
+                                  setState(() {
+                                    _progress = progress;
+                                  });
+                                },
+                                onDownloadCompleted: (value) {
+                                  print('file $value');
+                                  setState(() {
+                                    _progress = null;
+                                  });
+                                },
+                                notificationType:
+                                NotificationType.all,
+                              );
+                              Fluttertoast.showToast(
+                                  msg: 'Downloading....',
+                                  toastLength: Toast.LENGTH_SHORT);
+                              Timer(Duration(seconds: 4), () {
+                                Fluttertoast.showToast(
+                                    msg: 'Downloaded',
+                                    toastLength: Toast.LENGTH_LONG);
+                              });
                             },
                             icon: Icon(
                               FontAwesomeIcons.fileArrowDown,

@@ -7,8 +7,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Profile extends StatefulWidget {
   String _UserId;
+  String _UserType;
 
-  Profile(this._UserId, {super.key});
+  Profile(this._UserId, this._UserType, {super.key});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -19,11 +20,15 @@ class _ProfileState extends State<Profile> {
     final QuerySnapshot<Map<String, dynamic>> querySnapshot =
         await FirebaseFirestore.instance.collectionGroup('student').get();
 
+    final QuerySnapshot<Map<String, dynamic>> querySnapshotFaculty =
+        await FirebaseFirestore.instance.collectionGroup('faculty').get();
+
     for (final QueryDocumentSnapshot<Map<String, dynamic>> document
-        in querySnapshot.docs) {
+        in widget._UserType == 'Student'
+            ? querySnapshot.docs
+            : querySnapshotFaculty.docs) {
       final userData = document.data();
       final String documentUserId = document.id;
-      final String mobile = userData?['Mobile'];
 
       // Check if the document userId (user ID) matches the entered userId and mobile number matches the entered mobile number
       if (documentUserId == enteredUserId) {
@@ -35,8 +40,6 @@ class _ProfileState extends State<Profile> {
   }
 
   @override
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
   Widget build(BuildContext context) {
     Color themeColor = Color(0xff002233);
     return MaterialApp(
@@ -69,127 +72,228 @@ class _ProfileState extends State<Profile> {
               final userData = snapshot.data!;
               final String Name =
                   userData['First Name'] + " " + userData['Last Name'];
-              final String program = userData['program'] +
-                  " | " +
-                  userData['programTerm'] +
-                  " | " +
-                  userData['division'];
               final String ProfileUrl = userData['Profile Img'];
-              return SingleChildScrollView(
-                  child: Column(
-                children: [
-                  Center(
-                    child: Column(
+              return widget._UserType == "Student"
+                  ? SingleChildScrollView(
+                      child: Column(
                       children: [
-                        CircleAvatar(
-                          radius: 50,
-                          foregroundImage: NetworkImage(ProfileUrl),
-                        ),
-                        SizedBox(height: 18),
-                        Text(
-                          Name,
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.w500),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          userData['User Id'],
-                          style: TextStyle(
-                            fontSize: 15,
+                        Center(
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 50,
+                                foregroundImage: NetworkImage(ProfileUrl),
+                              ),
+                              SizedBox(height: 18),
+                              Text(
+                                Name,
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                userData['User Id'],
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Divider(
+                                thickness: 2,
+                                color: Colors.grey,
+                                indent: 25,
+                                endIndent: 25,
+                              ),
+                            ],
                           ),
                         ),
-                        Divider(
-                          thickness: 2,
-                          color: Colors.grey,
-                          indent: 25,
-                          endIndent: 25,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
                         Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Text(
-                            'Personal Details',
-                            style:
-                                TextStyle(fontSize: 20, color: Colors.blueGrey),
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Text(
+                                  'Personal Details',
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.blueGrey),
+                                ),
+                              ),
+                              ListItem(
+                                title: 'Program',
+                                subtitle: userData['program'],
+                                icon: Icon(
+                                  FontAwesomeIcons.buildingColumns,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              ListItem(
+                                title: 'Program Term',
+                                subtitle: userData['programTerm'],
+                                icon: Icon(
+                                  FontAwesomeIcons.layerGroup,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              ListItem(
+                                title: 'Division',
+                                subtitle: userData['division'],
+                                icon: Icon(
+                                  FontAwesomeIcons.sitemap,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              ListItem(
+                                title: 'DOB',
+                                subtitle: userData['DOB'],
+                                icon: Icon(
+                                  FontAwesomeIcons.calendarDays,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              ListItem(
+                                title: 'Gender',
+                                subtitle: userData['Gender'],
+                                icon: Icon(
+                                  userData['Gender'] == "Male"
+                                      ? FontAwesomeIcons.male
+                                      : FontAwesomeIcons.female,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              ListItem(
+                                title: 'Mobile',
+                                subtitle: userData['Mobile'],
+                                icon: Icon(
+                                  FontAwesomeIcons.phone,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              ListItem(
+                                title: 'Email',
+                                subtitle: userData['Email'],
+                                icon: Icon(
+                                  FontAwesomeIcons.envelope,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              ListItem(
+                                title: 'Activation Date',
+                                subtitle: userData['Activation Date'],
+                                icon: Icon(
+                                  FontAwesomeIcons.addressCard,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 30,
+                              )
+                            ],
                           ),
-                        ),
-                        ListItem(
-                          title: 'Program',
-                          subtitle: userData['program'],
-                          icon: Icon(
-                            FontAwesomeIcons.buildingColumns,
-                            color: Colors.white,
-                          ),
-                        ),
-                        ListItem(
-                          title: 'Program Term',
-                          subtitle: userData['programTerm'],
-                          icon: Icon(
-                            FontAwesomeIcons.layerGroup,
-                            color: Colors.white,
-                          ),
-                        ),
-                        ListItem(
-                          title: 'Division',
-                          subtitle: userData['division'],
-                          icon: Icon(
-                            FontAwesomeIcons.sitemap,
-                            color: Colors.white,
-                          ),
-                        ),
-                        ListItem(
-                          title: 'DOB',
-                          subtitle: userData['DOB'],
-                          icon: Icon(
-                            FontAwesomeIcons.calendarDays,
-                            color: Colors.white,
-                          ),
-                        ),
-                        ListItem(
-                          title: 'Gender',
-                          subtitle: userData['Gender'],
-                          icon: Icon(
-                            userData['Gender']=="Male"?FontAwesomeIcons.male:FontAwesomeIcons.female,
-                            color: Colors.white,
-                          ),
-                        ),
-                        ListItem(
-                          title: 'Mobile',
-                          subtitle: userData['Mobile'],
-                          icon: Icon(
-                            FontAwesomeIcons.phone,
-                            color: Colors.white,
-                          ),
-                        ),
-                        ListItem(
-                          title: 'Email',
-                          subtitle: userData['Email'],
-                          icon: Icon(
-                            FontAwesomeIcons.envelope,
-                            color: Colors.white,
-                          ),
-                        ),
-                        ListItem(
-                          title: 'Activation Date',
-                          subtitle: userData['Activation Date'],
-                          icon: Icon(
-                            FontAwesomeIcons.addressCard,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: 30,)
+                        )
                       ],
-                    ),
-                  )
-                ],
-              ));
+                    ))
+                  : SingleChildScrollView(
+                      child: Column(
+                      children: [
+                        Center(
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 50,
+                                foregroundImage: NetworkImage(ProfileUrl),
+                              ),
+                              SizedBox(height: 18),
+                              Text(
+                                Name,
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                userData['Id'],
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Divider(
+                                thickness: 2,
+                                color: Colors.grey,
+                                indent: 25,
+                                endIndent: 25,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Text(
+                                  'Personal Details',
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.blueGrey),
+                                ),
+                              ),
+                              ListItem(
+                                title: 'Program',
+                                subtitle: userData['program'],
+                                icon: Icon(
+                                  FontAwesomeIcons.buildingColumns,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              ListItem(
+                                title: 'Gender',
+                                subtitle: userData['Gender'],
+                                icon: Icon(
+                                  userData['Gender'] == "Male"
+                                      ? FontAwesomeIcons.male
+                                      : FontAwesomeIcons.female,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              ListItem(
+                                title: 'Mobile',
+                                subtitle: userData['Mobile'],
+                                icon: Icon(
+                                  FontAwesomeIcons.phone,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              ListItem(
+                                title: 'Email',
+                                subtitle: userData['Email'],
+                                icon: Icon(
+                                  FontAwesomeIcons.envelope,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              ListItem(
+                                  title: 'Qualification',
+                                  subtitle: userData['Qualification'],
+                              icon: Icon(
+                                FontAwesomeIcons.graduationCap,
+                                color: Colors.white,
+                              ),),
+                              ListItem(
+                                  title: 'Designation',
+                                  subtitle: userData['Designation'],
+                                 icon:  Icon(
+                                    FontAwesomeIcons.userTie,
+                                    color: Colors.white,
+                                  )),
+                              SizedBox(
+                                height: 30,
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ));
             }
           },
         ),

@@ -4,12 +4,14 @@ import 'package:clg_project/splash_screen.dart';
 import 'package:clg_project/student/Studentassignment.dart';
 import 'package:clg_project/student/dashboard.dart';
 import 'package:clg_project/student/login.dart';
+import 'package:clg_project/student/student_dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'admin/assignment.dart';
 
+import 'admin/faculty_dashboard.dart';
 import 'demo.dart';
 
 //DONE
@@ -44,11 +46,10 @@ class _MyAppState extends State<MyApp> {
            // Studentassignment()
         //HomeMain()
       //SplashScreen()
-     // MainDashboard('Faculty', 'BCA-101')
+     //MainDashboard('202400101', 'Student')
         // Myhome()
       //EventList()
-        //FacultyDashboard('admin2@gmail.com', 'Faculty')
-        MainDashboard('Student', '202400101')
+       MainDashboard('Faculty', 'BCA-101')
         //StudentDashboard('202400101', 'Student')
         );
   }
