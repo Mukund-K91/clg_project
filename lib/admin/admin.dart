@@ -715,7 +715,6 @@ class FirestoreService {
         .collection(programTerm)
         .doc(division)
         .collection('student')
-        .orderBy('Last Name')
         .where('First Name', isGreaterThanOrEqualTo: searchTerm)
         .where('First Name', isLessThanOrEqualTo: searchTerm + '\uf8ff')
         .snapshots()
@@ -741,10 +740,8 @@ class FirestoreService {
   }
 }
 
-late TextEditingController _totalStudentsController = TextEditingController();
 final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 late DocumentReference _UserIdDoc;
-int _totalStudent = 0;
 late String imjUrl;
 
 /*===============================================*/
@@ -824,7 +821,7 @@ class _StudentsState extends State<Students> {
                 _selectedProgramTerm = value!;
               });
             },
-            items: _selectedProgram == "--Please Select--"
+            items: _selectedProgram == ""
                 ? []
                 : lists.programTerms.map<DropdownMenuItem<String>>(
                     (String value) {
@@ -912,9 +909,12 @@ class _StudentsState extends State<Students> {
             scrollDirection: Axis.horizontal,
             child: SingleChildScrollView(
               controller: _dataController1,
-              child: DataTable(
+              child:
+              DataTable(
+                columnSpacing: 15,
                 border: TableBorder.all(),
                 columns: const [
+                  DataColumn(label: Text('Roll No'), numeric: true),
                   DataColumn(label: Text('User Id')),
                   DataColumn(label: Text('Name')),
                   DataColumn(label: Text('Profile')),
@@ -929,31 +929,32 @@ class _StudentsState extends State<Students> {
                 rows: students
                     .map(
                       (student) => DataRow(cells: [
-                        DataCell(Text(student.userId)),
-                        DataCell(
-                            Text(student.firstname + " " + student.lastname)),
-                        DataCell(
-                          CircleAvatar(
-                            radius: 27,
-                            child: ClipOval(
-                              child: Image.network(
-                                student.profile,
-                                fit: BoxFit.cover,
-                                height: 70,
-                                width: 70,
-                              ),
-                            ),
+                    DataCell(Text('${student.rollNo}')),
+                    DataCell(Text(student.userId)),
+                    DataCell(
+                        Text(student.lastname + " " + student.firstname +" "+student.middlename)),
+                    DataCell(
+                      CircleAvatar(
+                        radius: 27,
+                        child: ClipOval(
+                          child: Image.network(
+                            student.profile,
+                            fit: BoxFit.cover,
+                            height: 70,
+                            width: 70,
                           ),
                         ),
-                        DataCell(Text(student.program)),
-                        DataCell(Text(student.programTerm)),
-                        DataCell(Text(student.division)),
-                        DataCell(Text(student.activationDate)),
-                        DataCell(Text(student.DOB)),
-                        DataCell(Text(student.mobile)),
-                        DataCell(Text(student.email)),
-                      ]),
-                    )
+                      ),
+                    ),
+                    DataCell(Text(student.program)),
+                    DataCell(Text(student.programTerm)),
+                    DataCell(Text(student.division)),
+                    DataCell(Text(student.activationDate)),
+                    DataCell(Text(student.DOB)),
+                    DataCell(Text(student.mobile)),
+                    DataCell(Text(student.email)),
+                  ]),
+                )
                     .toList(),
               ),
             ),
