@@ -136,6 +136,7 @@ class FacultyDashboard extends StatelessWidget {
                                   children: [
                                     IconButton(
                                       onPressed: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => Students(userData['program']),));
                                       },
                                       iconSize: 50,
                                       icon: const Icon(
@@ -158,11 +159,6 @@ class FacultyDashboard extends StatelessWidget {
                                   children: [
                                     IconButton(
                                       onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => StudentList(program: userData['program'],),
-                                            ));
                                       },
                                       iconSize: 50,
                                       icon: const Icon(FontAwesomeIcons.calendarDay,
