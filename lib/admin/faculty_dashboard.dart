@@ -1,3 +1,4 @@
+import 'package:clg_project/admin/assignment.dart';
 import 'package:clg_project/noticeboard.dart';
 import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,7 +14,6 @@ import '../student/profile.dart';
 import 'admin.dart';
 import 'attendance.dart';
 
-
 class FacultyDashboard extends StatelessWidget {
   String UserId;
   String _user;
@@ -22,10 +22,10 @@ class FacultyDashboard extends StatelessWidget {
 
   Future<Map<String, dynamic>?> _UserData(String enteredUserId) async {
     final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-    await FirebaseFirestore.instance.collectionGroup('faculty').get();
+        await FirebaseFirestore.instance.collectionGroup('faculty').get();
 
     for (final QueryDocumentSnapshot<Map<String, dynamic>> document
-    in querySnapshot.docs) {
+        in querySnapshot.docs) {
       final userData = document.data();
       final String documentUserId = document.id;
 
@@ -41,8 +41,7 @@ class FacultyDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-      FutureBuilder<Map<String, dynamic>?>(
+      body: FutureBuilder<Map<String, dynamic>?>(
         future: _UserData(UserId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -59,10 +58,7 @@ class FacultyDashboard extends StatelessWidget {
             return Column(
               children: [
                 Container(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height / 7,
+                  height: MediaQuery.of(context).size.height / 7,
                   decoration: const BoxDecoration(
                       color: Color(0xff002233),
                       borderRadius: BorderRadius.only(
@@ -82,9 +78,8 @@ class FacultyDashboard extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          Profile(
-                                              userData['User Id'], 'Student'),
+                                      builder: (context) => Profile(
+                                          userData['User Id'], 'Student'),
                                     ));
                               },
                               child: ListTile(
@@ -106,7 +101,7 @@ class FacultyDashboard extends StatelessWidget {
                                 ),
                                 subtitle: Text("${userData['program']}",
                                     style:
-                                    const TextStyle(color: Colors.white)),
+                                        const TextStyle(color: Colors.white)),
                               ),
                             ),
                           ],
@@ -117,192 +112,198 @@ class FacultyDashboard extends StatelessWidget {
                 ),
                 Expanded(
                     child: SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: Column(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ImgSlider(),
+                      ),
+                      GridView.count(
+                        crossAxisCount: 2,
+                        // Number of columns in the grid
+                        shrinkWrap: true,
+                        // Ensure that the grid view occupies only the necessary space
+                        physics: NeverScrollableScrollPhysics(),
+                        // Disable scrolling
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ImgSlider(),
-                          ),
-                          GridView.count(
-                            crossAxisCount: 2,
-                            // Number of columns in the grid
-                            shrinkWrap: true,
-                            // Ensure that the grid view occupies only the necessary space
-                            physics: NeverScrollableScrollPhysics(),
-                            // Disable scrolling
-                            children: [
-                              Card(
-                                color: Colors.white,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                              builder: (context) => Students(
-                                                  userData['program']),));
-                                      },
-                                      iconSize: 50,
-                                      icon: const Icon(
-                                        FontAwesomeIcons.userGraduate,
-                                        color: Color(0xff002233),
-                                      ),
-                                    ),
-                                    const Text(
-                                      "Students",
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ],
+                          Card(
+                            color: Colors.white,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              Students(userData['program']),
+                                        ));
+                                  },
+                                  iconSize: 50,
+                                  icon: const Icon(
+                                    FontAwesomeIcons.userGraduate,
+                                    color: Color(0xff002233),
+                                  ),
                                 ),
-                              ),
-                              Card(
-                                color: Colors.white,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AddAttendance(
-                                                      program: userData['program']),));
-                                      },
-                                      iconSize: 50,
-                                      icon: const Icon(
-                                          FontAwesomeIcons.calendarDay,
-                                          color: Color(0xff002233)),
-                                    ),
-                                    const Text(
-                                      "Attendance",
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ],
+                                const Text(
+                                  "Students",
+                                  style: TextStyle(fontSize: 20),
                                 ),
-                              ),
-                              Card(
-                                color: Colors.white,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () async {
-                                        await pagenotfound(context,
-                                            'This Feature Not available Yet...!\nunder progress');
-                                      },
-                                      iconSize: 50,
-                                      icon: const Icon(FontAwesomeIcons.filePen,
-                                          color: Color(0xff002233)),
-                                    ),
-                                    const Text(
-                                      "Assignment",
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Card(
-                                color: Colors.white,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {},
-                                      iconSize: 50,
-                                      icon: const Icon(
-                                          FontAwesomeIcons.fileContract,
-                                          color: Color(0xff002233)),
-                                    ),
-                                    const Text(
-                                      "Results",
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Card(
-                                color: Colors.white,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  FilesUpload(_user),
-                                            ));
-                                      },
-                                      iconSize: 50,
-                                      icon: const Icon(FontAwesomeIcons.book,
-                                          color: Color(0xff002233)),
-                                    ),
-                                    const Text(
-                                      "Material",
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Card(
-                                color: Colors.white,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        String name =
-                                            userData['First Name'] +
-                                                userData['Last Name'];
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  NoticeBoard(name, _user),
-                                            ));
-                                      },
-                                      iconSize: 50,
-                                      icon: const Icon(
-                                          FontAwesomeIcons.newspaper,
-                                          color: Color(0xff002233)),
-                                    ),
-                                    const Text(
-                                      "Notice & Events",
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          ListTile(
-                            title: Text(
-                              "Latest News",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              ],
                             ),
-                            trailing: TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => EventList(),
-                                      ));
-                                },
-                                child: Text("view all >>")),
                           ),
-                          buildEventList()
+                          Card(
+                            color: Colors.white,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => AddAttendance(
+                                              program: userData['program']),
+                                        ));
+                                  },
+                                  iconSize: 50,
+                                  icon: const Icon(FontAwesomeIcons.calendarDay,
+                                      color: Color(0xff002233)),
+                                ),
+                                const Text(
+                                  "Attendance",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Card(
+                            color: Colors.white,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () async {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => AssignmentPage(
+                                              userData['program']),
+                                        ));
+                                  },
+                                  iconSize: 50,
+                                  icon: const Icon(FontAwesomeIcons.filePen,
+                                      color: Color(0xff002233)),
+                                ),
+                                const Text(
+                                  "Assignment",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Card(
+                            color: Colors.white,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    pagenotfound(context, 'Results not published yet...!');
+                                  },
+                                  iconSize: 50,
+                                  icon: const Icon(
+                                      FontAwesomeIcons.fileContract,
+                                      color: Color(0xff002233)),
+                                ),
+                                const Text(
+                                  "Results",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Card(
+                            color: Colors.white,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              FilesUpload(_user),
+                                        ));
+                                  },
+                                  iconSize: 50,
+                                  icon: const Icon(FontAwesomeIcons.book,
+                                      color: Color(0xff002233)),
+                                ),
+                                const Text(
+                                  "Material",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Card(
+                            color: Colors.white,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    String name = userData['First Name'] +
+                                        userData['Last Name'];
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              NoticeBoard(name, _user),
+                                        ));
+                                  },
+                                  iconSize: 50,
+                                  icon: const Icon(FontAwesomeIcons.newspaper,
+                                      color: Color(0xff002233)),
+                                ),
+                                const Text(
+                                  "Notice & Events",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                    ))
+                      ListTile(
+                        title: Text(
+                          "Latest News",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        trailing: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EventList(),
+                                  ));
+                            },
+                            child: Text("view all >>")),
+                      ),
+                      buildEventList()
+                    ],
+                  ),
+                ))
               ],
             );
           }

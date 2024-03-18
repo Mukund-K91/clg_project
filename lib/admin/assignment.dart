@@ -1,61 +1,28 @@
+import 'package:clg_project/reusable_widget/lists.dart';
+import 'package:clg_project/reusable_widget/reusable_appbar.dart';
 import 'package:clg_project/reusable_widget/reusable_textfield.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+String? _selProgram = "--Please Select--";
 
-String dropdownValue = '';
-String dpdownValue = '';
+String? _selProgramTerm = "--Please Select--";
 
-const carType = <String>[
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-];
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: AssignmentPage(),
-    );
-  }
-}
+String? _seldiv = "--Please Select--";
 
 class AssignmentPage extends StatefulWidget {
-  const AssignmentPage({Key? key}) : super(key: key);
+  String program;
+
+  AssignmentPage(this.program, {Key? key}) : super(key: key);
 
   @override
   _AssignmentPageState createState() => _AssignmentPageState();
 }
 
-var selectItem = carType.first;
-
 class _AssignmentPageState extends State<AssignmentPage> {
   bool isSwitched = false;
-
-  // TimeOfDay selectedTime = TimeOfDay.now();
-  //
-  // Future<void> _selectTime(BuildContext context) async {
-  //   final TimeOfDay? picked = await showTimePicker(
-  //     context: context,
-  //     initialTime: selectedTime,
-  //   );
-  //
-  //   if (picked != null && picked != selectedTime) {
-  //     setState(() {
-  //       selectedTime = picked;
-  //     });
-  //   }
-  // }
 
   final formkey = GlobalKey<FormState>();
   final toDateControler = TextEditingController();
@@ -93,126 +60,78 @@ class _AssignmentPageState extends State<AssignmentPage> {
     super.dispose();
   }
 
+  void initState() {
+    super.initState();
+    _selProgram = "--Please Select--";
+    _selProgramTerm = "--Please Select--";
+    _seldiv = "--Please Select--";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
+      appBar: CustomAppBar(title: 'Create Assignment'),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              height: 130,
-              decoration: const BoxDecoration(
-                color: Color(0xff225779),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(35),
-                  bottomRight: Radius.circular(35),
-                ),
+            ListTile(
+              title: const Text(
+                "Program Term",
+                style: TextStyle(fontSize: 15),
               ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Create Assignment',
-                    style: TextStyle(color: Colors.white, fontSize: 23),
-                  ),
-                ],
+              subtitle: DropdownButtonFormField(
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.zero))),
+                  value: _selProgramTerm,
+                  items: lists.programTerms
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e),
+                          ))
+                      .toList(),
+                  onChanged: (val) {
+                    setState(() {
+                      _selProgramTerm = val as String;
+                    });
+                  }),
+            ),
+            ListTile(
+              title: const Text(
+                "Division",
+                style: TextStyle(fontSize: 15),
               ),
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                  ),
-                  child: Expanded(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width *
-                          .9, // Set your desired width here
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey, // Border color
-                          width: 2.0, // Border width
-                        ),
-                        borderRadius:
-                            BorderRadius.circular(8.0), // Border radius
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: DropdownButton<String>(
-                        value: dpdownValue.isEmpty ? selectItem : dpdownValue,
-                        icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: const TextStyle(color: Colors.black),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dpdownValue = newValue!;
-                          });
-                        },
-                        items: carType.map<DropdownMenuItem<String>>(
-                          (String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                  ),
-                  child: Expanded(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width *
-                          .9, // Set your desired width here
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey, // Border color
-                          width: 2.0, // Border width
-                        ),
-                        borderRadius:
-                            BorderRadius.circular(8.0), // Border radius
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: DropdownButton<String>(
-                        value:
-                            dropdownValue.isEmpty ? selectItem : dropdownValue,
-                        icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: const TextStyle(color: Colors.black),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropdownValue = newValue!;
-                          });
-                        },
-                        items: carType.map<DropdownMenuItem<String>>(
-                          (String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              subtitle: DropdownButtonFormField(
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.zero))),
+                  value: _seldiv,
+                  items: _selProgram == "BCA"
+                      ? lists.bcaDivision
+                          .map((e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e),
+                              ))
+                          .toList()
+                      : _selProgram == "B-Com"
+                          ? lists.bcomDivision
+                              .map((e) => DropdownMenuItem(
+                                    value: e,
+                                    child: Text(e),
+                                  ))
+                              .toList()
+                          : lists.bbaDivision
+                              .map((e) => DropdownMenuItem(
+                                    value: e,
+                                    child: Text(e),
+                                  ))
+                              .toList(),
+                  onChanged: (val) {
+                    setState(() {
+                      _seldiv = val as String;
+                    });
+                  }),
             ),
             const SizedBox(
               height: 25,
@@ -222,14 +141,6 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(right: 20, left: 20),
-                    // child: TextFormField(
-                    //   decoration: InputDecoration(
-                    //     labelText: 'Assignment Name',
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(10),
-                    //     ),
-                    //   ),
-                    // ),
                     child: ReusableTextField(
                       title: 'Assignment Name',
                       readOnly: false,
@@ -246,16 +157,6 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(right: 20, left: 20),
-                    // child: TextFormField(
-                    //   textAlign: TextAlign.start,
-                    //   decoration: InputDecoration(
-                    //     labelText: 'Instructions',
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(10),
-                    //     ),
-                    //   ),
-                    //   maxLines: 3,
-                    // ),
                     child: ReusableTextField(
                       title: 'Instructions',
                       readOnly: false,
@@ -345,7 +246,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),
-                            labelText: 'Selected Time',
+                            labelText: 'Due Time',
                             prefixIcon: const Icon(Icons.access_time),
                           ),
                         ),
@@ -358,54 +259,6 @@ class _AssignmentPageState extends State<AssignmentPage> {
             const SizedBox(
               height: 25,
             ),
-            // Row(
-            //   children: [
-            //     Expanded(
-            //       child: Padding(
-            //         padding: const EdgeInsets.only(right: 20, left: 20),
-            //         child: TextField(
-            //           decoration: InputDecoration(
-            //             labelText: 'Resubmission Of Rejected Assignment ',
-            //             border: OutlineInputBorder(
-            //               borderRadius: BorderRadius.circular(10),
-            //             ),
-            //             suffixIcon: Switch(
-            //               value: isSwitched,
-            //               onChanged: (value) {
-            //                 setState(() {
-            //                   isSwitched = value;
-            //                 });
-            //               },
-            //             ),
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-
-            // Row(
-            //   children: [
-            //     Expanded(
-            //       child: Padding(
-            //         padding: const EdgeInsets.only(right: 20, left: 20),
-            //         child: TextFormField(
-            //           style: TextStyle(fontSize: 18),
-            //           textAlign: TextAlign.center,
-            //           decoration: InputDecoration(
-            //             labelText:
-            //                 'Extra Days For Resubmission Of Rejected Assignment',
-            //             border: OutlineInputBorder(
-            //               borderRadius: BorderRadius.circular(10),
-            //             ),
-            //             // floatingLabelBehavior: FloatingLabelBehavior.always
-            //           ),
-            //         ),
-            //       ),
-            //     )
-            //   ],
-            // ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -417,9 +270,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                     width: MediaQuery.of(context).size.width * .9,
                     height: 65,
                     color: Colors.white,
-                    child:
-                        //button ma asvhe a e nthi khabar mane ama inkwell thay ?
-                        ElevatedButton(
+                    child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           shape: const ContinuousRectangleBorder()),
                       onPressed: () {},
@@ -434,7 +285,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                           SizedBox(
                             width: 18,
                           ),
-                          Text('Create Assignment',
+                          Text('Reference Material',
                               style: TextStyle(fontSize: 20)),
                         ],
                       ),
@@ -458,6 +309,9 @@ class _AssignmentPageState extends State<AssignmentPage> {
                   ),
                 ],
               ),
+            ),
+            SizedBox(
+              height: 30,
             )
           ],
         ),

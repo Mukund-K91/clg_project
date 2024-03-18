@@ -17,7 +17,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       iconTheme: IconThemeData(color: Colors.white, size: 25),
       titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-      toolbarHeight: 150,
+      toolbarHeight: 130,
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(80),
@@ -39,5 +39,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(150);
+  Size get preferredSize => Size.fromHeight(130);
 }
