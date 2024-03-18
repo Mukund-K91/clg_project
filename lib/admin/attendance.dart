@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import '../reusable_widget/lists.dart';
+import '../reusable_widget/reusable_appbar.dart';
 import '../reusable_widget/reusable_textfield.dart';
 
 class Student {
@@ -212,163 +213,158 @@ class _AddAttendanceState extends State<AddAttendance> {
               )),
         ),
       ),
-      appBar: AppBar(
-        title: Text('Attendance Stream: ${selectedProgram}',
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              '${currentDate}',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: ReusableTextField(
-                onChanged: (value) {
-                  setState(() {
-                    searchQuery = value;
-                  });
-                },
-                title: 'Search By Name',
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            ListTile(
-              title: const Text(
-                "Program Term",
-                style: TextStyle(fontSize: 15),
-              ),
-              subtitle: DropdownButtonFormField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.zero))),
-                  value: selectedProgramTerm,
-                  items: lists.programTerms
-                      .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e),
-                  ))
-                      .toList(),
-                  onChanged: (val) {
-                    setState(() {
-                      selectedProgramTerm = val as String;
-                      updateSubjectList(
-                          selectedProgram, selectedProgramTerm);
-                    });
-                  }),
-            ),
-            ListTile(
-              title: const Text(
-                "Division",
-                style: TextStyle(fontSize: 15),
-              ),
-              subtitle: DropdownButtonFormField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.zero))),
-                  value: selectedDivision,
-                  items: selectedProgram == "BCA"
-                      ? lists.bcaDivision
-                      .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e),
-                  ))
-                      .toList()
-                      : selectedProgram == "B-Com"
-                      ? lists.bcomDivision
-                      .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e),
-                  ))
-                      .toList()
-                      : lists.bbaDivision
-                      .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e),
-                  ))
-                      .toList(),
-                  onChanged: (val) {
-                    setState(() {
-                      selectedDivision = val as String;
-                      fetchData(selectedProgram, selectedProgramTerm,
-                          selectedDivision);
-                    });
-                  }),
-            ),
-            ListTile(
-              title: const Text(
-                "Subject",
-                style: TextStyle(fontSize: 15),
-              ),
-              subtitle: DropdownButtonFormField(
-                isExpanded: true,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.zero))),
-                  value: selectedSubject,
-                  items: subjectList
-                      .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e),
-                  ))
-                      .toList(),
-                  onChanged: (val) {
-                    setState(() {
-                      selectedSubject = val as String;
-                    });
-                  }),
-            ),
-            ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: filteredStudents.length,
-              itemBuilder: (context, index) {
-                Student student = filteredStudents[index];
-                AttendanceRecord record = attendanceRecords[index];
-                return Card(
-                  child: ListTile(
-                    leading: Text(
-                      '${student.rollNumber}',
-                      style: TextStyle(
-                          color: Color(0xff002233),
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    title: Text('${student.lastname} ${student.firstname} ${student.middlename}',style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),),
-                    subtitle: Text('${student.userID}'),
-                    trailing: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.black,
-                        backgroundColor:
-                        record.isPresent ? Colors.green : Colors.red,
-                        minimumSize: Size(50, 40),
-                      ),
-                      onPressed: () {
-                        _toggleAttendance(index);
-                      },
-                      child: Text(
-                        record.isPresent ? 'Present' : 'Absent',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
+      appBar: CustomAppBar(title: 'Stream : ${selectedProgram}\n${currentDate}',),
+      body:
+      Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(15),
+          child: ReusableTextField(
+            onChanged: (value) {
+              setState(() {
+                searchQuery = value;
+              });
+            },
+            title: 'Search By Name',
+          ),
         ),
-      ),
+            Expanded(
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: [
+              SizedBox(
+                width: 10,
+              ),
+              ListTile(
+                title: const Text(
+                  "Program Term",
+                  style: TextStyle(fontSize: 15),
+                ),
+                subtitle: DropdownButtonFormField(
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.zero))),
+                    value: selectedProgramTerm,
+                    items: lists.programTerms
+                        .map((e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(e),
+                    ))
+                        .toList(),
+                    onChanged: (val) {
+                      setState(() {
+                        selectedProgramTerm = val as String;
+                        updateSubjectList(
+                            selectedProgram, selectedProgramTerm);
+                      });
+                    }),
+              ),
+              ListTile(
+                title: const Text(
+                  "Division",
+                  style: TextStyle(fontSize: 15),
+                ),
+                subtitle: DropdownButtonFormField(
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.zero))),
+                    value: selectedDivision,
+                    items: selectedProgram == "BCA"
+                        ? lists.bcaDivision
+                        .map((e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(e),
+                    ))
+                        .toList()
+                        : selectedProgram == "B-Com"
+                        ? lists.bcomDivision
+                        .map((e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(e),
+                    ))
+                        .toList()
+                        : lists.bbaDivision
+                        .map((e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(e),
+                    ))
+                        .toList(),
+                    onChanged: (val) {
+                      setState(() {
+                        selectedDivision = val as String;
+                        fetchData(selectedProgram, selectedProgramTerm,
+                            selectedDivision);
+                      });
+                    }),
+              ),
+              ListTile(
+                title: const Text(
+                  "Subject",
+                  style: TextStyle(fontSize: 15),
+                ),
+                subtitle: DropdownButtonFormField(
+                    isExpanded: true,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.zero))),
+                    value: selectedSubject,
+                    items: subjectList
+                        .map((e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(e),
+                    ))
+                        .toList(),
+                    onChanged: (val) {
+                      setState(() {
+                        selectedSubject = val as String;
+                      });
+                    }),
+              ),
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: filteredStudents.length,
+                itemBuilder: (context, index) {
+                  Student student = filteredStudents[index];
+                  AttendanceRecord record = attendanceRecords[index];
+                  return Card(
+                    child: ListTile(
+                      leading: Text(
+                        '${student.rollNumber}',
+                        style: TextStyle(
+                            color: Color(0xff002233),
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      title: Text('${student.lastname} ${student.firstname} ${student.middlename}',style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),),
+                      subtitle: Text('${student.userID}'),
+                      trailing: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.black,
+                          backgroundColor:
+                          record.isPresent ? Colors.green : Colors.red,
+                          minimumSize: Size(50, 40),
+                        ),
+                        onPressed: () {
+                          _toggleAttendance(index);
+                        },
+                        child: Text(
+                          record.isPresent ? 'Present' : 'Absent',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ))
+            ],
+          ),
     );
   }
 
