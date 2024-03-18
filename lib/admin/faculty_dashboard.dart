@@ -55,11 +55,14 @@ class FacultyDashboard extends StatelessWidget {
             final userData = snapshot.data!;
             final String Name =
                 userData['First Name'] + " " + userData['Last Name'];
-            final String ProfileUrl =userData['Profile Img'];
+            final String ProfileUrl = userData['Profile Img'];
             return Column(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height / 7,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height / 7,
                   decoration: const BoxDecoration(
                       color: Color(0xff002233),
                       borderRadius: BorderRadius.only(
@@ -80,7 +83,8 @@ class FacultyDashboard extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          Profile(userData['User Id'],'Student'),
+                                          Profile(
+                                              userData['User Id'], 'Student'),
                                     ));
                               },
                               child: ListTile(
@@ -136,7 +140,10 @@ class FacultyDashboard extends StatelessWidget {
                                   children: [
                                     IconButton(
                                       onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context) => Students(userData['program']),));
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                              builder: (context) => Students(
+                                                  userData['program']),));
                                       },
                                       iconSize: 50,
                                       icon: const Icon(
@@ -159,9 +166,15 @@ class FacultyDashboard extends StatelessWidget {
                                   children: [
                                     IconButton(
                                       onPressed: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AddAttendance(
+                                                      program: userData['program']),));
                                       },
                                       iconSize: 50,
-                                      icon: const Icon(FontAwesomeIcons.calendarDay,
+                                      icon: const Icon(
+                                          FontAwesomeIcons.calendarDay,
                                           color: Color(0xff002233)),
                                     ),
                                     const Text(
@@ -248,7 +261,8 @@ class FacultyDashboard extends StatelessWidget {
                                     IconButton(
                                       onPressed: () {
                                         String name =
-                                            userData['First Name'] + userData['Last Name'];
+                                            userData['First Name'] +
+                                                userData['Last Name'];
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -257,7 +271,8 @@ class FacultyDashboard extends StatelessWidget {
                                             ));
                                       },
                                       iconSize: 50,
-                                      icon: const Icon(FontAwesomeIcons.newspaper,
+                                      icon: const Icon(
+                                          FontAwesomeIcons.newspaper,
                                           color: Color(0xff002233)),
                                     ),
                                     const Text(

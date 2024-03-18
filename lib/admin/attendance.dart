@@ -1,411 +1,389 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
-import '../firebase_options.dart';
+import '../reusable_widget/lists.dart';
 import '../reusable_widget/reusable_textfield.dart';
-import '../storage_service.dart';
 
 class Student {
+  final String documentId; // Firestore document ID
+  final String userID;
   final String firstname;
   final String middlename;
   final String lastname;
-  final String gender;
-  final String userId;
-  final String activationDate;
-  final String profile;
-  final String email;
-  final String mobile;
-  final String DOB;
-  final String program;
-  final String programTerm;
-  final String division;
-  final String password;
+  final int rollNumber;
 
   Student(
-      {required this.firstname,
-      required this.middlename,
-      required this.lastname,
-      required this.gender,
-      required this.userId,
-      required this.activationDate,
-      required this.profile,
-      required this.email,
-      required this.mobile,
-      required this.DOB,
-      required this.program,
-      required this.programTerm,
-      required this.division,
-      required this.password});
-
-  // Convert Student object to a Map for Firestore
-  Map<String, dynamic> toMap() {
-    return {
-      "First Name": firstname,
-      "Middle Name": middlename,
-      "Last Name": lastname,
-      "Gender": gender,
-      "User Id": userId,
-      "Activation Date": activationDate,
-      "Profile Img": profile,
-      "Email": email,
-      "Mobile": mobile,
-      "DOB": DOB,
-      'program': program,
-      'programTerm': programTerm,
-      'division': division,
-      'Password': password,
-    };
-  }
+      {required this.documentId,
+        required this.userID,
+        required this.firstname,
+        required this.middlename,
+        required this.lastname,
+        required this.rollNumber});
 }
+
 class AttendanceRecord {
   final String subject;
-  int presentCount;
-  int absentCount;
+  bool isPresent;
 
   AttendanceRecord({
     required this.subject,
-    this.presentCount = 0,
-    this.absentCount = 0,
+    this.isPresent = true, // Default isPresent to true (present)
   });
 }
-class FirestoreService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Fetch students from Firestore based on program, program term, and division
-  Stream<List<Student>> getStudents(
-      String program, String programTerm, String division) {
-    return _firestore
-        .collection('students')
-        .doc(program)
-        .collection(programTerm)
-        .doc(division)
-        .collection('student')
-        .orderBy('User Id')
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => Student(
-                  firstname: doc['First Name'],
-                  middlename: doc['Middle Name'],
-                  lastname: doc['Last Name'],
-                  gender: doc['Gender'],
-                  userId: doc['User Id'],
-                  activationDate: doc['Activation Date'],
-                  profile: doc['Profile Img'],
-                  email: doc['Email'],
-                  mobile: doc['Mobile'],
-                  DOB: doc['DOB'],
-                  program: doc['program'],
-                  programTerm: doc['programTerm'],
-                  division: doc['division'],
-                  password: doc['Password'],
-                ))
-            .toList());
-  }
+class AddAttendance extends StatefulWidget {
+  final String program;
 
-  Stream<List<Student>> searchStudents(
-      String program, String programTerm, String division, String searchTerm) {
-    return _firestore
-        .collection('students')
-        .doc(program)
-        .collection(programTerm)
-        .doc(division)
-        .collection('student')
-        .where('First Name', isGreaterThanOrEqualTo: searchTerm)
-        .where('First Name', isLessThanOrEqualTo: searchTerm + '\uf8ff')
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => Student(
-                  firstname: doc['First Name'],
-                  middlename: doc['Middle Name'],
-                  lastname: doc['Last Name'],
-                  gender: doc['Gender'],
-                  userId: doc['User Id'],
-                  activationDate: doc['Activation Date'],
-                  profile: doc['Profile Img'],
-                  email: doc['Email'],
-                  mobile: doc['Mobile'],
-                  DOB: doc['DOB'],
-                  program: doc['program'],
-                  programTerm: doc['programTerm'],
-                  division: doc['division'],
-                  password: doc['Password'],
-                ))
-            .toList());
-  }
-}
-
-final _programs = ["--Please Select--", "BCA", "B-Com", "BBA"];
-final _programTerm = [
-  "--Please Select--",
-  "Sem - 1",
-  "Sem - 2",
-  "Sem - 3",
-  "Sem - 4",
-  "Sem - 5",
-  "Sem - 6"
-];
-final _Bcadivision = ["--Please Select--", "A", "B", "C", "D", "E", "F"];
-final _Bcomdivision = ["--Please Select--", "A", "B", "C", "D", "E", "F", "G"];
-final _Bbadivision = ["--Please Select--", "A", "B", "C", "D"];
-
-final TextEditingController _firstNameController = TextEditingController();
-final TextEditingController _middleNameController = TextEditingController();
-final TextEditingController _lastNameController = TextEditingController();
-final TextEditingController _emailController = TextEditingController();
-final TextEditingController _mobileNoController = TextEditingController();
-late TextEditingController _UserIdController;
-final TextEditingController _dobController = TextEditingController();
-late TextEditingController _fileNameController = TextEditingController();
-late TextEditingController _totalStudentsController = TextEditingController();
-TextEditingController _rollNumberController = TextEditingController();
-DateTime _activationDate = DateTime.now();
-TextEditingController _activeDate = TextEditingController();
-final FirestoreService _firestoreService = FirestoreService();
-final TextEditingController _searchController = TextEditingController();
-final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-StorageService service = StorageService();
-
-StorageService storageService = StorageService();
-late CollectionReference _studentsCollection;
-late DocumentReference _UserIdDoc;
-int _lastUserId = 202400101;
-int _totalStudent = 0;
-late String imjUrl;
-
-String? _selectedGender = 'Male';
-DateTime? _selectedDate;
-
-String? _selProgram = "--Please Select--";
-
-String? _selProgramTerm = "--Please Select--";
-
-String? _seldiv = "--Please Select--";
-final _formKey = GlobalKey<FormState>();
-
-/*===============================================*/
-/*===============================================*/
-/*===============================================*/
-
-class StudentList extends StatefulWidget {
-  final program;
-
-  const StudentList({super.key, this.program});
-
-  void main() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    //  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: SystemUiOverlay.values);
-  }
+  const AddAttendance({required this.program});
 
   @override
-  _StudentListState createState() => _StudentListState();
+  _AddAttendanceState createState() => _AddAttendanceState();
 }
 
-class _StudentListState extends State<StudentList> {
-  bool passwordObscured = true;
+class _AddAttendanceState extends State<AddAttendance> {
+  List<Student> students = [];
+  String selectedSubject = "--Please Select--"; // Default subject
+  DateTime selectedDate = DateTime.now();
 
-  Future<void> _getUserId() async {
-    final userIdDocSnapshot = await _UserIdDoc.get();
-    setState(() {
-      _totalStudent =
-          userIdDocSnapshot.exists && userIdDocSnapshot.data() != null
-              ? (userIdDocSnapshot.data()
-                      as Map<String, dynamic>)['Total Students'] ??
-                  0
-              : 0;
-      _totalStudentsController.text = _totalStudent.toString();
-    });
-  }
-
-  Future<void> _decreamentTotalStudents() async {
-    _totalStudent--;
-    await _UserIdDoc.update({'Total Students': _totalStudent});
-  }
-
-  final FirestoreService _firestoreService = FirestoreService();
-  late TextEditingController _searchController;
-  String? _selectedProgramTerm = "--Please Select--";
-  String? _selectedDivision = "--Please Select--";
-  late String _searchTerm;
-  ScrollController _dataController1 = ScrollController();
-  ScrollController _dataController2 = ScrollController();
+  List<AttendanceRecord> attendanceRecords = [];
+  String selectedProgram="BCA";
+  String selectedProgramTerm = "--Please Select--";
+  String selectedDivision = "--Please Select--";
+  String searchQuery = '';
+  List<String> subjectList = [];
 
   @override
   void initState() {
     super.initState();
-    _searchTerm = '';
-    _searchController = TextEditingController();
-    _UserIdDoc =
-        FirebaseFirestore.instance.collection('metadata').doc('userId');
-    _getUserId();
+    selectedProgram = widget.program;
+    fetchData(selectedProgram, selectedProgramTerm, selectedDivision);
+  }
+
+  Future<void> fetchData(
+      String program, String programTerm, String division) async {
+    QuerySnapshot<Map<String, dynamic>> studentsQuery = await FirebaseFirestore
+        .instance
+        .collection('students')
+        .doc(program)
+        .collection(programTerm)
+        .doc(division)
+        .collection('student')
+        .orderBy('Last Name')
+        .get();
+
+    students = studentsQuery.docs.map((doc) {
+      return Student(
+          documentId: doc.id,
+          userID: doc['User Id'],
+          firstname: doc['First Name'],
+          middlename: doc['Middle Name'],
+          rollNumber: doc['rollNumber']??null,
+          lastname: doc['Last Name']);
+    }).toList();
+
+    // Initialize attendanceRecords with default values
+    attendanceRecords = students.map((student) {
+      return AttendanceRecord(subject: selectedSubject);
+    }).toList();
+
+    setState(() {});
+  }
+
+  void _toggleAttendance(int index) {
+    setState(() {
+      // Toggle the isPresent status for the student at the given index
+      attendanceRecords[index].isPresent = !attendanceRecords[index].isPresent;
+    });
+  }
+
+  void updateSubjectList(String Program, String ProgramTerm) {
+    // Get the subject list based on the selected program and program term
+    subjectList = SubjectLists.getSubjects(Program, ProgramTerm);
+    setState(() {
+      //selectedSubject = subjectList.isNotEmpty ? subjectList[0] : null;
+    });
+  }
+
+  Future<void> _submitAttendance(
+      String program, String programTerm, String division) async {
+    CollectionReference studentCollection =
+    FirebaseFirestore.instance.collection('students');
+
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (int i = 0; i < students.length; i++) {
+      Student student = students[i];
+
+      // Create or update monthly attendance subcollection
+      DocumentReference studentDocRef = studentCollection
+          .doc(program)
+          .collection(programTerm)
+          .doc(division)
+          .collection('student')
+          .doc(student.documentId);
+
+      CollectionReference AttendanceCollection =
+      studentDocRef.collection('yearlyAttendance');
+
+      String Year = DateFormat('yyyy').format(selectedDate);
+      String monthYearKey = '${Year}';
+
+      DocumentReference AttendanceDocRef =
+      AttendanceCollection.doc(monthYearKey);
+
+      DocumentSnapshot<Object?> monthlyAttendanceDoc =
+      await AttendanceDocRef.get();
+
+      if (!monthlyAttendanceDoc.exists) {
+        // Create new monthly attendance record if not exists for the current month and year
+        batch.set(AttendanceDocRef, {
+          'subjectAttendance': {
+            selectedSubject: {
+              'presentCount': 0,
+              'absentCount': 0,
+            }
+          },
+        });
+      }
+
+      // Update monthly attendance count based on the recorded counts
+      AttendanceRecord record = attendanceRecords[i];
+      if (record.isPresent) {
+        // Increment present count if the student is present
+        batch.update(AttendanceDocRef, {
+          'subjectAttendance.$selectedSubject.presentCount':
+          FieldValue.increment(1),
+        });
+      } else {
+        // Increment absent count if the student is absent
+        batch.update(AttendanceDocRef, {
+          'subjectAttendance.$selectedSubject.absentCount':
+          FieldValue.increment(1),
+        });
+      }
+    }
+
+    // Commit the batch
+    await batch.commit();
+
+    // Reset attendanceRecords after submitting
+    setState(() {
+      attendanceRecords = students.map((student) {
+        return AttendanceRecord(subject: selectedSubject);
+      }).toList();
+    });
+
+    print(
+        'Attendance submitted for date: $selectedDate, subject: $selectedSubject');
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Attendance Successfully added")));
   }
 
   @override
   Widget build(BuildContext context) {
+    final filteredStudents = students
+        .where((student) =>
+        student.firstname.toLowerCase().contains(searchQuery.toLowerCase()))
+        .toList();
+
+    final currentDate = DateFormat('dd-MM-yyyy EEEE').format(selectedDate);
+
     return Scaffold(
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(10),
+        child: SizedBox(
+          width: double.infinity,
+          height: 30,
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xff002233),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5))),
+              onPressed: () async {
+                _submitAttendance(
+                    selectedProgram, selectedProgramTerm, selectedDivision);
+              },
+              child: const Text(
+                "SUBMIT",
+                style: TextStyle(color: Colors.white, fontSize: 15),
+              )),
+        ),
+      ),
       appBar: AppBar(
-        title: const Text('Student List'),
-      ),
-      body: Column(
-        children: [
-          _buildFilters(),
-          Expanded(
-            child: _buildStudentList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFilters() {
-    final String _selectedProgram = widget.program;
-
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          TextField(
-            decoration: const InputDecoration(
-              labelText: 'Search',
-              hintText: 'Search by name',
-              border: OutlineInputBorder(),
+        title: Text('Attendance Stream: ${selectedProgram}',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              '${currentDate}',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            onChanged: (value) {
-              setState(() {
-                _searchTerm = value;
-              });
-            },
-          ),
-          const SizedBox(width: 8),
-          Text('Program : ${widget.program}'),
-          const SizedBox(width: 8),
-          DropdownButton<String>(
-            value: _selectedProgramTerm,
-            onChanged: (String? value) {
-              setState(() {
-                _selectedProgramTerm = value!;
-              });
-            },
-            items: _selectedProgram == ''
-                ? []
-                : _programTerm.map<DropdownMenuItem<String>>(
-                    (String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    },
-                  ).toList(),
-            hint: const Text('Program Term'),
-          ),
-          const SizedBox(width: 8),
-          DropdownButton<String>(
-            value: _selectedDivision,
-            onChanged: (String? value) {
-              setState(() {
-                _selectedDivision = value!;
-              });
-            },
-            items: _selectedProgramTerm == '--Please Select--'
-                ? []
-                : _selectedProgram == "BCA"
-                    ? _Bcadivision.map((e) => DropdownMenuItem(
-                          value: e,
-                          child: Text(e),
-                        )).toList()
-                    : _selectedProgram == "B-Com"
-                        ? _Bcomdivision.map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(e),
-                            )).toList()
-                        : _Bbadivision.map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(e),
-                            )).toList(),
-            hint: const Text('Class'),
-          ),
+          )
         ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: ReusableTextField(
+                onChanged: (value) {
+                  setState(() {
+                    searchQuery = value;
+                  });
+                },
+                title: 'Search By Name',
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            ListTile(
+              title: const Text(
+                "Program Term",
+                style: TextStyle(fontSize: 15),
+              ),
+              subtitle: DropdownButtonFormField(
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.zero))),
+                  value: selectedProgramTerm,
+                  items: lists.programTerms
+                      .map((e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(e),
+                  ))
+                      .toList(),
+                  onChanged: (val) {
+                    setState(() {
+                      selectedProgramTerm = val as String;
+                      updateSubjectList(
+                          selectedProgram, selectedProgramTerm);
+                    });
+                  }),
+            ),
+            ListTile(
+              title: const Text(
+                "Division",
+                style: TextStyle(fontSize: 15),
+              ),
+              subtitle: DropdownButtonFormField(
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.zero))),
+                  value: selectedDivision,
+                  items: selectedProgram == "BCA"
+                      ? lists.bcaDivision
+                      .map((e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(e),
+                  ))
+                      .toList()
+                      : selectedProgram == "B-Com"
+                      ? lists.bcomDivision
+                      .map((e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(e),
+                  ))
+                      .toList()
+                      : lists.bbaDivision
+                      .map((e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(e),
+                  ))
+                      .toList(),
+                  onChanged: (val) {
+                    setState(() {
+                      selectedDivision = val as String;
+                      fetchData(selectedProgram, selectedProgramTerm,
+                          selectedDivision);
+                    });
+                  }),
+            ),
+            ListTile(
+              title: const Text(
+                "Subject",
+                style: TextStyle(fontSize: 15),
+              ),
+              subtitle: DropdownButtonFormField(
+                isExpanded: true,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.zero))),
+                  value: selectedSubject,
+                  items: subjectList
+                      .map((e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(e),
+                  ))
+                      .toList(),
+                  onChanged: (val) {
+                    setState(() {
+                      selectedSubject = val as String;
+                    });
+                  }),
+            ),
+            ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: filteredStudents.length,
+              itemBuilder: (context, index) {
+                Student student = filteredStudents[index];
+                AttendanceRecord record = attendanceRecords[index];
+                return Card(
+                  child: ListTile(
+                    leading: Text(
+                      '${student.rollNumber}',
+                      style: TextStyle(
+                          color: Color(0xff002233),
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    title: Text('${student.lastname} ${student.firstname} ${student.middlename}',style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),),
+                    subtitle: Text('${student.userID}'),
+                    trailing: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.black,
+                        backgroundColor:
+                        record.isPresent ? Colors.green : Colors.red,
+                        minimumSize: Size(50, 40),
+                      ),
+                      onPressed: () {
+                        _toggleAttendance(index);
+                      },
+                      child: Text(
+                        record.isPresent ? 'Present' : 'Absent',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildStudentList() {
-    final String _selectedProgram = widget.program;
-    int rollnumber=0;
-    return StreamBuilder<List<Student>>(
-      stream: _searchTerm.isEmpty
-          ? _firestoreService.getStudents(
-          _selectedProgram!, _selectedProgramTerm!, _selectedDivision!)
-          : _firestoreService.searchStudents(_selectedProgram!,
-          _selectedProgramTerm!, _selectedDivision!, _searchTerm),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(
-            child: Text('Error: ${snapshot.error}'),
-          );
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        final students = snapshot.data;
-
-        if (students == null || students.isEmpty) {
-          return const Center(
-            child: Text('No students found'),
-          );
-        }
-        return ListView.builder(
-          itemCount: students.length,
-          itemBuilder: (context, index) {
-            final student = students[index];
-            rollnumber++;
-            return Card(
-              child: ListTile(
-                leading: CircleAvatar(
-                  child: Text('${rollnumber}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                ),
-                title: Text(student.firstname + " " + student.lastname,style: TextStyle(fontWeight: FontWeight.bold),),
-                subtitle: Text(
-                  student.userId
-                ),
-                trailing: widget.program == "Super Admin"
-                    ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        FontAwesomeIcons.edit,
-                        color: Colors.green,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        FontAwesomeIcons.trash,
-                        color: Colors.redAccent,
-                      ),
-                    ),
-                  ],
-                )
-                    : null,
-              ),
-            );
-          },
-        );
-      },
+  Future<void> _pickDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
     );
-  }
 
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    }
+  }
 }
