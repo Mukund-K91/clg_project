@@ -1,22 +1,33 @@
 import 'dart:async';
 import 'package:clg_project/main.dart';
+import 'package:clg_project/student/dashboard.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'home_main.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<SplashScreen> createState() => SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class SplashScreenState extends State<SplashScreen> {
+  static const String KEYLOGIN = "login";
+  static const String KEYUSERNAME = 'username';
+  static const String KEYUSERTYPE = 'Student';
+
+
   @override
   void initState() {
     super.initState();
     _checkInternetConnection();
+
+
   }
 
   Future<void> _checkInternetConnection() async {
@@ -24,13 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (connectivityResult == ConnectivityResult.none) {
       showDialogBox();
     } else {
-      await Future.delayed(const Duration(seconds: 3));
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeMain(),
-        ),
-      );
+      whereToGo();
     }
   }
 
@@ -45,11 +50,11 @@ class _SplashScreenState extends State<SplashScreen> {
                 CupertinoButton.filled(
                     child: const Text('Retry'),
                     onPressed: () {
-                      Navigator.pushReplacement(
+                      Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const SplashScreen(),
-                        ),
+                        ),(_)=>false
                       );
                       runApp(
                         MaterialApp(
@@ -92,5 +97,33 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> whereToGo() async {
+    var sharedPref = await SharedPreferences.getInstance();
+    var isLoggedIn = sharedPref.getBool(KEYLOGIN) ?? false;
+    String UserType;
+    Timer(Duration(seconds: 3), () {
+
+        if(isLoggedIn){
+          var username = sharedPref.getString(KEYUSERNAME);
+          var usertype=sharedPref.getString(KEYUSERTYPE);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MainDashboard(KEYUSERTYPE, username),
+              ),(route)=>false);
+        }
+        else {
+          print("User Logout");
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeMain(),
+              ),(_)=>false);
+        }
+
+
+    });
   }
 }

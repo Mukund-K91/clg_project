@@ -2,8 +2,13 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clg_project/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../home_main.dart';
+import '../reusable_widget/reusable_textfield.dart';
+import '../splash_screen.dart';
 
 class Profile extends StatefulWidget {
   String _UserId;
@@ -63,7 +68,7 @@ class _ProfileState extends State<Profile> {
           future: profileData(widget._UserId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (!snapshot.hasData || snapshot.data == null) {
@@ -185,6 +190,26 @@ class _ProfileState extends State<Profile> {
                                   color: Colors.white,
                                 ),
                               ),
+                              Reusablebutton(
+                                onPressed: () async {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => HomeMain()),
+                                        (route) => false, // Remove all routes in the stack
+                                  );
+                                  var sharedPref = await SharedPreferences.getInstance();
+                                  sharedPref.remove(SplashScreenState.KEYLOGIN);
+                                  sharedPref.remove(SplashScreenState.KEYUSERNAME);
+                                  sharedPref.remove(SplashScreenState.KEYUSERTYPE);
+
+                                },
+                                Style: false,
+                                child: const Text(
+                                  "LOG OUT !!",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                              ),
                               SizedBox(
                                 height: 30,
                               )
@@ -273,19 +298,39 @@ class _ProfileState extends State<Profile> {
                                 ),
                               ),
                               ListItem(
-                                  title: 'Qualification',
-                                  subtitle: userData['Qualification'],
-                              icon: Icon(
-                                FontAwesomeIcons.graduationCap,
-                                color: Colors.white,
-                              ),),
+                                title: 'Qualification',
+                                subtitle: userData['Qualification'],
+                                icon: Icon(
+                                  FontAwesomeIcons.graduationCap,
+                                  color: Colors.white,
+                                ),
+                              ),
                               ListItem(
                                   title: 'Designation',
                                   subtitle: userData['Designation'],
-                                 icon:  Icon(
+                                  icon: Icon(
                                     FontAwesomeIcons.userTie,
                                     color: Colors.white,
                                   )),
+                              Reusablebutton(
+                                onPressed: () async {
+                                  var sharedPref = await SharedPreferences.getInstance();
+                                  sharedPref.remove(SplashScreenState.KEYLOGIN);
+                                  sharedPref.remove(SplashScreenState.KEYUSERNAME);
+                                  sharedPref.remove(SplashScreenState.KEYUSERTYPE);
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>SplashScreen(),
+                                      ),(_)=>false);
+                                },
+                                Style: false,
+                                child: const Text(
+                                  "LOG OUT !!",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                              ),
                               SizedBox(
                                 height: 30,
                               )

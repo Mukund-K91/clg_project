@@ -76,46 +76,44 @@ class StudentDashboard extends StatelessWidget {
                           bottomRight: Radius.circular(40))),
                   child: Padding(
                     padding: const EdgeInsets.all(15),
-                    child: Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Profile(
-                                          userData['User Id'], 'Student'),
-                                    ));
-                              },
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  radius: 27,
-                                  child: ClipOval(
-                                    child: Image.network(
-                                      ProfileUrl,
-                                      fit: BoxFit.cover,
-                                      height: 70,
-                                      width: 70,
-                                    ),
+                    child: Container(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Profile(
+                                        userData['User Id'], 'Student'),
+                                  ));
+                            },
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                radius: 27,
+                                child: ClipOval(
+                                  child: Image.network(
+                                    ProfileUrl,
+                                    fit: BoxFit.cover,
+                                    height: 70,
+                                    width: 70,
                                   ),
                                 ),
-                                title: Text(
-                                  "${Name}",
-                                  style: const TextStyle(
-                                      fontSize: 20, color: Colors.white),
-                                ),
-                                subtitle: Text("${program}",
-                                    style:
-                                        const TextStyle(color: Colors.white)),
                               ),
+                              title: Text(
+                                "${Name}",
+                                style: const TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                              ),
+                              subtitle: Text("${program}",
+                                  style:
+                                      const TextStyle(color: Colors.white)),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

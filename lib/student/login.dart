@@ -1,19 +1,23 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:clg_project/splash_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../home_main.dart';
 import '../main.dart';
 import '../reusable_widget/reusable_textfield.dart';
 import 'dashboard.dart';
 
 class Login extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
-  final _User;
+  final _UserType;
 
-  const Login(this._User, {super.key});
+  const Login(this._UserType, {super.key});
 
   @override
   State<Login> createState() => _LoginState();
@@ -64,30 +68,37 @@ class _LoginState extends State<Login> {
             animType: AnimType.bottomSlide,
             showCloseIcon: false,
             title: "Login Successfully",
-            btnOkOnPress: () {
-              Navigator.pushReplacement(
+            btnOkOnPress: () async {
+              var sharedPref = await SharedPreferences.getInstance();
+              sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
+              sharedPref.setString(
+                  SplashScreenState.KEYUSERNAME, enteredUserId);
+              sharedPref.setString(
+                  SplashScreenState.KEYUSERTYPE, widget._UserType);
+              Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MainDashboard(widget._User, userId),
-                  ));
+                    builder: (context) => MainDashboard(widget._UserType, userId),
+                  ),(_)=>false);
             }).show();
       }
       // ignore: use_build_context_synchronously
       else {
+        Center(child: CircularProgressIndicator(),);
         AwesomeDialog(
                 context: context,
                 dialogType: DialogType.error,
                 animType: AnimType.bottomSlide,
                 showCloseIcon: true,
                 btnOkOnPress: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const HomeMain(),
                       ));
                 },
-                title: "${widget._User} Not Found",
-                desc: widget._User == "Student"
+                title: "${widget._UserType} Not Found",
+                desc: widget._UserType == "Student"
                     ? "Please check userId or Password "
                     : "Please check userId or Password "
                         "Contact Admin for any query")
@@ -102,11 +113,11 @@ class _LoginState extends State<Login> {
         .text; // assuming _mobile is your TextEditingController for the mobile number
 // Query Firestore to get the user IDs
     final QuerySnapshot<Map<String, dynamic>> studentQuerySnapShot =
-    await FirebaseFirestore.instance.collectionGroup('faculty').get();
+        await FirebaseFirestore.instance.collectionGroup('faculty').get();
     bool isUserAuthenticated = false;
     if (_formKey.currentState!.validate()) {
       for (final QueryDocumentSnapshot<Map<String, dynamic>> document
-      in studentQuerySnapShot.docs) {
+          in studentQuerySnapShot.docs) {
         final userData = document.data();
         final String documentUserId = document.id;
         final String mobile = userData?['Password'];
@@ -128,7 +139,7 @@ class _LoginState extends State<Login> {
       }
       // ignore: use_build_context_synchronously
       if (isUserAuthenticated) {
-        // User authenticated successfully, navigate to the main application screen
+        Center(child: CircularProgressIndicator(),);
         AwesomeDialog(
             context: context,
             dialogType: DialogType.success,
@@ -139,36 +150,36 @@ class _LoginState extends State<Login> {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MainDashboard(widget._User, userId),
+                    builder: (context) => MainDashboard(widget._UserType, userId),
                   ));
             }).show();
       }
       // ignore: use_build_context_synchronously
       else {
         AwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            animType: AnimType.bottomSlide,
-            showCloseIcon: true,
-            btnOkOnPress: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomeMain(),
-                  ));
-            },
-            title: "${widget._User} Not Found",
-            desc: widget._User == "Student"
-                ? "Please check userId or Password "
-                : "Please check userId or Password "
-                "Contact Admin for any query")
+                context: context,
+                dialogType: DialogType.error,
+                animType: AnimType.bottomSlide,
+                showCloseIcon: true,
+                btnOkOnPress: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeMain(),
+                      ));
+                },
+                title: "${widget._UserType} Not Found",
+                desc: widget._UserType == "Student"
+                    ? "Please check userId or Password "
+                    : "Please check userId or Password "
+                        "Contact Admin for any query")
             .show();
       }
     }
   }
 
-  final TextEditingController _userIdController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _userIdController = TextEditingController(text: kDebugMode ? '202400101':'');
+  final TextEditingController _passwordController = TextEditingController(text: kDebugMode?'7862992577':'');
 
   @override
   Widget build(BuildContext context) {
@@ -207,7 +218,7 @@ class _LoginState extends State<Login> {
                   child: Column(
                     children: [
                       ReusableTextField(
-                        preIcon: widget._User == "Student"
+                        preIcon: widget._UserType == "Student"
                             ? const Icon(FontAwesomeIcons.userGraduate,
                                 color: Color(0xff002233))
                             : const Icon(
@@ -216,7 +227,7 @@ class _LoginState extends State<Login> {
                               ),
                         controller: _userIdController,
                         title:
-                            widget._User == 'Student' ? 'STUDENT ID' : 'Emp Id',
+                            widget._UserType == 'Student' ? 'STUDENT ID' : 'Emp Id',
                       ),
                       const SizedBox(
                         height: 15,
@@ -245,8 +256,11 @@ class _LoginState extends State<Login> {
                       ),
                       Reusablebutton(
                         onPressed: () async {
-                          widget._User=="Student"?_Studentlogin(
-                              _userIdController.text, _passwordController.text):_Facultylogin(_userIdController.text, _passwordController.text);
+                          widget._UserType == "Student"
+                              ? _Studentlogin(_userIdController.text,
+                                  _passwordController.text)
+                              : _Facultylogin(_userIdController.text,
+                                  _passwordController.text);
                         },
                         Style: false,
                         child: const Text(
