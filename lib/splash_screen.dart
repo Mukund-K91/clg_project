@@ -21,13 +21,12 @@ class SplashScreenState extends State<SplashScreen> {
   static const String KEYUSERNAME = 'username';
   static const String KEYUSERTYPE = 'Student';
 
-
   @override
   void initState() {
     super.initState();
-    _checkInternetConnection();
-
-
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _checkInternetConnection();
+    });
   }
 
   Future<void> _checkInternetConnection() async {
@@ -51,11 +50,11 @@ class SplashScreenState extends State<SplashScreen> {
                     child: const Text('Retry'),
                     onPressed: () {
                       Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SplashScreen(),
-                        ),(_)=>false
-                      );
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SplashScreen(),
+                          ),
+                          (_) => false);
                       runApp(
                         MaterialApp(
                           home: const SplashScreen(),
@@ -104,26 +103,21 @@ class SplashScreenState extends State<SplashScreen> {
     var isLoggedIn = sharedPref.getBool(KEYLOGIN) ?? false;
     String UserType;
     Timer(Duration(seconds: 3), () {
-
-        if(isLoggedIn){
-          var username = sharedPref.getString(KEYUSERNAME);
-          var usertype=sharedPref.getString(KEYUSERTYPE);
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MainDashboard(KEYUSERTYPE, username),
-              ),(route)=>false);
-        }
-        else {
-          print("User Logout");
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeMain(),
-              ),(_)=>false);
-        }
-
-
+      if (isLoggedIn) {
+        var username = sharedPref.getString(KEYUSERNAME);
+        var usertype = sharedPref.getString(KEYUSERTYPE);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MainDashboard(KEYUSERTYPE, username),
+            ),
+            (route) => false);
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeMain()),
+        );
+      }
     });
   }
 }
