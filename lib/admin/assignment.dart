@@ -11,13 +11,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-String? _selProgram = "--Please Select--";
-String? _selProgramTerm = "--Please Select--";
-String? _seldiv = "--Please Select--";
-String selectedSubject = "--Please Select--"; // Default subject
-List<String> subjectList = [];
-final date = DateTime.now();
-
 class AssignmentPage extends StatefulWidget {
   String Name;
   String program;
@@ -29,6 +22,47 @@ class AssignmentPage extends StatefulWidget {
 }
 
 class _AssignmentPageState extends State<AssignmentPage> {
+  @override
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        bottomNavigationBar: FloatingActionButton(
+          backgroundColor: Color(0xff002233),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      AssignmentCreate(widget.Name, widget.program),
+                ));
+          },
+          child: Text(
+            'Create Assignment',
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        ),
+        backgroundColor: const Color(0xffffffff),
+        appBar: CustomAppBar(title: 'Assignments'),
+        body: AssignmentStream());
+  }
+}
+
+class AssignmentCreate extends StatefulWidget {
+  String Name;
+  String program;
+
+  AssignmentCreate(this.Name, this.program, {Key? key}) : super(key: key);
+
+  @override
+  State<AssignmentCreate> createState() => _AssignmentCreateState();
+}
+
+class _AssignmentCreateState extends State<AssignmentCreate> {
+  String? _selProgram = "--Please Select--";
+  String? _selProgramTerm = "--Please Select--";
+  String selectedSubject = "--Please Select--"; // Default subject
+  List<String> subjectList = [];
+  final date = DateTime.now();
   final toDateControler = TextEditingController();
   final fromDateControler = TextEditingController();
   final _instructions = TextEditingController();
@@ -37,12 +71,10 @@ class _AssignmentPageState extends State<AssignmentPage> {
   Color formBorderColor = Colors.grey;
   late FilePickerResult? selectedFile;
 
-  @override
   void initState() {
     super.initState();
     _selProgram = widget.program;
     _selProgramTerm = "--Please Select--";
-    _seldiv = "--Please Select--";
   }
 
   Future<void> _selectFile() async {
@@ -104,7 +136,6 @@ class _AssignmentPageState extends State<AssignmentPage> {
         'facultyName': widget.Name,
         'program': widget.program,
         'programTerm': _selProgramTerm,
-        'division': _seldiv,
         'subject': selectedSubject,
         'instructions': instructions,
         'dueDate': dueDate,
@@ -122,10 +153,8 @@ class _AssignmentPageState extends State<AssignmentPage> {
       selectedSubject = "--Please Select--";
       _selProgram = widget.program;
       _selProgramTerm = "--Please Select--";
-      _seldiv = "--Please Select--";
 
-      // Hide the progress indicator
-      Navigator.of(context).pop();
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AssignmentPage(widget.Name, widget.program),));
 
       // Show a snackbar to indicate successful creation
       ScaffoldMessenger.of(context).showSnackBar(
@@ -137,8 +166,6 @@ class _AssignmentPageState extends State<AssignmentPage> {
     } else {
       // Hide the progress indicator
       Navigator.of(context).pop();
-
-      // Show a snackbar to indicate failure
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to create assignment. Please try again.'),
@@ -175,276 +202,216 @@ class _AssignmentPageState extends State<AssignmentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: FloatingActionButton(
-          backgroundColor: Color(0xff002233),
-          onPressed: _add,
-          child: Text(
-            'Create Assignment',
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-        ),
-        backgroundColor: const Color(0xffffffff),
-        appBar: CustomAppBar(title: 'Assignments'),
-        body: AssignmentStream());
-  }
-
-  Future<void> _add() async {
-    showModalBottomSheet(
-        context: context,
-        isDismissible: true,
-        isScrollControlled: true,
-        builder: (BuildContext ctx) {
-          return Scaffold(
-              appBar: CustomAppBar(title: 'Create Assignment'),
-              body: Container(
-                height: MediaQuery.of(context).size.height,
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        title: const Text(
-                          "Program Term",
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        subtitle: DropdownButtonFormField(
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.zero),
-                            ),
-                          ),
-                          value: _selProgramTerm,
-                          items: lists.programTerms
-                              .map((e) => DropdownMenuItem(
-                                    value: e,
-                                    child: Text(e),
-                                  ))
-                              .toList(),
-                          onChanged: (val) {
-                            setState(() {
-                              _selProgramTerm = val as String;
-                              updateSubjectList(_selProgram!, _selProgramTerm!);
-                            });
-                          },
-                        ),
+        appBar: CustomAppBar(title: 'Create Assignment'),
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                ListTile(
+                  title: const Text(
+                    "Program Term",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  subtitle: DropdownButtonFormField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.zero),
                       ),
-                      ListTile(
-                        title: const Text(
-                          "Division",
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        subtitle: DropdownButtonFormField(
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.zero),
-                            ),
-                          ),
-                          value: _seldiv,
-                          items: _selProgram == "BCA"
-                              ? lists.bcaDivision
-                                  .map((e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e),
-                                      ))
-                                  .toList()
-                              : _selProgram == "B-Com"
-                                  ? lists.bcomDivision
-                                      .map((e) => DropdownMenuItem(
-                                            value: e,
-                                            child: Text(e),
-                                          ))
-                                      .toList()
-                                  : lists.bbaDivision
-                                      .map((e) => DropdownMenuItem(
-                                            value: e,
-                                            child: Text(e),
-                                          ))
-                                      .toList(),
-                          onChanged: (val) {
-                            setState(() {
-                              _seldiv = val as String;
-                            });
-                          },
-                        ),
-                      ),
-                      ListTile(
-                        title: const Text(
-                          "Subject",
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        subtitle: DropdownButtonFormField(
-                          isExpanded: true,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.zero),
-                            ),
-                          ),
-                          value: selectedSubject,
-                          items: subjectList
-                              .map((e) => DropdownMenuItem(
-                                    value: e,
-                                    child: Text(e),
-                                  ))
-                              .toList(),
-                          onChanged: (val) {
-                            setState(() {
-                              selectedSubject = val as String;
-                            });
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 20, left: 20),
-                        child: ReusableTextField(
-                          keyboardType: TextInputType.multiline,
-                          controller: _instructions,
-                          title: 'Instructions',
-                          readOnly: false,
-                          maxLines: 5,
-                          isMulti: true,
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      Row(children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 10, left: 20),
-                            child: TextFormField(
-                              onTap: () async {
-                                DateTime? pickedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(1950),
-                                  lastDate: DateTime(2050),
-                                );
-                                if (pickedDate != null) {
-                                  fromDateControler.text =
-                                      '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
-                                }
-                              },
-                              readOnly: true,
-                              autocorrect: false,
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              controller: fromDateControler,
-                              decoration: InputDecoration(
-                                prefixIcon: const Icon(
-                                  Icons.calendar_month_outlined,
-                                  color: Colors.grey,
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                hintText: 'Due Date',
-                                hintStyle: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.black,
-                                ),
-                                fillColor: Colors.white,
-                                filled: true,
-                                counterText: "",
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: formBorderColor, width: 1.0),
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                              ),
-                              keyboardType: TextInputType.datetime,
-                              textInputAction: TextInputAction.done,
-                              onChanged: (value) {
-                                setState(() {
-                                  if (value != null) {
-                                    formBorderColor = const Color(0xFFE91e63);
-                                  } else {
-                                    formBorderColor = Colors.grey;
-                                  }
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 20, left: 10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextFormField(
-                                  controller: _timeController,
-                                  readOnly: true,
-                                  onTap: () => _selectTime(context),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    labelText: 'Due Time',
-                                    prefixIcon: const Icon(Icons.access_time),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ]),
-                      SizedBox(height: 15),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: DottedBorder(
-                          color: Colors.blue,
-                          strokeWidth: 3,
-                          dashPattern: [12, 11],
-                          child: Container(
-                            width: double.infinity,
-                            height: 65,
-                            color: Colors.white,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: const ContinuousRectangleBorder(),
-                              ),
-                              onPressed: _selectFile,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    CupertinoIcons.plus_circle_fill,
-                                    color: Color(0xff225779),
-                                    size: 37,
-                                  ),
-                                  SizedBox(width: 18),
-                                  Text(
-                                    'Reference Material',
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Reusablebutton(
-                          onPressed: () {
-                            setState(() {
-                              _instructions.text;
-                              _createAssignment();
-                            });
-                          },
-                          Style: false,
-                          child: Text(
-                            'Create Assignment',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 30),
-                    ],
+                    ),
+                    value: _selProgramTerm,
+                    items: lists.programTerms
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e),
+                            ))
+                        .toList(),
+                    onChanged: (val) {
+                      setState(() {
+                        _selProgramTerm = val as String;
+                        selectedSubject="--Please Select--";
+                       updateSubjectList(_selProgram!, _selProgramTerm!);
+                      });
+                    },
                   ),
                 ),
-              ));
-        });
+                ListTile(
+                  title: const Text(
+                    "Subject",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  subtitle: DropdownButtonFormField(
+                    isExpanded: true,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.zero),
+                      ),
+                    ),
+                    value: selectedSubject,
+                    items: subjectList
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e),
+                            ))
+                        .toList(),
+                    onChanged: (val) {
+                      setState(() {
+                        selectedSubject = val as String;
+                      });
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 20, left: 20),
+                  child: ReusableTextField(
+                    keyboardType: TextInputType.multiline,
+                    controller: _instructions,
+                    title: 'Instructions',
+                    readOnly: false,
+                    maxLines: 5,
+                    isMulti: true,
+                  ),
+                ),
+                SizedBox(height: 15),
+                Row(children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10, left: 20),
+                      child: TextFormField(
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1950),
+                            lastDate: DateTime(2050),
+                          );
+                          if (pickedDate != null) {
+                            fromDateControler.text =
+                                '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
+                          }
+                        },
+                        readOnly: true,
+                        autocorrect: false,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: fromDateControler,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(
+                            Icons.calendar_month_outlined,
+                            color: Colors.grey,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          hintText: 'Due Date',
+                          hintStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.black,
+                          ),
+                          fillColor: Colors.white,
+                          filled: true,
+                          counterText: "",
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: formBorderColor, width: 1.0),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                        keyboardType: TextInputType.datetime,
+                        textInputAction: TextInputAction.done,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value != null) {
+                              formBorderColor = const Color(0xFFE91e63);
+                            } else {
+                              formBorderColor = Colors.grey;
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 20, left: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextFormField(
+                            controller: _timeController,
+                            readOnly: true,
+                            onTap: () => _selectTime(context),
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              labelText: 'Due Time',
+                              prefixIcon: const Icon(Icons.access_time),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ]),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: DottedBorder(
+                    color: Colors.blue,
+                    strokeWidth: 3,
+                    dashPattern: [12, 11],
+                    child: Container(
+                      width: double.infinity,
+                      height: 65,
+                      color: Colors.white,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: const ContinuousRectangleBorder(),
+                        ),
+                        onPressed: _selectFile,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              CupertinoIcons.plus_circle_fill,
+                              color: Color(0xff225779),
+                              size: 37,
+                            ),
+                            SizedBox(width: 18),
+                            Text(
+                              'Reference Material',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Reusablebutton(
+                    onPressed: () {
+                      setState(() {
+                        _instructions.text;
+                        _createAssignment();
+                      });
+                    },
+                    Style: false,
+                    child: Text(
+                      'Create Assignment',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30),
+              ],
+            ),
+          ),
+        ));
+    ;
   }
 }
 
@@ -471,12 +438,14 @@ class AssignmentStream extends StatelessWidget {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: Text("Confirm Deletion"),
-                      content: Text("Are you sure you want to delete this assignment?"),
+                      content: Text(
+                          "Are you sure you want to delete this assignment?"),
                       actions: [
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop(); // Close the dialog
-                            deleteAssignmentAndFile(document.id, data['referenceMaterialUrl']);
+                            deleteAssignmentAndFile(
+                                document.id, data['referenceMaterialUrl']);
                           },
                           child: Text("Yes"),
                         ),
@@ -489,7 +458,8 @@ class AssignmentStream extends StatelessWidget {
                       ],
                     );
                   },
-                );              },
+                );
+              },
               onUpdate: () {
                 // Implement update logic here
               },
@@ -502,16 +472,21 @@ class AssignmentStream extends StatelessWidget {
 }
 
 // Method to delete assignment and associated file from Firestore and Firebase Storage
-Future<void> deleteAssignmentAndFile(String assignmentId, String fileUrl) async {
+Future<void> deleteAssignmentAndFile(
+    String assignmentId, String fileUrl) async {
   try {
     // Delete assignment document from Firestore
-    await FirebaseFirestore.instance.collection('assignments').doc(assignmentId).delete();
+    await FirebaseFirestore.instance
+        .collection('assignments')
+        .doc(assignmentId)
+        .delete();
 
     // Extract file name from the URL
     String fileName = fileUrl.split('/').last;
 
     // Delete file from Firebase Storage
-    Reference storageReference = FirebaseStorage.instance.ref().child('reference_material/$fileName');
+    Reference storageReference =
+        FirebaseStorage.instance.ref().child('reference_material/$fileName');
     await storageReference.delete();
   } catch (e) {
     print('Error deleting assignment and file: $e');
