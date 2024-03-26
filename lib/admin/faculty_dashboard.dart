@@ -1,6 +1,7 @@
 import 'package:clg_project/admin/assignment.dart';
 import 'package:clg_project/noticeboard.dart';
 import 'package:clg_project/main.dart';
+import 'package:clg_project/student/Studentassignment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -192,8 +193,7 @@ class FacultyDashboard extends StatelessWidget {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => AssignmentPage(
-                                              userData['program']),
+                                          builder: (context) => AssignmentPage(Name,userData['program']),
                                         ));
                                   },
                                   iconSize: 50,
@@ -300,7 +300,8 @@ class FacultyDashboard extends StatelessWidget {
                             },
                             child: Text("view all >>")),
                       ),
-                      buildEventList()
+                      buildEventList(),
+                      SizedBox(height: 30,)
                     ],
                   ),
                 ))

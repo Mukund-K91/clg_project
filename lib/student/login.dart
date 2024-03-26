@@ -72,7 +72,7 @@ class _LoginState extends State<Login> {
               var sharedPref = await SharedPreferences.getInstance();
               sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
               sharedPref.setString(
-                  SplashScreenState.KEYUSERNAME, enteredUserId);
+                  SplashScreenState.KEYUSERNAME, userId);
               sharedPref.setString(
                   SplashScreenState.KEYUSERTYPE, widget._UserType);
               Navigator.pushAndRemoveUntil(
@@ -146,12 +146,18 @@ class _LoginState extends State<Login> {
             animType: AnimType.bottomSlide,
             showCloseIcon: false,
             title: "Login Successfully",
-            btnOkOnPress: () {
-              Navigator.pushReplacement(
+            btnOkOnPress: () async {
+              var sharedPref = await SharedPreferences.getInstance();
+              sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
+              sharedPref.setString(
+                  SplashScreenState.KEYUSERNAME, enteredUserId);
+              sharedPref.setString(
+                  SplashScreenState.KEYUSERTYPE, widget._UserType);
+              Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                     builder: (context) => MainDashboard(widget._UserType, userId),
-                  ));
+                  ),(_)=>false);
             }).show();
       }
       // ignore: use_build_context_synchronously
