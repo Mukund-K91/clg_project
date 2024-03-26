@@ -11,8 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../admin/Material.dart';
 import '../admin/PageNotAvailable.dart';
+import '../home_main.dart';
+import '../splash_screen.dart';
 
 class StudentDashboard extends StatelessWidget {
   String UserId;
@@ -54,7 +57,24 @@ class StudentDashboard extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data == null) {
-            return Text('User not found or invalid credentials');
+            return Center(
+              child: Column(
+                children: [
+                  ElevatedButton(onPressed: () async {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeMain()),
+                          (route) => false, // Remove all routes in the stack
+                    );
+                    var sharedPref = await SharedPreferences.getInstance();
+                    sharedPref.remove(SplashScreenState.KEYLOGIN);
+                    sharedPref.remove(SplashScreenState.KEYUSERNAME);
+                    sharedPref.remove(SplashScreenState.KEYUSERTYPE);
+                  }, child:Text('LOgout')),
+                  Text('User not found or invalid credentials'),
+                ],
+              ),
+            );
           } else {
             final userData = snapshot.data!;
             final String Name =

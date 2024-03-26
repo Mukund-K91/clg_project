@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:clg_project/reusable_widget/lists.dart';
 import 'package:clg_project/reusable_widget/reusable_appbar.dart';
 import 'package:clg_project/reusable_widget/reusable_textfield.dart';
@@ -10,7 +9,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
 
 String? _selProgram = "--Please Select--";
 String? _selProgramTerm = "--Please Select--";
@@ -31,7 +29,9 @@ class AssignmentPage extends StatefulWidget {
 class _AssignmentPageState extends State<AssignmentPage> {
   final toDateControler = TextEditingController();
   final fromDateControler = TextEditingController();
+  final _instructions=TextEditingController();
   final _timeController = TextEditingController();
+
   Color formBorderColor = Colors.grey;
   late FilePickerResult? selectedFile;
 
@@ -77,12 +77,20 @@ class _AssignmentPageState extends State<AssignmentPage> {
 
   void _createAssignment() async {
     // Get the assignment details
-    String assignmentName =
-        'Assignment Name'; // Replace with the actual assignment name
-    String instructions =
-        'Assignment Instructions'; // Replace with the actual instructions
+    String instructions = _instructions.text; // Replace with the actual instructions
     String dueDate = fromDateControler.text; // Get the due date
     String dueTime = _timeController.text; // Get the due time
+
+    // Show a circular progress indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
 
     // Upload reference material to Firebase Storage and get the download URL
     String? referenceMaterialUrl = await _uploadFileToStorage();
@@ -95,19 +103,47 @@ class _AssignmentPageState extends State<AssignmentPage> {
         'programTerm': _selProgramTerm,
         'division': _seldiv,
         'subject': selectedSubject,
-        'assignmentName': assignmentName,
         'instructions': instructions,
         'dueDate': dueDate,
         'dueTime': dueTime,
         'referenceMaterialUrl': referenceMaterialUrl,
         // Add more fields as needed
       });
-      print('done${referenceMaterialUrl}');
+
+      // Reset values upon successful creation
+      _instructions.clear();
+      fromDateControler.clear();
+      _timeController.clear();
+      selectedFile = null;
+      selectedSubject="--Please Select--";
+      _selProgram = widget.program;
+      _selProgramTerm = "--Please Select--";
+      _seldiv = "--Please Select--";
+
+      // Hide the progress indicator
+      Navigator.of(context).pop();
+
+      // Show a snackbar to indicate successful creation
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Assignment created successfully!'),
+          duration: Duration(seconds: 3),
+        ),
+      );
     } else {
-      print('Reference material URL is null');
+      // Hide the progress indicator
+      Navigator.of(context).pop();
+
+      // Show a snackbar to indicate failure
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to create assignment. Please try again.'),
+          duration: Duration(seconds: 3),
+        ),
+      );
     }
-    // Navigate to a new screen or perform any other actions after storing the data
   }
+
   TimeOfDay selectedTime = TimeOfDay.now();
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -134,7 +170,8 @@ class _AssignmentPageState extends State<AssignmentPage> {
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
       appBar: CustomAppBar(title: 'Create Assignment'),
-      body: SingleChildScrollView(
+      body:
+      SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
         child: Column(
           children: [
@@ -232,6 +269,8 @@ class _AssignmentPageState extends State<AssignmentPage> {
             Padding(
               padding: EdgeInsets.only(right: 20, left: 20),
               child: ReusableTextField(
+                keyboardType: TextInputType.multiline,
+                controller: _instructions,
                 title: 'Instructions',
                 readOnly: false,
                 maxLines: 5,
@@ -285,8 +324,6 @@ class _AssignmentPageState extends State<AssignmentPage> {
                     ),
                     keyboardType: TextInputType.datetime,
                     textInputAction: TextInputAction.done,
-                    validator: (value) =>
-                        value!.isEmpty ? 'please give date' : null,
                     onChanged: (value) {
                       setState(() {
                         if (value != null) {
@@ -359,8 +396,14 @@ class _AssignmentPageState extends State<AssignmentPage> {
             SizedBox(height: 15),
             Padding(
               padding: const EdgeInsets.all(20),
-              child: ElevatedButton(
-                onPressed: _createAssignment,
+              child: Reusablebutton(
+                onPressed: (){
+                  setState(() {
+                    _instructions.text;
+                    _createAssignment();
+                  });
+                },
+                Style: false,
                 child: Text(
                   'Create Assignment',
                   style: TextStyle(color: Colors.white),

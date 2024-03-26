@@ -322,19 +322,24 @@ class _ProfileState extends State<Profile> {
                                   )),
                               Reusablebutton(
                                 onPressed: () async {
+                                  final NavigatorState navigator =
+                                  Navigator.of(context);
+
+                                  // Get the current stack of routes
+                                  final List routes = navigator.widget.pages;
+                                  print("routes -> ${routes.length}");
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SplashScreen()),
+                                          (_) => false);
                                   var sharedPref =
-                                      await SharedPreferences.getInstance();
+                                  await SharedPreferences.getInstance();
                                   sharedPref.remove(SplashScreenState.KEYLOGIN);
                                   sharedPref
                                       .remove(SplashScreenState.KEYUSERNAME);
                                   sharedPref
                                       .remove(SplashScreenState.KEYUSERTYPE);
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => SplashScreen(),
-                                      ),
-                                      (_) => false);
                                 },
                                 Style: false,
                                 child: const Text(

@@ -5,11 +5,14 @@ import 'package:clg_project/student/Studentassignment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../admin/Material.dart';
 import '../admin/PageNotAvailable.dart';
 import '../event_screen.dart';
+import '../home_main.dart';
 import '../reusable_widget/img_slider.dart';
 import '../reusable_widget/notice_board_list.dart';
+import '../splash_screen.dart';
 import '../student/attendance.dart';
 import '../student/profile.dart';
 import 'admin.dart';
@@ -50,7 +53,24 @@ class FacultyDashboard extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data == null) {
-            return Text('User not found or invalid credentials');
+            return Center(
+              child: Column(
+                children: [
+                  ElevatedButton(onPressed: () async {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeMain()),
+                          (route) => false, // Remove all routes in the stack
+                    );
+                    var sharedPref = await SharedPreferences.getInstance();
+                    sharedPref.remove(SplashScreenState.KEYLOGIN);
+                    sharedPref.remove(SplashScreenState.KEYUSERNAME);
+                    sharedPref.remove(SplashScreenState.KEYUSERTYPE);
+                  }, child:Text('LOgout')),
+                  Text('User not found or invalid credentials'),
+                ],
+              ),
+            );
           } else {
             final userData = snapshot.data!;
             final String Name =
@@ -80,7 +100,7 @@ class FacultyDashboard extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => Profile(
-                                          userData['User Id'], 'Student'),
+                                          userData['Id'], 'Faculty'),
                                     ));
                               },
                               child: ListTile(

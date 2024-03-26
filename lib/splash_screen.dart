@@ -19,7 +19,7 @@ class SplashScreen extends StatefulWidget {
 class SplashScreenState extends State<SplashScreen> {
   static const String KEYLOGIN = "login";
   static const String KEYUSERNAME = 'username';
-  static const String KEYUSERTYPE = 'Student';
+  static const String KEYUSERTYPE = 'userType';
 
   @override
   void initState() {
