@@ -192,20 +192,28 @@ class _ProfileState extends State<Profile> {
                               ),
                               Reusablebutton(
                                 onPressed: () async {
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => HomeMain()),
-                                        (route) => false, // Remove all routes in the stack
-                                  );
-                                  var sharedPref = await SharedPreferences.getInstance();
-                                  sharedPref.remove(SplashScreenState.KEYLOGIN);
-                                  sharedPref.remove(SplashScreenState.KEYUSERNAME);
-                                  sharedPref.remove(SplashScreenState.KEYUSERTYPE);
+                                  final NavigatorState navigator =
+                                      Navigator.of(context);
 
+                                  // Get the current stack of routes
+                                  final List routes = navigator.widget.pages;
+                                  print("routes -> ${routes.length}");
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SplashScreen()),
+                                      (_) => false);
+                                  var sharedPref =
+                                      await SharedPreferences.getInstance();
+                                  sharedPref.remove(SplashScreenState.KEYLOGIN);
+                                  sharedPref
+                                      .remove(SplashScreenState.KEYUSERNAME);
+                                  sharedPref
+                                      .remove(SplashScreenState.KEYUSERTYPE);
                                 },
                                 Style: false,
                                 child: const Text(
-                                  "LOG OUT !!",
+                                  "LOG OUT !!!",
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 20),
                                 ),
@@ -314,15 +322,19 @@ class _ProfileState extends State<Profile> {
                                   )),
                               Reusablebutton(
                                 onPressed: () async {
-                                  var sharedPref = await SharedPreferences.getInstance();
+                                  var sharedPref =
+                                      await SharedPreferences.getInstance();
                                   sharedPref.remove(SplashScreenState.KEYLOGIN);
-                                  sharedPref.remove(SplashScreenState.KEYUSERNAME);
-                                  sharedPref.remove(SplashScreenState.KEYUSERTYPE);
+                                  sharedPref
+                                      .remove(SplashScreenState.KEYUSERNAME);
+                                  sharedPref
+                                      .remove(SplashScreenState.KEYUSERTYPE);
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>SplashScreen(),
-                                      ),(_)=>false);
+                                        builder: (context) => SplashScreen(),
+                                      ),
+                                      (_) => false);
                                 },
                                 Style: false,
                                 child: const Text(
