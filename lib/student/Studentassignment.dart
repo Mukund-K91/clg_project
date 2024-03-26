@@ -21,13 +21,13 @@ class _StudentassignmentState extends State<Studentassignment> {
         child: Column(
           children: [
             Card(
-              child: _SampleCard(cardName: "Assignment name", cardDes: 'E-COMMERCE AND CYBER SECURITY\n1 to 4',),
+              child: SampleCard(cardName: "Assignment name", cardDes: 'E-COMMERCE AND CYBER SECURITY\n1 to 4',),
             ),
             Card(
-              child: _SampleCard(cardName: "Subject name", cardDes: 'E-COMMERCE AND CYBER SECURITY',),
+              child: SampleCard(cardName: "Subject name", cardDes: 'E-COMMERCE AND CYBER SECURITY',),
             ),
             Card(
-              child: _SampleCard(cardName: "Due date", cardDes: '25-03-2024',),
+              child: SampleCard(cardName: "Due date", cardDes: '25-03-2024',),
             ),
           ],
         ),
@@ -53,8 +53,8 @@ class _StudentassignmentState extends State<Studentassignment> {
   }
 }
 
-class _SampleCard extends StatelessWidget {
-  const _SampleCard({required this.cardName, required this.cardDes});
+class SampleCard extends StatelessWidget {
+  const SampleCard({required this.cardName, required this.cardDes});
 
   final String cardName;
   final String cardDes;
@@ -64,9 +64,11 @@ class _SampleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20),
-      child:ListTile(
-        title: Text(cardName,style: TextStyle(fontWeight: FontWeight.bold),),
-        subtitle: Text(cardDes),
+      child:Card(
+        child: ListTile(
+          title: Text(cardName,style: TextStyle(fontWeight: FontWeight.bold),),
+          subtitle: Text(cardDes),
+        ),
       )
     );
   }
