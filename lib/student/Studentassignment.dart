@@ -54,10 +54,11 @@ class _StudentassignmentState extends State<Studentassignment> {
 }
 
 class SampleCard extends StatelessWidget {
-  const SampleCard({required this.cardName, required this.cardDes});
+  const SampleCard({required this.cardName, required this.cardDes,this.color});
 
   final String cardName;
   final String cardDes;
+  final Color? color;
 
 
   @override
@@ -65,6 +66,7 @@ class SampleCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20),
       child:Card(
+        color: color,
         child: ListTile(
           title: Text(cardName,style: TextStyle(fontWeight: FontWeight.bold),),
           subtitle: Text(cardDes),

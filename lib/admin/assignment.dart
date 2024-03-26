@@ -16,6 +16,7 @@ String? _selProgramTerm = "--Please Select--";
 String? _seldiv = "--Please Select--";
 String selectedSubject = "--Please Select--"; // Default subject
 List<String> subjectList = [];
+final date = DateTime.now();
 
 class AssignmentPage extends StatefulWidget {
   String Name;
@@ -108,6 +109,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
         'instructions': instructions,
         'dueDate': dueDate,
         'dueTime': dueTime,
+        'assignedDate': date,
         'referenceMaterialUrl': referenceMaterialUrl,
         // Add more fields as needed
       });
@@ -464,9 +466,30 @@ class AssignmentStream extends StatelessWidget {
             return AssignmentCard(
               assignment: Assignment.fromMap(data),
               onDelete: () {
-                // Implement delete logic here
-                // Example: FirebaseFirestore.instance.collection('assignments').doc(document.id).delete();
-              },
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Confirm Deletion"),
+                      content: Text("Are you sure you want to delete this assignment?"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close the dialog
+                            deleteAssignmentAndFile(document.id, data['referenceMaterialUrl']);
+                          },
+                          child: Text("Yes"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close the dialog
+                          },
+                          child: Text("No"),
+                        ),
+                      ],
+                    );
+                  },
+                );              },
               onUpdate: () {
                 // Implement update logic here
               },
@@ -475,6 +498,24 @@ class AssignmentStream extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+// Method to delete assignment and associated file from Firestore and Firebase Storage
+Future<void> deleteAssignmentAndFile(String assignmentId, String fileUrl) async {
+  try {
+    // Delete assignment document from Firestore
+    await FirebaseFirestore.instance.collection('assignments').doc(assignmentId).delete();
+
+    // Extract file name from the URL
+    String fileName = fileUrl.split('/').last;
+
+    // Delete file from Firebase Storage
+    Reference storageReference = FirebaseStorage.instance.ref().child('reference_material/$fileName');
+    await storageReference.delete();
+  } catch (e) {
+    print('Error deleting assignment and file: $e');
+    // Handle error
   }
 }
 
@@ -556,15 +597,33 @@ class AssignmentCard extends StatelessWidget {
         ),
         onTap: () {
           showModalBottomSheet(
+              backgroundColor: Colors.white,
               context: context,
               builder: (BuildContext ctx) {
-                return SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      AppBar(actions: [IconButton(onPressed: (){Navigator.of(context).pop(); }, icon:Icon(Icons.close))],),
-                      SampleCard(
-                          cardName: 'Subject', cardDes: '${assignment.subject}')
-                    ],
+                return Scaffold(
+                  body: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        AppBar(
+                          leading: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('${assignment.dueDate}'),
+                          ),
+                          leadingWidth: double.infinity,
+                          actions: [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                icon: Icon(Icons.close))
+                          ],
+                        ),
+                        SampleCard(
+                            color: Colors.grey.shade200,
+                            cardName: 'Subject',
+                            cardDes: '${assignment.subject}')
+                      ],
+                    ),
                   ),
                 );
               });
