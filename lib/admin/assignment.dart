@@ -13,10 +13,11 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class AssignmentPage extends StatefulWidget {
+  String userType;
   String Name;
   String program;
 
-  AssignmentPage(this.Name, this.program, {Key? key}) : super(key: key);
+  AssignmentPage(this.userType,this.Name, this.program, {Key? key}) : super(key: key);
 
   @override
   _AssignmentPageState createState() => _AssignmentPageState();
@@ -34,7 +35,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      AssignmentCreate(widget.Name, widget.program),
+                      AssignmentCreate(widget.userType,widget.Name, widget.program),
                 ));
           },
           child: Text(
@@ -49,10 +50,11 @@ class _AssignmentPageState extends State<AssignmentPage> {
 }
 
 class AssignmentCreate extends StatefulWidget {
+  String userType;
   String Name;
   String program;
 
-  AssignmentCreate(this.Name, this.program, {Key? key}) : super(key: key);
+  AssignmentCreate(this.userType,this.Name, this.program, {Key? key}) : super(key: key);
 
   @override
   State<AssignmentCreate> createState() => _AssignmentCreateState();
@@ -160,7 +162,7 @@ class _AssignmentCreateState extends State<AssignmentCreate> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => AssignmentPage(widget.Name, widget.program),
+            builder: (context) => AssignmentPage(widget.userType,widget.Name, widget.program),
           ));
 
       // Show a snackbar to indicate successful creation
@@ -467,9 +469,6 @@ class AssignmentStream extends StatelessWidget {
                   },
                 );
               },
-              onUpdate: () {
-                // Implement update logic here
-              },
             );
           }).toList(),
         );
@@ -478,7 +477,7 @@ class AssignmentStream extends StatelessWidget {
   }
 }
 
-// Method to delete assignment and associated file from Firestore and Firebase Storage
+
 Future<void> deleteAssignmentAndFile(
     String assignmentId, String fileUrl) async {
   try {
@@ -549,12 +548,10 @@ class Assignment {
 class AssignmentCard extends StatelessWidget {
   final Assignment assignment;
   final VoidCallback onDelete;
-  final VoidCallback onUpdate;
 
   AssignmentCard({
     required this.assignment,
     required this.onDelete,
-    required this.onUpdate,
   });
 
   @override
@@ -568,18 +565,9 @@ class AssignmentCard extends StatelessWidget {
             Text('${assignment.assignedDate}'),
           ],
         ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: onUpdate,
-            ),
-            IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: onDelete,
-            ),
-          ],
+        trailing: IconButton(
+          icon: Icon(Icons.delete,color: Color(0xff002233),),
+          onPressed: onDelete,
         ),
         onTap: () {
           showModalBottomSheet(
@@ -591,7 +579,7 @@ class AssignmentCard extends StatelessWidget {
                  appBar:  AppBar(
                     leading: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('${assignment.assignedDate}'),
+                      child: Text('${assignment.facultyName}'),
                     ),
                     leadingWidth: double.infinity,
                     actions: [

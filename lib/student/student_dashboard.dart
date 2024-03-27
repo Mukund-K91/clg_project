@@ -1,3 +1,4 @@
+import 'package:clg_project/admin/assignment.dart';
 import 'package:clg_project/event_screen.dart';
 import 'package:clg_project/noticeboard.dart';
 import 'package:clg_project/reusable_widget/img_slider.dart';
@@ -230,7 +231,7 @@ class StudentDashboard extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              Studentassignment(),
+                                              AssignmentPage(Name, program,_user),
                                         ));
                                   },
                                   iconSize: 50,

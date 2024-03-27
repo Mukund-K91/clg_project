@@ -383,12 +383,7 @@ class _LoginState extends State<Login> {
           animType: AnimType.bottomSlide,
           showCloseIcon: true,
           btnOkOnPress: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HomeMain(),
-              ),
-            );
+           Navigator.pop(context);
           },
           title: "$userType Not Found",
           desc: "Please check userId or Password. Contact Admin for any query",
