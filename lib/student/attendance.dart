@@ -45,43 +45,44 @@ class _AttendanceDisplayState extends State<AttendanceDisplay> {
             width: double.infinity,
             child: Card(
               color: Color(0xff002233),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child:Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      const TextSpan(
-                        text: "Program: ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(text: "${widget.program}\n"),
-                      const TextSpan(
-                        text: "Program Term: ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(text: "${widget.programTerm}\n"),
-                      const TextSpan(
-                        text: "Division: ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(text: "${widget.division}\n"),
-                      const TextSpan(
-                        text: "AY: ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(text: "${_ay}"),
-                    ],
+                  padding: const EdgeInsets.all(10),
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        const TextSpan(
+                          text: "Program: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(text: "${widget.program}\n"),
+                        const TextSpan(
+                          text: "Program Term: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(text: "${widget.programTerm}\n"),
+                        const TextSpan(
+                          text: "Division: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(text: "${widget.division}\n"),
+                        const TextSpan(
+                          text: "AY: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(text: "${_ay}"),
+                      ],
+                    ),
+                    style: const TextStyle(fontSize: 20, color: Colors.white),
                   ),
-                  style: const TextStyle(fontSize: 20,color: Colors.white),
                 ),
               ),
-                )),
+            ),
           ),
           Expanded(
-            child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-              future: FirebaseFirestore.instance
+            child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              stream: FirebaseFirestore.instance
                   .collection('students')
                   .doc(widget.program)
                   .collection(widget.programTerm)
@@ -89,8 +90,8 @@ class _AttendanceDisplayState extends State<AttendanceDisplay> {
                   .collection('student')
                   .doc(widget.userId)
                   .collection('yearlyAttendance')
-                  .doc(_year) // Replace with the actual month and year
-                  .get(),
+                  .doc(_year)
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -105,10 +106,10 @@ class _AttendanceDisplayState extends State<AttendanceDisplay> {
                 if (subjectAttendance.isEmpty) {
                   return const Center(
                       child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                        'No Data Found ! Please Check Selected Month or Contact Admin '),
-                  ));
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                            'No Data Found ! Please Check Selected Month or Contact Admin '),
+                      ));
                 }
                 return ListView(
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -124,7 +125,7 @@ class _AttendanceDisplayState extends State<AttendanceDisplay> {
                     final totalLectures = presentCount + absentCount;
                     final percentage = totalLectures != 0
                         ? ((presentCount / totalLectures) * 100)
-                            .toStringAsFixed(1)
+                        .toStringAsFixed(1)
                         : '0.0';
 
                     return Padding(
@@ -140,12 +141,12 @@ class _AttendanceDisplayState extends State<AttendanceDisplay> {
                                 width: 90,
                                 child: Center(
                                     child: Text(
-                                  "${percentage}%",
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ))),
+                                      "${percentage}%",
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ))),
                           ),
                         ));
                   }).toList(),
@@ -158,3 +159,4 @@ class _AttendanceDisplayState extends State<AttendanceDisplay> {
     );
   }
 }
+
