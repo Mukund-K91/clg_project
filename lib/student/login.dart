@@ -228,7 +228,7 @@ class _LoginState extends State<Login> {
                                           try {
                                             // Query Firestore to find the document with the entered user ID
                                             final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-                                            await FirebaseFirestore.instance.collectionGroup('student').get();
+                                            await FirebaseFirestore.instance.collectionGroup(_collectionGroup).get();
 
                                             // Loop through the query snapshot to find the document with the entered user ID
                                             for (final QueryDocumentSnapshot<Map<String, dynamic>> docSnapshot
