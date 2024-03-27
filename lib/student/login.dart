@@ -33,17 +33,28 @@ class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  TextEditingController _mobileController = TextEditingController();
+  TextEditingController _mobileController =
+      TextEditingController();
   TextEditingController _otpController = TextEditingController();
-  TextEditingController _newPasswordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
+  TextEditingController _newPasswordController =
+      TextEditingController();
+  TextEditingController _confirmPasswordController =
+      TextEditingController();
   final TextEditingController _userIdController2 =
-  TextEditingController();
+      TextEditingController();
   bool _otpSent = false;
 
   Future<void> _forgotPassword() async {
-    bool _otpSent = false; // Add this line
+    bool _otpSent = false;
     TextEditingController _otpController = TextEditingController();
+
+    final String _collectionGroup =
+        widget._UserType == "Student" ? "student" : "faculty";
+    // Query Firestore to get the user IDs
+    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await FirebaseFirestore.instance
+            .collectionGroup(_collectionGroup)
+            .get();
 
     showDialog(
       barrierDismissible: false,
@@ -101,19 +112,42 @@ class _LoginState extends State<Login> {
                       child: TextButton(
                         onPressed: () async {
                           if (_formKey1.currentState!.validate()) {
-                            // Send OTP logic
-                            String mobile = _mobileController.text;
-                            String userId = _userIdController.text;
-                            // Implement logic to send OTP to mobile number
-                            // For simplicity, let's assume OTP sent successfully
-                            setState(() {
-                              _otpSent = true; // Update _otpSent to true
-                            });
+                            // Check if the entered user ID and mobile exist in Firestore
+                            final String enteredUserId =
+                                _userIdController2.text;
+                            final String enteredMobile = _mobileController.text;
+
+                            bool isUserExists = false;
+
+                            for (final QueryDocumentSnapshot<
+                                    Map<String, dynamic>> document
+                                in querySnapshot.docs) {
+                              final userData = document.data();
+                              final String documentUserId = document.id;
+                              final String? mobile = userData['Mobile'];
+
+                              // Check if the document userId (user ID) matches the entered userId and mobile number matches the entered mobile number
+                              if (documentUserId == enteredUserId &&
+                                  mobile == enteredMobile) {
+                                isUserExists = true;
+                                break;
+                              }
+                            }
+
+                            if (isUserExists) {
+                              // Send OTP logic
+                              // Implement logic to send OTP to mobile number
+                              // For simplicity, let's assume OTP sent successfully
+                              setState(() {
+                                _otpSent = true; // Update _otpSent to true
+                              });
+                            } else {
+                              // User not found in Firestore
+                              print('User not found');
+                            }
                           }
                         },
-                        child: Text(_otpSent
-                            ? 'Resend OTP'
-                            : 'Send OTP'), // Change button text based on _otpSent
+                        child: Text(_otpSent ? 'Resend OTP' : 'Send OTP'),
                       ),
                     ),
                     Expanded(
@@ -125,7 +159,6 @@ class _LoginState extends State<Login> {
                             // Implement OTP verification logic
                             // For simplicity, let's assume OTP verification successful
                             // Show dialog for entering new password
-                            // ...
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -136,7 +169,7 @@ class _LoginState extends State<Login> {
                                       key: _formKey2,
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Text("Enter New Password"),
@@ -157,19 +190,17 @@ class _LoginState extends State<Login> {
                                           SizedBox(height: 10),
                                           TextFormField(
                                             controller:
-                                            _confirmPasswordController,
+                                                _confirmPasswordController,
                                             obscureText: true,
                                             validator: (value) {
                                               if (value !=
-                                                  _newPasswordController
-                                                      .text) {
+                                                  _newPasswordController.text) {
                                                 return 'Passwords do not match';
                                               }
                                               return null;
                                             },
                                             decoration: InputDecoration(
-                                              labelText:
-                                              'Confirm Password',
+                                              labelText: 'Confirm Password',
                                             ),
                                           ),
                                         ],
@@ -179,22 +210,52 @@ class _LoginState extends State<Login> {
                                   actions: <Widget>[
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.popUntil(context,
-                                                (route) => route.isFirst); // Close the dialog
+                                        Navigator.popUntil(
+                                            context,
+                                            (route) => route
+                                                .isFirst); // Close the dialog
                                       },
                                       child: Text('Cancel'),
                                     ),
                                     TextButton(
-                                      onPressed: () {
+                                      onPressed: () async {
                                         if (_formKey2.currentState!
                                             .validate()) {
-                                          print('hi');
-                                          _showSuccessDialog();
                                           // Implement logic to update password in Firestore
-                                          String newPassword =
-                                              _newPasswordController.text;
-                                          // For simplicity, let's assume password updated successfully
-                                          // Show success dialog
+                                          final String enteredUserId = _userIdController2.text;
+                                          final String newPassword = _newPasswordController.text;
+
+                                          try {
+                                            // Query Firestore to find the document with the entered user ID
+                                            final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+                                            await FirebaseFirestore.instance.collectionGroup('student').get();
+
+                                            // Loop through the query snapshot to find the document with the entered user ID
+                                            for (final QueryDocumentSnapshot<Map<String, dynamic>> docSnapshot
+                                            in querySnapshot.docs) {
+                                              final String userId = docSnapshot.id;
+
+                                              // Check if the user ID in the document matches the entered user ID
+                                              if (userId == enteredUserId) {
+                                                // Update the 'Password' field for the found document
+                                                await docSnapshot.reference.update({
+                                                  'Password': newPassword,
+                                                });
+
+                                                // Password updated successfully
+                                                _showSuccessDialog();
+                                                return; // Exit the loop once the document is found and updated
+                                              }
+                                            }
+
+                                            // If the loop completes without finding the document, the user ID doesn't exist
+                                            print("Document does not exist for user ID: $enteredUserId");
+                                          } catch (error) {
+                                            // Handle any errors that occur during the update process
+                                            print("Error updating password: $error");
+                                          }
+
+
 
                                         }
                                       },
@@ -212,7 +273,7 @@ class _LoginState extends State<Login> {
                     TextButton(
                       onPressed: () {
                         Navigator.popUntil(context,
-                                (route) => route.isFirst); // Close the dialog
+                            (route) => route.isFirst); // Close the dialog
                       },
                       child: Text('Cancel'),
                     ),
@@ -224,7 +285,6 @@ class _LoginState extends State<Login> {
         );
       },
     ).then((_) {
-      // Reset form field controllers when AlertDialog is closed
       _mobileController.clear();
       _userIdController2.clear();
       _otpController.clear();
@@ -235,7 +295,7 @@ class _LoginState extends State<Login> {
 
   void _showSuccessDialog() {
     showDialog(
-      barrierDismissible:false ,
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -244,8 +304,8 @@ class _LoginState extends State<Login> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.popUntil(context,
-                        (route) => route.isFirst); // Close the dialog
+                Navigator.popUntil(
+                    context, (route) => route.isFirst); // Close the dialog
               },
               child: Text('OK'),
             ),
@@ -255,18 +315,22 @@ class _LoginState extends State<Login> {
     );
   }
 
-
-  Future<void> _login(String enteredUserId, String password, String userType) async {
+  Future<void> _login(
+      String enteredUserId, String password, String userType) async {
     final String userId = _userIdController.text;
     final String password = _passwordController.text;
-    final String _collectionGroup=userType=="Student"?"student":"faculty";
+    final String _collectionGroup =
+        userType == "Student" ? "student" : "faculty";
     // Query Firestore to get the user IDs
     final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-    await FirebaseFirestore.instance.collectionGroup(_collectionGroup).get();
+        await FirebaseFirestore.instance
+            .collectionGroup(_collectionGroup)
+            .get();
     bool isUserAuthenticated = false;
 
     if (_formKey.currentState!.validate()) {
-      for (final QueryDocumentSnapshot<Map<String, dynamic>> document in querySnapshot.docs) {
+      for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+          in querySnapshot.docs) {
         final userData = document.data();
         final String documentUserId = document.id;
         final String documentPassword = userData?['Password'];
@@ -301,13 +365,14 @@ class _LoginState extends State<Login> {
             var sharedPref = await SharedPreferences.getInstance();
             sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
             sharedPref.setString(SplashScreenState.KEYUSERNAME, enteredUserId);
-            sharedPref.setString(SplashScreenState.KEYUSERTYPE, widget._UserType);
+            sharedPref.setString(
+                SplashScreenState.KEYUSERTYPE, widget._UserType);
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
                 builder: (context) => MainDashboard(userType, userId),
               ),
-                  (_) => false,
+              (_) => false,
             );
           },
         ).show();
@@ -332,11 +397,8 @@ class _LoginState extends State<Login> {
     }
   }
 
-
-  final TextEditingController _userIdController =
-  TextEditingController();
-  final TextEditingController _passwordController =
-  TextEditingController();
+  final TextEditingController _userIdController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -377,11 +439,11 @@ class _LoginState extends State<Login> {
                       ReusableTextField(
                         preIcon: widget._UserType == "Student"
                             ? const Icon(FontAwesomeIcons.userGraduate,
-                            color: Color(0xff002233))
+                                color: Color(0xff002233))
                             : const Icon(
-                          FontAwesomeIcons.userTie,
-                          color: Color(0xff002233),
-                        ),
+                                FontAwesomeIcons.userTie,
+                                color: Color(0xff002233),
+                              ),
                         controller: _userIdController,
                         title: widget._UserType == 'Student'
                             ? 'STUDENT ID'
@@ -424,7 +486,8 @@ class _LoginState extends State<Login> {
                       ),
                       Reusablebutton(
                         onPressed: () async {
-                          _login(_userIdController.text, _passwordController.text, widget._UserType);
+                          _login(_userIdController.text,
+                              _passwordController.text, widget._UserType);
                         },
                         Style: false,
                         child: const Text(
