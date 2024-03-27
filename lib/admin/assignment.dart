@@ -10,6 +10,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 class AssignmentPage extends StatefulWidget {
   String Name;
@@ -113,6 +114,8 @@ class _AssignmentCreateState extends State<AssignmentCreate> {
     // Get the assignment details
     String instructions =
         _instructions.text; // Replace with the actual instructions
+    String assignedDate =
+        DateFormat('dd-MM-yyyy hh:mm a').format(date).toString();
     String dueDate = fromDateControler.text; // Get the due date
     String dueTime = _timeController.text; // Get the due time
 
@@ -140,7 +143,7 @@ class _AssignmentCreateState extends State<AssignmentCreate> {
         'instructions': instructions,
         'dueDate': dueDate,
         'dueTime': dueTime,
-        'assignedDate': date,
+        'assignedDate': assignedDate,
         'referenceMaterialUrl': referenceMaterialUrl,
         // Add more fields as needed
       });
@@ -154,7 +157,11 @@ class _AssignmentCreateState extends State<AssignmentCreate> {
       _selProgram = widget.program;
       _selProgramTerm = "--Please Select--";
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AssignmentPage(widget.Name, widget.program),));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AssignmentPage(widget.Name, widget.program),
+          ));
 
       // Show a snackbar to indicate successful creation
       ScaffoldMessenger.of(context).showSnackBar(
@@ -230,8 +237,8 @@ class _AssignmentCreateState extends State<AssignmentCreate> {
                     onChanged: (val) {
                       setState(() {
                         _selProgramTerm = val as String;
-                        selectedSubject="--Please Select--";
-                       updateSubjectList(_selProgram!, _selProgramTerm!);
+                        selectedSubject = "--Please Select--";
+                        updateSubjectList(_selProgram!, _selProgramTerm!);
                       });
                     },
                   ),
@@ -283,7 +290,7 @@ class _AssignmentCreateState extends State<AssignmentCreate> {
                           DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime(1950),
+                            firstDate: DateTime.now(),
                             lastDate: DateTime(2050),
                           );
                           if (pickedDate != null) {
@@ -504,6 +511,8 @@ class Assignment {
   final String instructions;
   final String dueDate;
   final String dueTime;
+  final String assignedDate;
+
   final String referenceMaterialUrl;
 
   Assignment({
@@ -516,6 +525,7 @@ class Assignment {
     required this.instructions,
     required this.dueDate,
     required this.dueTime,
+    required this.assignedDate,
     required this.referenceMaterialUrl,
   });
 
@@ -531,6 +541,7 @@ class Assignment {
       dueDate: data['dueDate'] ?? '',
       dueTime: data['dueTime'] ?? '',
       referenceMaterialUrl: data['referenceMaterialUrl'] ?? '',
+      assignedDate: data['assignedDate'],
     );
   }
 }
@@ -554,7 +565,7 @@ class AssignmentCard extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${assignment.dueDate}'),
+            Text('${assignment.assignedDate}'),
           ],
         ),
         trailing: Row(
@@ -572,31 +583,44 @@ class AssignmentCard extends StatelessWidget {
         ),
         onTap: () {
           showModalBottomSheet(
+            isScrollControlled: true,
               backgroundColor: Colors.white,
               context: context,
               builder: (BuildContext ctx) {
                 return Scaffold(
+                 appBar:  AppBar(
+                    leading: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('${assignment.assignedDate}'),
+                    ),
+                    leadingWidth: double.infinity,
+                    actions: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: Icon(Icons.close))
+                    ],
+                  ),
                   body: SingleChildScrollView(
                     child: Column(
                       children: [
-                        AppBar(
-                          leading: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('${assignment.dueDate}'),
-                          ),
-                          leadingWidth: double.infinity,
-                          actions: [
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                icon: Icon(Icons.close))
-                          ],
-                        ),
                         SampleCard(
                             color: Colors.grey.shade200,
                             cardName: 'Subject',
-                            cardDes: '${assignment.subject}')
+                            cardDes: '${assignment.subject}'),
+                        SampleCard(
+                            color: Colors.grey.shade200,
+                            cardName: 'Assigned Date',
+                            cardDes: '${assignment.assignedDate}'),
+                        SampleCard(
+                            color: Colors.grey.shade200,
+                            cardName: 'Due Date & Time',
+                            cardDes: '${assignment.dueDate} ${assignment.dueTime}'),
+                        SampleCard(
+                            color: Colors.grey.shade200,
+                            cardName: 'Instruction',
+                            cardDes: '${assignment.instructions}')
                       ],
                     ),
                   ),
