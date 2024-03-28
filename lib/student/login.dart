@@ -159,6 +159,7 @@ class _LoginState extends State<Login> {
                   child: Column(
                     children: [
                       ReusableTextField(
+                        keyboardType: widget._UserType=="Student"?TextInputType.phone:TextInputType.text,
                         preIcon: widget._UserType == "Student"
                             ? const Icon(FontAwesomeIcons.userGraduate,
                                 color: Color(0xff002233))
