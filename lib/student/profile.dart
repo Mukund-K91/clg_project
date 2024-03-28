@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clg_project/main.dart';
+import 'package:clg_project/reusable_widget/forgot_password.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -190,6 +191,17 @@ class _ProfileState extends State<Profile> {
                                   color: Colors.white,
                                 ),
                               ),
+                              SizedBox(height: 30,),
+                              Reusablebutton(
+                                onPressed: () =>ForgotPasswordDialog.show(context, widget._UserType),
+                                Style: false,
+                                child: const Text(
+                                  "Change Password",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                              ),
+                              SizedBox(height: 20,),
                               Reusablebutton(
                                 onPressed: () async {
                                   final NavigatorState navigator =
@@ -320,6 +332,17 @@ class _ProfileState extends State<Profile> {
                                     FontAwesomeIcons.userTie,
                                     color: Colors.white,
                                   )),
+                              SizedBox(height: 30,),
+                              Reusablebutton(
+                                onPressed: () =>ForgotPasswordDialog.show(context, widget._UserType),
+                                Style: false,
+                                child: const Text(
+                                  "Change Password",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                              ),
+                              SizedBox(height: 20,),
                               Reusablebutton(
                                 onPressed: () async {
                                   final NavigatorState navigator =

@@ -679,7 +679,7 @@ class AssignmentCard extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${assignment.assignedDate}'),
+            Text('Due Date: ${assignment.dueDate}'),
           ],
         ),
         trailing: IconButton(
