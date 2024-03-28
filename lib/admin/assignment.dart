@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:clg_project/reusable_widget/lists.dart';
 import 'package:clg_project/reusable_widget/reusable_appbar.dart';
@@ -10,6 +11,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class AssignmentPage extends StatefulWidget {
@@ -17,7 +21,8 @@ class AssignmentPage extends StatefulWidget {
   String Name;
   String program;
 
-  AssignmentPage(this.userType,this.Name, this.program, {Key? key}) : super(key: key);
+  AssignmentPage(this.userType, this.Name, this.program, {Key? key})
+      : super(key: key);
 
   @override
   _AssignmentPageState createState() => _AssignmentPageState();
@@ -28,24 +33,28 @@ class _AssignmentPageState extends State<AssignmentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: FloatingActionButton(
-          backgroundColor: Color(0xff002233),
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      AssignmentCreate(widget.userType,widget.Name, widget.program),
-                ));
-          },
-          child: Text(
-            'Create Assignment',
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-        ),
+        bottomNavigationBar: widget.userType == "Faculty"
+            ? FloatingActionButton(
+                backgroundColor: Color(0xff002233),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AssignmentCreate(
+                            widget.userType, widget.Name, widget.program),
+                      ));
+                },
+                child: Text(
+                  'Create Assignment',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              )
+            : null,
         backgroundColor: const Color(0xffffffff),
         appBar: CustomAppBar(title: 'Assignments'),
-        body: AssignmentStream());
+        body: AssignmentStream(
+          UserType: widget.userType,
+        ));
   }
 }
 
@@ -54,7 +63,8 @@ class AssignmentCreate extends StatefulWidget {
   String Name;
   String program;
 
-  AssignmentCreate(this.userType,this.Name, this.program, {Key? key}) : super(key: key);
+  AssignmentCreate(this.userType, this.Name, this.program, {Key? key})
+      : super(key: key);
 
   @override
   State<AssignmentCreate> createState() => _AssignmentCreateState();
@@ -162,7 +172,8 @@ class _AssignmentCreateState extends State<AssignmentCreate> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => AssignmentPage(widget.userType,widget.Name, widget.program),
+            builder: (context) =>
+                AssignmentPage(widget.userType, widget.Name, widget.program),
           ));
 
       // Show a snackbar to indicate successful creation
@@ -424,7 +435,16 @@ class _AssignmentCreateState extends State<AssignmentCreate> {
   }
 }
 
-class AssignmentStream extends StatelessWidget {
+class AssignmentStream extends StatefulWidget {
+  final String UserType;
+
+  AssignmentStream({super.key, required this.UserType});
+
+  @override
+  State<AssignmentStream> createState() => _AssignmentStreamState();
+}
+
+class _AssignmentStreamState extends State<AssignmentStream> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -445,7 +465,7 @@ class AssignmentStream extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return AlertDialog(
+                    return widget.UserType=="Faculty"? AlertDialog(
                       title: Text("Confirm Deletion"),
                       content: Text(
                           "Are you sure you want to delete this assignment?"),
@@ -465,15 +485,81 @@ class AssignmentStream extends StatelessWidget {
                           child: Text("No"),
                         ),
                       ],
+                    ):AlertDialog(
+                      title: Text("Download Assignment"),
+                      content: StatefulBuilder(
+                        builder: (BuildContext context, StateSetter setState) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Are you sure you want to download this assignment?",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              SizedBox(height: 20),
+                              if (_progress != null)
+                                LinearProgressIndicator(value: _progress),
+                              SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(); // Close the dialog
+                                    },
+                                    child: Text("Cancel"),
+                                  ),
+                                  SizedBox(width: 10),
+                                  TextButton(
+                                    onPressed: () async {
+                                      Navigator.of(context).pop(); // Close the dialog
+                                      await downloadAssignmentFile(data['referenceMaterialUrl'], setState);
+                                    },
+                                    child: Text("Download"),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     );
                   },
                 );
               },
+              UserType: widget.UserType,
             );
           }).toList(),
         );
       },
     );
+  }
+
+  double? _progress;
+
+  Future<void> downloadAssignmentFile(String FileUrl, StateSetter setState) async {
+
+    FileDownloader.downloadFile(
+      url: FileUrl,
+      onProgress: (name, progress) {
+        setState(() {
+          _progress = progress;
+        });
+      },
+      onDownloadCompleted: (value) {
+        print('file $value');
+        setState(() {
+          _progress = null;
+        });
+      },
+      notificationType: NotificationType.all,
+    );
+    Fluttertoast.showToast(
+        msg: 'Downloading....', toastLength: Toast.LENGTH_SHORT);
+    Timer(Duration(seconds: 3), () {
+      Fluttertoast.showToast(msg: 'Downloaded', toastLength: Toast.LENGTH_LONG);
+    });
   }
 }
 
@@ -547,11 +633,13 @@ class Assignment {
 
 class AssignmentCard extends StatelessWidget {
   final Assignment assignment;
-  final VoidCallback onDelete;
+  final VoidCallback? onDelete;
+  final String UserType;
 
   AssignmentCard({
     required this.assignment,
-    required this.onDelete,
+    this.onDelete,
+    required this.UserType,
   });
 
   @override
@@ -566,17 +654,25 @@ class AssignmentCard extends StatelessWidget {
           ],
         ),
         trailing: IconButton(
-          icon: Icon(Icons.delete,color: Color(0xff002233),),
+          icon: UserType == "Faculty"
+              ? Icon(
+                  Icons.delete,
+                  color: Color(0xff002233),
+                )
+              : Icon(
+                  FontAwesomeIcons.solidFilePdf,
+                  color: Color(0xff002233),
+                ),
           onPressed: onDelete,
         ),
         onTap: () {
           showModalBottomSheet(
-            isScrollControlled: true,
+              isScrollControlled: true,
               backgroundColor: Colors.white,
               context: context,
               builder: (BuildContext ctx) {
                 return Scaffold(
-                 appBar:  AppBar(
+                  appBar: AppBar(
                     leading: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text('${assignment.facultyName}'),
@@ -604,7 +700,8 @@ class AssignmentCard extends StatelessWidget {
                         SampleCard(
                             color: Colors.grey.shade200,
                             cardName: 'Due Date & Time',
-                            cardDes: '${assignment.dueDate} ${assignment.dueTime}'),
+                            cardDes:
+                                '${assignment.dueDate} ${assignment.dueTime}'),
                         SampleCard(
                             color: Colors.grey.shade200,
                             cardName: 'Instruction',

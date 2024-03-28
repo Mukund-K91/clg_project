@@ -54,6 +54,7 @@ class StudentDashboard extends StatelessWidget {
         future: _UserData(UserId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
+            print(_user);
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');

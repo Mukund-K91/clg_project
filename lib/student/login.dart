@@ -356,6 +356,7 @@ class _LoginState extends State<Login> {
           child: CircularProgressIndicator(),
         );
         AwesomeDialog(
+          dismissOnTouchOutside: false,
           context: context,
           dialogType: DialogType.success,
           animType: AnimType.bottomSlide,

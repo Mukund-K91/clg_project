@@ -109,7 +109,7 @@ class SplashScreenState extends State<SplashScreen> {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => MainDashboard(KEYUSERTYPE, username),
+              builder: (context) => MainDashboard(usertype.toString(), username),
             ),
             (route) => false);
       } else {
