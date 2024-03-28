@@ -20,8 +20,10 @@ class AssignmentPage extends StatefulWidget {
   String userType;
   String Name;
   String program;
+  String programTerm;
 
-  AssignmentPage(this.userType, this.Name, this.program, {Key? key})
+
+  AssignmentPage(this.userType, this.Name, this.program,this.programTerm ,{Key? key})
       : super(key: key);
 
   @override
@@ -53,7 +55,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
         backgroundColor: const Color(0xffffffff),
         appBar: CustomAppBar(title: 'Assignments'),
         body: AssignmentStream(
-          UserType: widget.userType,
+          UserType: widget.userType, program: widget.program,programTerm: widget.programTerm,
         ));
   }
 }
@@ -173,7 +175,7 @@ class _AssignmentCreateState extends State<AssignmentCreate> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                AssignmentPage(widget.userType, widget.Name, widget.program),
+                AssignmentPage(widget.userType, widget.Name, widget.program,widget.program),
           ));
 
       // Show a snackbar to indicate successful creation
@@ -437,8 +439,15 @@ class _AssignmentCreateState extends State<AssignmentCreate> {
 
 class AssignmentStream extends StatefulWidget {
   final String UserType;
+  final String program;
+  final String programTerm;
 
-  AssignmentStream({super.key, required this.UserType});
+  AssignmentStream({
+    Key? key,
+    required this.UserType,
+    required this.program,
+    required this.programTerm,
+  }) : super(key: key);
 
   @override
   State<AssignmentStream> createState() => _AssignmentStreamState();
@@ -447,8 +456,20 @@ class AssignmentStream extends StatefulWidget {
 class _AssignmentStreamState extends State<AssignmentStream> {
   @override
   Widget build(BuildContext context) {
+    Query assignmentsQuery;
+
+    if (widget.UserType == "Faculty") {
+      assignmentsQuery = FirebaseFirestore.instance
+          .collection('assignments')
+          .where('program', isEqualTo: widget.program);
+    } else {
+      assignmentsQuery = FirebaseFirestore.instance
+          .collection('assignments')
+          .where('programTerm', isEqualTo: widget.programTerm);
+    }
+
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('assignments').snapshots(),
+      stream: assignmentsQuery.snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -458,14 +479,16 @@ class _AssignmentStreamState extends State<AssignmentStream> {
         }
         return ListView(
           children: snapshot.data!.docs.map((DocumentSnapshot document) {
-            Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+            Map<String, dynamic> data =
+            document.data() as Map<String, dynamic>;
             return AssignmentCard(
               assignment: Assignment.fromMap(data),
               onDelete: () {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return widget.UserType=="Faculty"? AlertDialog(
+                    return widget.UserType == "Faculty"
+                        ? AlertDialog(
                       title: Text("Confirm Deletion"),
                       content: Text(
                           "Are you sure you want to delete this assignment?"),
@@ -474,7 +497,8 @@ class _AssignmentStreamState extends State<AssignmentStream> {
                           onPressed: () {
                             Navigator.of(context).pop(); // Close the dialog
                             deleteAssignmentAndFile(
-                                document.id, data['referenceMaterialUrl']);
+                                document.id,
+                                data['referenceMaterialUrl']);
                           },
                           child: Text("Yes"),
                         ),
@@ -485,7 +509,8 @@ class _AssignmentStreamState extends State<AssignmentStream> {
                           child: Text("No"),
                         ),
                       ],
-                    ):AlertDialog(
+                    )
+                        : AlertDialog(
                       title: Text("Download Assignment"),
                       content: StatefulBuilder(
                         builder: (BuildContext context, StateSetter setState) {
@@ -514,7 +539,9 @@ class _AssignmentStreamState extends State<AssignmentStream> {
                                   TextButton(
                                     onPressed: () async {
                                       Navigator.of(context).pop(); // Close the dialog
-                                      await downloadAssignmentFile(data['referenceMaterialUrl'], setState);
+                                      await downloadAssignmentFile(
+                                          data['referenceMaterialUrl'],
+                                          setState);
                                     },
                                     child: Text("Download"),
                                   ),
@@ -538,8 +565,8 @@ class _AssignmentStreamState extends State<AssignmentStream> {
 
   double? _progress;
 
-  Future<void> downloadAssignmentFile(String FileUrl, StateSetter setState) async {
-
+  Future<void> downloadAssignmentFile(
+      String FileUrl, StateSetter setState) async {
     FileDownloader.downloadFile(
       url: FileUrl,
       onProgress: (name, progress) {
@@ -558,10 +585,12 @@ class _AssignmentStreamState extends State<AssignmentStream> {
     Fluttertoast.showToast(
         msg: 'Downloading....', toastLength: Toast.LENGTH_SHORT);
     Timer(Duration(seconds: 3), () {
-      Fluttertoast.showToast(msg: 'Downloaded', toastLength: Toast.LENGTH_LONG);
+      Fluttertoast.showToast(
+          msg: 'Downloaded', toastLength: Toast.LENGTH_LONG);
     });
   }
 }
+
 
 
 Future<void> deleteAssignmentAndFile(

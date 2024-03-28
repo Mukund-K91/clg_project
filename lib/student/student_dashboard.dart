@@ -232,7 +232,7 @@ class StudentDashboard extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              AssignmentPage(Name, program,_user),
+                                              AssignmentPage(Name, userData['program'],_user,userData['programTerm']),
                                         ));
                                   },
                                   iconSize: 50,

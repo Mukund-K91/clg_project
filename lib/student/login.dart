@@ -382,10 +382,8 @@ class _LoginState extends State<Login> {
           context: context,
           dialogType: DialogType.error,
           animType: AnimType.bottomSlide,
+          dismissOnTouchOutside: false,
           showCloseIcon: true,
-          btnOkOnPress: () {
-           Navigator.pop(context);
-          },
           title: "$userType Not Found",
           desc: "Please check userId or Password. Contact Admin for any query",
         ).show();
