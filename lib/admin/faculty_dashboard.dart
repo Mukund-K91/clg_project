@@ -1,4 +1,5 @@
 import 'package:clg_project/admin/assignment.dart';
+import 'package:clg_project/admin/result.dart';
 import 'package:clg_project/noticeboard.dart';
 import 'package:clg_project/main.dart';
 import 'package:clg_project/student/Studentassignment.dart';
@@ -235,7 +236,7 @@ class FacultyDashboard extends StatelessWidget {
                               children: [
                                 IconButton(
                                   onPressed: () {
-                                    pagenotfound(context, 'Results not published yet...!');
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => ResultPage(userData['program']),));
                                   },
                                   iconSize: 50,
                                   icon: const Icon(

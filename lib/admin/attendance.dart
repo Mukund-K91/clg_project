@@ -255,6 +255,7 @@ class _AddAttendanceState extends State<AddAttendance> {
                     onChanged: (val) {
                       setState(() {
                         selectedProgramTerm = val as String;
+                        selectedSubject = "--Please Select--";
                         updateSubjectList(
                             selectedProgram, selectedProgramTerm);
                       });
