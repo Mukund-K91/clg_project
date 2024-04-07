@@ -1,3 +1,4 @@
+import 'package:clg_project/reusable_widget/reusable_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -20,7 +21,7 @@ class StudentResultPage extends StatefulWidget {
 
 class _StudentResultPageState extends State<StudentResultPage> {
   Map<String, Map<String, int>> subjectMarks = {};
-  String selectedExamType = "--Please Select--";
+  String selectedExamType = "Internal";
 
   bool isLoading = false;
 
@@ -37,16 +38,16 @@ class _StudentResultPageState extends State<StudentResultPage> {
       });
 
       DocumentSnapshot<Map<String, dynamic>> resultSnapshot =
-      await FirebaseFirestore.instance
-          .collection('students')
-          .doc(widget.program)
-          .collection(widget.programterm)
-          .doc(widget.division)
-          .collection('student')
-          .doc(widget.userId)
-          .collection('result')
-          .doc('23-24')
-          .get();
+          await FirebaseFirestore.instance
+              .collection('students')
+              .doc(widget.program)
+              .collection(widget.programterm)
+              .doc(widget.division)
+              .collection('student')
+              .doc(widget.userId)
+              .collection('result')
+              .doc('23-24')
+              .get();
 
       Map<String, dynamic> resultData = resultSnapshot.data() ?? {};
 
@@ -80,9 +81,7 @@ class _StudentResultPageState extends State<StudentResultPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Internal Marks Details'),
-      ),
+      appBar: CustomAppBar(title: "Internal Marks Details",),
       body: Column(
         children: [
           ListTile(
@@ -96,15 +95,11 @@ class _StudentResultPageState extends State<StudentResultPage> {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.zero))),
                 value: selectedExamType,
-                items: [
-                  '--Please Select--',
-                  'Internal',
-                  'Practical-Internal'
-                ]
+                items: ['Internal', 'Practical-Internal']
                     .map((e) => DropdownMenuItem(
-                  value: e,
-                  child: Text(e),
-                ))
+                          value: e,
+                          child: Text(e),
+                        ))
                     .toList(),
                 onChanged: (val) {
                   setState(() {
@@ -113,7 +108,6 @@ class _StudentResultPageState extends State<StudentResultPage> {
                   });
                 }),
           ),
-
           SingleChildScrollView(
             child: isLoading
                 ? Center(child: CircularProgressIndicator())
@@ -151,7 +145,7 @@ class _StudentResultPageState extends State<StudentResultPage> {
                         }).toList(),
                       )
                     : Text(
-                        "No result found for this student.",
+                        "No result found for this student. or Ple",
                         style: TextStyle(fontSize: 16),
                       ),
           ),
