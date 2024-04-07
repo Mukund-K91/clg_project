@@ -6,6 +6,7 @@ import 'package:clg_project/reusable_widget/notice_board_list.dart';
 import 'package:clg_project/student/Studentassignment.dart';
 import 'package:clg_project/student/attendance.dart';
 import 'package:clg_project/student/profile.dart';
+import 'package:clg_project/student/student_result.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,17 +63,19 @@ class StudentDashboard extends StatelessWidget {
             return Center(
               child: Column(
                 children: [
-                  ElevatedButton(onPressed: () async {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeMain()),
+                  ElevatedButton(
+                      onPressed: () async {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeMain()),
                           (route) => false, // Remove all routes in the stack
-                    );
-                    var sharedPref = await SharedPreferences.getInstance();
-                    sharedPref.remove(SplashScreenState.KEYLOGIN);
-                    sharedPref.remove(SplashScreenState.KEYUSERNAME);
-                    sharedPref.remove(SplashScreenState.KEYUSERTYPE);
-                  }, child:Text('LOgout')),
+                        );
+                        var sharedPref = await SharedPreferences.getInstance();
+                        sharedPref.remove(SplashScreenState.KEYLOGIN);
+                        sharedPref.remove(SplashScreenState.KEYUSERNAME);
+                        sharedPref.remove(SplashScreenState.KEYUSERTYPE);
+                      },
+                      child: Text('LOgout')),
                   Text('User not found or invalid credentials'),
                 ],
               ),
@@ -109,8 +112,8 @@ class StudentDashboard extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => Profile(
-                                        userData['User Id'], 'Student'),
+                                    builder: (context) =>
+                                        Profile(userData['User Id'], 'Student'),
                                   ));
                             },
                             child: ListTile(
@@ -131,8 +134,7 @@ class StudentDashboard extends StatelessWidget {
                                     fontSize: 20, color: Colors.white),
                               ),
                               subtitle: Text("${program}",
-                                  style:
-                                      const TextStyle(color: Colors.white)),
+                                  style: const TextStyle(color: Colors.white)),
                             ),
                           ),
                         ],
@@ -231,8 +233,11 @@ class StudentDashboard extends StatelessWidget {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              AssignmentPage(Name, userData['program'],_user,userData['programTerm']),
+                                          builder: (context) => AssignmentPage(
+                                              Name,
+                                              userData['program'],
+                                              _user,
+                                              userData['programTerm']),
                                         ));
                                   },
                                   iconSize: 50,
@@ -256,8 +261,18 @@ class StudentDashboard extends StatelessWidget {
                               children: [
                                 IconButton(
                                   onPressed: () async {
-                                    await pagenotfound(context,
-                                        'Results not published yet...!');
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              StudentResultPage(
+                                            userId: userData['User Id'],
+                                            program: userData['program'],
+                                            programterm:
+                                                userData['programTerm'],
+                                            division: userData['division'],
+                                          ),
+                                        ));
                                   },
                                   iconSize: 50,
                                   icon: const Icon(

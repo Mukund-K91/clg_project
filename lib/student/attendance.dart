@@ -128,10 +128,12 @@ class _AttendanceDisplayState extends State<AttendanceDisplay> {
                         .toStringAsFixed(1)
                         : '0.0';
 
-                    return Padding(
+                    return
+                      Padding(
                         padding: const EdgeInsets.all(10),
                         child: Card(
                           child: ListTile(
+                            subtitle: Text("Total Lecture: ${totalLectures}"),
                             title: Text("${subject}"),
                             trailing: Container(
                                 decoration: BoxDecoration(

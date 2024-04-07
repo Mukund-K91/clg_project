@@ -1,76 +1,52 @@
+import 'package:clg_project/reusable_widget/lists.dart';
+import 'package:clg_project/reusable_widget/reusable_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
-
-import '../reusable_widget/lists.dart';
-import '../reusable_widget/reusable_appbar.dart';
-import '../reusable_widget/reusable_textfield.dart';
 
 class Student {
-  final String firstname;
-  final String middlename;
-  final String lastname;
   final String userId;
-  final int rollNo;
+  final String rollNo;
+  final String firstName;
+  final String lastName;
+  final String middleName;
+  int totalMarks = 0;
+  int obtainMarks = 0;
 
   Student({
-    required this.firstname,
-    required this.middlename,
-    required this.lastname,
     required this.userId,
     required this.rollNo,
+    required this.firstName,
+    required this.lastName,
+    required this.middleName,
   });
+
+  bool isPass() {
+    double thirtyThreePercentOfTotalMarks = totalMarks * 0.40;
+    return obtainMarks >= thirtyThreePercentOfTotalMarks;
+  }
 }
 
-TextEditingController _obtainMarks = TextEditingController();
-TextEditingController _totalMarks = TextEditingController();
-
-class ResultPage extends StatefulWidget {
+class AllStudentResultTable extends StatefulWidget {
   final String program;
-
-  const ResultPage({required this.program});
-
+  AllStudentResultTable({required this.program});
   @override
-  _ResultPageState createState() => _ResultPageState();
+  _AllStudentResultTableState createState() => _AllStudentResultTableState();
 }
 
-class _ResultPageState extends State<ResultPage> {
-  List<Student> students = [];
+class _AllStudentResultTableState extends State<AllStudentResultTable> {
   String selectedProgramTerm = "--Please Select--";
   String selectedDivision = "--Please Select--";
   String selectedSubject = "--Please Select--";
-  String searchQuery = '';
+  String selectedExamType = "--Please Select--";
+
   List<String> subjectList = [];
+  List<Student> studentList = [];
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    fetchData(widget.program, selectedProgramTerm, selectedDivision);
-  }
-
-  Future<void> fetchData(
-      String program, String programTerm, String division) async {
-    QuerySnapshot<Map<String, dynamic>> studentsQuery = await FirebaseFirestore
-        .instance
-        .collection('students')
-        .doc(program)
-        .collection(programTerm)
-        .doc(division)
-        .collection('student')
-        .orderBy('Last Name')
-        .get();
-
-    students = studentsQuery.docs.map((doc) {
-      return Student(
-        firstname: doc['First Name'],
-        middlename: doc['Middle Name'],
-        lastname: doc['Last Name'],
-        userId: doc['User Id'],
-        rollNo: doc['rollNumber'],
-      );
-    }).toList();
-
-    setState(() {});
+    fetchStudentData();
   }
 
   void updateSubjectList(String Program, String ProgramTerm) {
@@ -82,39 +58,90 @@ class _ResultPageState extends State<ResultPage> {
     });
   }
 
+  Future<void> fetchStudentData() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      QuerySnapshot<Map<String, dynamic>> studentSnapshot =
+          await FirebaseFirestore.instance
+              .collection('students')
+              .doc(widget.program)
+              .collection(selectedProgramTerm)
+              .doc(selectedDivision)
+              .collection('student')
+              .orderBy('rollNumber')
+              .get();
+
+      studentList.clear(); // Clear existing list before fetching new data
+
+      studentSnapshot.docs.forEach((doc) {
+        studentList.add(Student(
+          userId: doc.id,
+          firstName: doc['First Name'],
+          rollNo: doc['rollNumber'].toString(),
+          lastName: doc['Last Name'],
+          middleName: doc['Middle Name'],
+        ));
+      });
+
+      await Future.forEach(studentList, (Student student) async {
+        await fetchData(student);
+      });
+
+      setState(() {
+        isLoading = false;
+      }); // Update the UI after fetching data
+    } catch (e) {
+      print('Error fetching student data: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> fetchData(Student student) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> resultSnapshot =
+          await FirebaseFirestore.instance
+              .collection('students')
+              .doc(widget.program)
+              .collection(selectedProgramTerm)
+              .doc(selectedDivision)
+              .collection('student')
+              .doc(student.userId)
+              .collection('result')
+              .doc('23-24')
+              .get();
+
+      Map<String, dynamic> resultData = resultSnapshot.data() ?? {};
+
+      if (resultData.containsKey(selectedExamType)) {
+        final practicalInternalData = resultData[selectedExamType];
+        if (practicalInternalData.containsKey(selectedSubject)) {
+          final projectData = practicalInternalData[selectedSubject];
+          student.totalMarks = projectData['totalmarks'] ?? "Not Available";
+          student.obtainMarks = projectData['obtainmarks'] ?? "Not Available";
+        }
+      }
+    } catch (e) {
+      print('Error fetching result data for student ${student.userId}: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final filteredStudents = students
-        .where((student) =>
-        student.rollNo.toString().contains(searchQuery.toLowerCase()))
-        .toList();
-String program=widget.program;
-
     return Scaffold(
-      appBar: CustomAppBar(title: 'Stream : ${program}'),
-      body: Column(
-        children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: ReusableTextField(
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  setState(() {
-                    searchQuery = value;
-                  });
-                },
-                title: 'Search By Name',
-              ),
-            ),
-          ),
-          Expanded(
-              child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            child: Column(
+      appBar: CustomAppBar(title: "Internal Marks Details"),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Dropdowns for selecting program, term, division, subject, and exam
+            Row(
               children: [
-                Row(children: [
-                  Expanded(child: ListTile(
+                Expanded(
+                  child: ListTile(
                     title: const Text(
                       "Program Term",
                       style: TextStyle(fontSize: 15),
@@ -127,22 +154,22 @@ String program=widget.program;
                         value: selectedProgramTerm,
                         items: lists.programTerms
                             .map((e) => DropdownMenuItem(
-                          value: e,
-                          child: Text(e),
-                        ))
+                                  value: e,
+                                  child: Text(e),
+                                ))
                             .toList(),
                         onChanged: (val) {
                           setState(() {
                             selectedProgramTerm = val as String;
                             selectedSubject = "--Please Select--";
-                            fetchData(program, selectedProgramTerm,
-                                selectedDivision);
                             updateSubjectList(
-                                program.toString(), selectedProgramTerm.toString());
+                                widget.program, selectedProgramTerm);
                           });
                         }),
-                  ),),
-                  Expanded(child: ListTile(
+                  ),
+                ),
+                Expanded(
+                  child: ListTile(
                     title: const Text(
                       "Division",
                       style: TextStyle(fontSize: 15),
@@ -153,117 +180,142 @@ String program=widget.program;
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(Radius.zero))),
                         value: selectedDivision,
-                        items: program == "BCA"
+                        items: widget.program == "BCA"
                             ? lists.bcaDivision
-                            .map((e) => DropdownMenuItem(
-                          value: e,
-                          child: Text(e),
-                        ))
-                            .toList()
-                            : program == "B-Com"
-                            ? lists.bcomDivision
-                            .map((e) => DropdownMenuItem(
-                          value: e,
-                          child: Text(e),
-                        ))
-                            .toList()
-                            : lists.bbaDivision
-                            .map((e) => DropdownMenuItem(
-                          value: e,
-                          child: Text(e),
-                        ))
-                            .toList(),
+                                .map((e) => DropdownMenuItem(
+                                      value: e,
+                                      child: Text(e),
+                                    ))
+                                .toList()
+                            : widget.program == "B-Com"
+                                ? lists.bcomDivision
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
+                                    .toList()
+                                : lists.bbaDivision
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
+                                    .toList(),
                         onChanged: (val) {
                           setState(() {
                             selectedDivision = val as String;
-                            fetchData(program, selectedProgramTerm,
-                                selectedDivision);
                           });
                         }),
-                  ),)
-                ],),
-                ListTile(
-                  title: const Text(
-                    "Subject",
-                    style: TextStyle(fontSize: 15),
                   ),
-                  subtitle: DropdownButtonFormField(
-                      isExpanded: true,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.zero))),
-                      value: selectedSubject,
-                      items: subjectList
-                          .map((e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(e),
-                              ))
-                          .toList(),
-                      onChanged: (val) {
-                        setState(() {
-                          selectedSubject = val as String;
-                        });
-                      }),
                 ),
-                SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: DataTable(
-                      border: TableBorder.all(),
-                      columns: const [
-                        DataColumn(label: Text('Roll\nNo')),
-                        DataColumn(label: Text('Name')),
-                        DataColumn(label: Text('Obtain')),
-                      ],
-                      rows: filteredStudents
-                          .map(
-                            (student) => DataRow(cells: [
-                          DataCell(Align(
-                            alignment: Alignment.center,
-                            child: Text('${student.rollNo}',style: TextStyle(fontSize: 20),),
-                          )),
-                          DataCell(
-                              Text("${student.lastname} ${student.firstname} ${student.middlename}")),
-                          DataCell(Padding(
-                            padding: const EdgeInsets.all(5),
-                            child: SizedBox(
-                              width: 60,
-                              child: TextFormField(
-                                maxLength: 3,
-                                enableSuggestions: true,
-                                textAlign: TextAlign.center,
-                                textAlignVertical: TextAlignVertical.center,
-                                keyboardType: TextInputType.phone,
-                                decoration: InputDecoration(
-                                  counterText: "",
-                                  border: OutlineInputBorder(),
-                                ),
-                                validator: (value) {
-                                  if (value != null) {
-                                    int? totalMarks = int.tryParse(_totalMarks.text);
-                                    int? obtainMarks = int.tryParse(value);
-                                    if (totalMarks == null || obtainMarks == null) {
-                                      return 'Enter valid marks';
-                                    }
-                                    if (obtainMarks > totalMarks) {
-                                      return 'Obtain marks should not be greater than total marks';
-                                    }
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                          )),
-
-                        ]),
-                      )
-                          .toList(),
-                    ),
-                ),
-                SizedBox(height: 30,)
               ],
             ),
-          ))
-        ],
+            ListTile(
+              title: const Text(
+                "Component Type",
+                style: TextStyle(fontSize: 15),
+              ),
+              subtitle: DropdownButtonFormField(
+                  isExpanded: true,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.zero))),
+                  value: selectedExamType,
+                  items: [
+                    '--Please Select--',
+                    'Internal',
+                    'Practical-Internal'
+                  ]
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e),
+                          ))
+                      .toList(),
+                  onChanged: (val) {
+                    setState(() {
+                      selectedExamType = val as String;
+                    });
+                  }),
+            ),
+            ListTile(
+              title: const Text(
+                "Subject",
+                style: TextStyle(fontSize: 15),
+              ),
+              subtitle: DropdownButtonFormField(
+                  isExpanded: true,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.zero))),
+                  value: selectedSubject,
+                  items: subjectList
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e),
+                          ))
+                      .toList(),
+                  onChanged: (val) {
+                    setState(() {
+                      selectedSubject = val as String;
+                      fetchStudentData();
+                    });
+                  }),
+            ),
+            isLoading
+                ? CircularProgressIndicator() // Show loading indicator while fetching data
+                : studentList.isEmpty
+                    ? Center(
+                        child: Text(
+                            'No Data Found'), // Show "No Data Found" if student list is empty
+                      )
+                    : SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: DataTable(
+                          columnSpacing: 10,
+                          headingTextStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff002233)),
+                          dataTextStyle: TextStyle(fontWeight: FontWeight.w500),
+                          border: TableBorder.all(
+                            style: BorderStyle.solid,
+                          ),
+                          columns: const <DataColumn>[
+                            DataColumn(label: Text('Roll\nNo')),
+                            DataColumn(label: Text('Name')),
+                            DataColumn(label: Text('Total')),
+                            DataColumn(label: Text('Obtain')),
+                          ],
+                          rows: studentList.map((student) {
+                            final String name =
+                                "${student.lastName} ${student.firstName} ${student.middleName}";
+                            return DataRow(cells: <DataCell>[
+                              DataCell(Text(
+                                "${student.rollNo}",
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              )),
+                              DataCell(Text(name)),
+                              DataCell(Text(student.totalMarks.toString(),
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold))),
+                              DataCell(Center(
+                                child: Text(student.obtainMarks.toString(),
+                                    style: TextStyle(
+                                        color: student.isPass()
+                                            ? Colors.black
+                                            : Colors.redAccent,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold)),
+                              )),
+                            ]);
+                          }).toList(),
+                        ),
+                      ),
+            SizedBox(
+              height: 30,
+            )
+          ],
+        ),
       ),
     );
   }
