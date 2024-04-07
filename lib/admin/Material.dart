@@ -24,11 +24,6 @@ class _FilesUploadState extends State<FilesUpload> {
   StorageService storageService = StorageService();
   double? _progress;
 
-  void _onSearchChanged(String value) {
-    setState(() {
-      searchText = value;
-    });
-  }
 
   bool isSearchClicked = false;
   @override
@@ -36,13 +31,14 @@ class _FilesUploadState extends State<FilesUpload> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar:
+      AppBar(
         title: const Text(
           "Material",
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-          widget._user == "Student"
+          widget._user == ""
               ? Padding(
                   padding: EdgeInsets.all(10),
                   child: IconButton(
