@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clg_project/reusable_widget/reusable_appbar.dart';
 import 'package:clg_project/reusable_widget/reusable_textfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,12 +19,13 @@ class NoticeBoard extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<NoticeBoard> {
-  final TextEditingController _searchController = TextEditingController();
   final TextEditingController _title = TextEditingController();
   final TextEditingController _description = TextEditingController();
   final CollectionReference _con =
       FirebaseFirestore.instance.collection('Notice');
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
+
   var _timeString;
 
   void initState() {
@@ -81,12 +83,13 @@ class _MyWidgetState extends State<NoticeBoard> {
                     child: Text(
                       "Notice",
                       style:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Form(
+                      key: _formKey1,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -108,16 +111,18 @@ class _MyWidgetState extends State<NoticeBoard> {
                             width: 150,
                             child: Reusablebutton(
                               onPressed: () async {
-                                await _con.add({
-                                  "Title": _title.text,
-                                  "Description": _description.text,
-                                  "Date": _Date(DateTime.now()),
-                                  "Time": _Time(DateTime.now()),
-                                  "Name": widget.name
-                                });
-                                _title.text = "";
-                                _description.text = "";
-                                Navigator.of(context).pop();
+                                if (_formKey1.currentState!.validate()) {
+                                  await _con.add({
+                                    "Title": _title.text,
+                                    "Description": _description.text,
+                                    "Date": _Date(DateTime.now()),
+                                    "Time": _Time(DateTime.now()),
+                                    "Name": widget.name
+                                  });
+                                  _title.text = "";
+                                  _description.text = "";
+                                  Navigator.of(context).pop();
+                                }
                               },
                               Style: false,
                               child: const Text(
@@ -140,7 +145,6 @@ class _MyWidgetState extends State<NoticeBoard> {
           );
         });
   }
-
 
   // for Update operation
   Future<void> _update([DocumentSnapshot? documentSnapshot]) async {
@@ -203,6 +207,7 @@ class _MyWidgetState extends State<NoticeBoard> {
                               ),
                               onPressed: () async {
                                 await _con.doc(documentSnapshot!.id).update({
+                                  "Title": _title.text,
                                   "Description": _description.text,
                                   "Date": _Date(DateTime.now()),
                                   "Time": _Time(DateTime.now()),
@@ -301,21 +306,46 @@ class _MyWidgetState extends State<NoticeBoard> {
                               ),
                               SizedBox(width: 8),
                               // Add space between ListTile and trailing image
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                // Adjust padding as needed
-                                child: widget.user == 'Faculty'
-                                    ? IconButton(
-                                        color: Colors.white,
-                                        onPressed: () =>
-                                            _update(documentSnapshot),
-                                        icon: const Icon(Icons.edit),
-                                      )
-                                    : Text(
-                                        "- " + documentSnapshot['Name'],
-                                        style:
-                                            const TextStyle(color: Colors.grey),
-                                      ),
+                              Column(
+                                children: [
+                                  widget.user == 'Faculty'
+                                      ? IconButton(
+                                          color: Colors.white,
+                                          onPressed: () =>
+                                              _update(documentSnapshot),
+                                          icon: const Icon(Icons.edit),
+                                        )
+                                      : Text(
+                                          "- " + documentSnapshot['Name'],
+                                          style: const TextStyle(
+                                              color: Colors.grey),
+                                        ),
+                                  widget.user == 'Faculty'
+                                      ? IconButton(
+                                          color: Colors.white,
+                                          onPressed: () => AwesomeDialog(
+                                                  dismissOnTouchOutside: false,
+                                                  context: context,
+                                                  dialogType:
+                                                      DialogType.question,
+                                                  animType:
+                                                      AnimType.bottomSlide,
+                                                  showCloseIcon: false,
+                                                  title: "Confirm Delete",
+                                                  btnOkOnPress: () async {
+                                                    _delete(
+                                                        documentSnapshot.id);
+                                                  },
+                                                  btnCancelOnPress: () {})
+                                              .show(),
+                                          icon: const Icon(Icons.delete),
+                                        )
+                                      : Text(
+                                          "- " + documentSnapshot['Name'],
+                                          style: const TextStyle(
+                                              color: Colors.grey),
+                                        ),
+                                ],
                               ),
                             ],
                           ),

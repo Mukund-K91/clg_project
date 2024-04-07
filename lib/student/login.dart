@@ -27,20 +27,9 @@ class _LoginState extends State<Login> {
   bool passwordObscured = true;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
-  final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  TextEditingController _mobileController =
-      TextEditingController();
-  TextEditingController _otpController = TextEditingController();
-  TextEditingController _newPasswordController =
-      TextEditingController();
-  TextEditingController _confirmPasswordController =
-      TextEditingController();
-  final TextEditingController _userIdController2 =
-      TextEditingController();
-  bool _otpSent = false;
+
   
 
   Future<void> _login(
