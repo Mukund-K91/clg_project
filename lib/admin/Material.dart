@@ -33,6 +33,7 @@ class _FilesUploadState extends State<FilesUpload> {
     return Scaffold(
       appBar:
       AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: const Text(
           "Material",
           style: TextStyle(color: Colors.white),
