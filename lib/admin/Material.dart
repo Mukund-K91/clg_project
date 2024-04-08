@@ -38,22 +38,8 @@ class _FilesUploadState extends State<FilesUpload> {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-          widget._user == ""
-              ? Padding(
-                  padding: EdgeInsets.all(10),
-                  child: IconButton(
-                    icon: Icon(
-                      isSearchClicked ? Icons.close : Icons.search,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isSearchClicked = !isSearchClicked;
-                      });
-                    },
-                  ),
-                )
-              : IconButton(
+          widget._user == "Faculty"
+              ? IconButton(
                   onPressed: () async {
                     final result = await FilePicker.platform
                         .pickFiles(allowMultiple: true, type: FileType.any);
@@ -74,6 +60,9 @@ class _FilesUploadState extends State<FilesUpload> {
                   },
                   icon: const Icon(size: 30, Icons.add),
                   color: Colors.white,
+                ):Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.book,color: Colors.white,),
                 )
         ],
         backgroundColor: const Color(0xff002233),
